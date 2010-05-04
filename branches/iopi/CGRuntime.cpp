@@ -62,9 +62,8 @@ To contact the author: codeworker@free.fr
 //for 'Sleep'
 #	include <windows.h>
 #else
-#	if defined(__cplusplus) && defined(__GNUC_PREREQ)
-#		if __GNUC_PREREQ (4, 3)
-#			include <features.h>
+#	if defined(__cplusplus) && defined(__GNUC__) && defined(__GNUC_MINOR__)
+#		if __GNUC__ >=4 && __GNUC_MINOR__ > 3
 #			include <cstdlib>
 #		endif
 #	endif
@@ -162,7 +161,8 @@ extern "C" char **environ;
 			peek_character = -1;
 			return ch;
 		}
-		read(0,&ch,1);
+		if (read(0,&ch,1) == -1)
+		  return -1;
 		return ch;
 	}
 #endif
@@ -1467,7 +1467,7 @@ SEQUENCE_INTERRUPTION_LIST CGRuntime::insertText(int iLocation, const std::strin
 	if (!_pOutputStream->insertText(sText, iLocation, 0)) {
 		std::string sMessage = "unable to insert \"" + composeCLikeString(sText) + "\" at position ";
 		char tcNumber[32];
-		sprintf(tcNumber, "%d/%ld", iLocation, _pOutputStream->size());
+		sprintf(tcNumber, "%d/%d", iLocation, _pOutputStream->size());
 		sMessage += tcNumber;
 		throw UtlException(sMessage);
 	}
@@ -1481,7 +1481,7 @@ SEQUENCE_INTERRUPTION_LIST CGRuntime::insertTextOnce(int iLocation, const std::s
 		if ((iLocation < 0) || (iLocation > _pOutputStream->size())) {
 			std::string sMessage = "unable to insert \"" + composeCLikeString(sText) + "\" at position ";
 			char tcNumber[32];
-			sprintf(tcNumber, "%d/%ld", iLocation, _pOutputStream->size());
+			sprintf(tcNumber, "%d/%d", iLocation, _pOutputStream->size());
 			sMessage += tcNumber;
 			throw UtlException(sMessage);
 		}
@@ -1498,7 +1498,7 @@ SEQUENCE_INTERRUPTION_LIST CGRuntime::insertTextToFloatingLocation(const std::st
 	if (!pOwner->insertText(sText, iLocation, 0)) {
 		std::string sMessage = "unable to insert \"" + composeCLikeString(sText) + "\" at position ";
 		char tcNumber[32];
-		sprintf(tcNumber, "%d/%ld", iLocation, pOwner->size());
+		sprintf(tcNumber, "%d/%d", iLocation, pOwner->size());
 		sMessage += tcNumber;
 		throw UtlException(sMessage);
 	}
@@ -1515,7 +1515,7 @@ SEQUENCE_INTERRUPTION_LIST CGRuntime::insertTextOnceToFloatingLocation(const std
 		if ((iLocation < 0) || (iLocation > pOwner->size())) {
 			std::string sMessage = "unable to insert \"" + composeCLikeString(sText) + "\" at position ";
 			char tcNumber[32];
-			sprintf(tcNumber, "%d/%ld", iLocation, pOwner->size());
+			sprintf(tcNumber, "%d/%d", iLocation, pOwner->size());
 			sMessage += tcNumber;
 			throw UtlException(sMessage);
 		}
@@ -1529,7 +1529,7 @@ SEQUENCE_INTERRUPTION_LIST CGRuntime::overwritePortion(int iLocation, const std:
 	if (!_pOutputStream->insertText(sText, iLocation, iSize)) {
 		std::string sMessage = "unable to overwrite \"" + composeCLikeString(sText) + "\" at position ";
 		char tcNumber[32];
-		sprintf(tcNumber, "%d/%ld", iLocation, _pOutputStream->size());
+		sprintf(tcNumber, "%d/%d", iLocation, _pOutputStream->size());
 		sMessage += tcNumber;
 		throw UtlException(sMessage);
 	}

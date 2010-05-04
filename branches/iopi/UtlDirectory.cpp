@@ -114,7 +114,8 @@ namespace CodeWorker {
 		} else {
 			char pcFullPath[CW_PATH_MAX];
 			pcFullPath[0] = '\0';
-			getcwd(pcFullPath, CW_PATH_MAX - 1);
+			if (getcwd(pcFullPath, CW_PATH_MAX - 1) == NULL)
+			  throw UtlException("can't call getcwd in 'UtlDirectory::getFullPath()'");
 			sFullPath= pcFullPath;
 			if (!sFullPath.empty()) {
 				if (sFullPath[sFullPath.size() - 1] != '/') sFullPath += "/";

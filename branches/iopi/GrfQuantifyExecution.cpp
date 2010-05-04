@@ -113,7 +113,7 @@ namespace CodeWorker {
 			result = GrfBlock::executeInternal(visibility);
 			myTimer.stop();
 			char tcMessage[80];
-			sprintf(tcMessage, "quantify execution time = %dms", myTimer.getTimeInMillis());
+			sprintf(tcMessage, "quantify execution time = %lums", myTimer.getTimeInMillis());
 			CGRuntime::traceLine(tcMessage);
 		} catch(UtlException&/* exception*/) {
 			CGRuntime::traceLine("-- quantify session interrupted by an exception --");
@@ -194,7 +194,7 @@ namespace CodeWorker {
 						CGRuntime::traceText(tcMessage);
 					}
 					char tcMessage[80];
-					sprintf(tcMessage, ": %d occurences in %dms", j->second._iCounter, j->second._iTimeInMillis);
+					sprintf(tcMessage, ": %d occurences in %ldms", j->second._iCounter, j->second._iTimeInMillis);
 					CGRuntime::traceLine(tcMessage);
 				}
 				if (pFile != NULL) {

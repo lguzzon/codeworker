@@ -808,7 +808,7 @@ public:
 		std::string sBytes = (*cursor)->getValue(visibility);
 		unsigned long returnValue = CGRuntime::bytesToLong(sBytes);
 		char tcNumber[16];
-		sprintf(tcNumber, "%Lu", returnValue);
+		sprintf(tcNumber, "%lu", returnValue);
 		return tcNumber;
     }
 

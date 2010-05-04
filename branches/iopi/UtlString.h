@@ -23,9 +23,8 @@ To contact the author: codeworker@free.fr
 #define _UtlString_h_
 
 #ifndef WIN32
-#	if defined(__cplusplus) && defined(__GNUC_PREREQ)
-#		if __GNUC_PREREQ (4, 3)
-#			include <features.h>
+#	if defined(__cplusplus) && defined(__GNUC__) && defined(__GNUC_MINOR__)
+#		if __GNUC__ >=4 && __GNUC_MINOR__ > 3
 #			include <cstring>
 #			include <cstdlib>
 #		endif

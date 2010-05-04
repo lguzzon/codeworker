@@ -1064,11 +1064,11 @@ namespace CodeWorker {
 			myTimer.stop();
 			if (CGRuntime::getExternalHandling() == NULL) {
 				char tcNumber[32];
-				sprintf(tcNumber, "%d", myTimer.getTimeInMillis());
+				sprintf(tcNumber, "%lu", myTimer.getTimeInMillis());
 				CGRuntime::traceLine("time execution = " + std::string(tcNumber) + "ms");
 			} else {
 				char tcMessage[80];
-				sprintf(tcMessage, "time execution = %dms", myTimer.getTimeInMillis());
+				sprintf(tcMessage, "time execution = %lums", myTimer.getTimeInMillis());
 				CGRuntime::getExternalHandling()->traceLine(tcMessage);
 			}
 		}
