@@ -27,5 +27,9 @@ if [ -d "${architetture_dir}" ]; then
 fi
 mkdir -p "${architetture_dir}"
 mv "${script_dir}"/deploy/* "${architetture_dir}"
-svn --parents --force -q add "${architetture_dir}"/*
-svn --parents --force -q add "${architetture_dir}"/lib/*
+svn info >/dev/null 2>/dev/null
+if [ $? -eq 0 ]
+then
+	svn --parents --force -q add "${architetture_dir}"/*
+	svn --parents --force -q add "${architetture_dir}"/lib/*
+fi

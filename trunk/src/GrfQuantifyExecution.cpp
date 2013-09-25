@@ -113,7 +113,7 @@ namespace CodeWorker {
 			result = GrfBlock::executeInternal(visibility);
 			myTimer.stop();
 			char tcMessage[80];
-			sprintf(tcMessage, "quantify execution time = %lums", myTimer.getTimeInMillis());
+			sprintf(tcMessage, "quantify execution time = %ld ms", myTimer.getTimeInMillis());
 			CGRuntime::traceLine(tcMessage);
 		} catch(UtlException&/* exception*/) {
 			CGRuntime::traceLine("-- quantify session interrupted by an exception --");

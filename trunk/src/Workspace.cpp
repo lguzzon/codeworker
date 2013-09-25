@@ -1068,7 +1068,7 @@ namespace CodeWorker {
 				CGRuntime::traceLine("time execution = " + std::string(tcNumber) + "ms");
 			} else {
 				char tcMessage[80];
-				sprintf(tcMessage, "time execution = %lums", myTimer.getTimeInMillis());
+				sprintf(tcMessage, "time execution = %lu ms", myTimer.getTimeInMillis());
 				CGRuntime::getExternalHandling()->traceLine(tcMessage);
 			}
 		}

@@ -2651,6 +2651,12 @@ double CGRuntime::getLastDelay() {
 //##protect##"getLastDelay"
 }
 
+void CGRuntime::setLastDelay(double dDelay) {
+//##protect##"setLastDelay"
+	DtaProject::getInstance().setLastDelay(dDelay);
+//##protect##"setLastDelay"
+}	
+
 std::string CGRuntime::getNow() {
 //##protect##"getNow"
 	if (_sFrozenTime.empty()) {

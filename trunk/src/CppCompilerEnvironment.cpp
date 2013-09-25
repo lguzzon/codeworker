@@ -239,7 +239,7 @@ namespace CodeWorker {
 		addGlobalVariable("_REQUEST"); // for CGI program
 		try {
 			std::string sCWIncludeDir = _sCodeWorkerDirectory;
-			if (CGRuntime::existFile(sCWIncludeDir + "include/UtlException.h")) sCWIncludeDir += "include/";
+			if (CGRuntime::existFile(sCWIncludeDir + "src/UtlException.h")) sCWIncludeDir += "src/";
 			CGRuntime::copySmartFile(sCWIncludeDir + "UtlException.h", _sCppProjectDirectory + "UtlException.h");
 			CGRuntime::copySmartFile(sCWIncludeDir + "CppParsingTree.h", _sCppProjectDirectory + "CppParsingTree.h");
 			CGRuntime::copySmartFile(sCWIncludeDir + "CGRuntime.h", _sCppProjectDirectory + "CGRuntime.h");
@@ -563,18 +563,18 @@ namespace CodeWorker {
 
 	void CppCompilerEnvironment::generateMakefile() {
 		std::string sBinDir = _sCodeWorkerDirectory;
-		if (CGRuntime::existFile(sBinDir + "bin/libCodeWorker.a")) sBinDir += "bin/";
-		else if (CGRuntime::existFile(sBinDir + "../bin/libCodeWorker.a")) sBinDir += "../bin/";
-		else if (CGRuntime::existFile(sBinDir + "lib/libCodeWorker.a")) sBinDir += "lib/";
-		else if (CGRuntime::existFile(sBinDir + "../lib/libCodeWorker.a")) sBinDir += "../lib/";
+		if (CGRuntime::existFile(sBinDir + "bin/libcodeworker.a")) sBinDir += "bin/";
+		else if (CGRuntime::existFile(sBinDir + "../bin/libcodeworker.a")) sBinDir += "../bin/";
+		else if (CGRuntime::existFile(sBinDir + "lib/libcodeworker.a")) sBinDir += "lib/";
+		else if (CGRuntime::existFile(sBinDir + "../lib/libcodeworker.a")) sBinDir += "../lib/";
 		std::string sProjectName = getRadical(_listOfProjectModules.front());
 		std::string::size_type iIndex = sProjectName.find_last_of('_');
 		if ((iIndex != std::string::npos) && (iIndex != 0)) sProjectName = sProjectName.substr(0, iIndex);
 		std::auto_ptr<ScpStream> pMakeFile(new ScpStream(_sCppProjectDirectory + "Makefile", ScpStream::IN | ScpStream::OUT));
 		std::auto_ptr<ScpStream> pOldMakeFile(new ScpStream(_sCppProjectDirectory + "Makefile", ScpStream::IN | ScpStream::OUT));
 		(*pMakeFile) << "INCDIRS	= -I.\n";
-		(*pMakeFile) << "CXXFLAGS	= -O2 -g $(INCDIRS)\n";
-		(*pMakeFile) << "LFLAGS	= -g -lm -ldl -L" << sBinDir << " -lcodeworker\n";
+		(*pMakeFile) << "CXXFLAGS	= -O3 $(INCDIRS)\n";
+		(*pMakeFile) << "LFLAGS	= -L\"" << sBinDir << "\" -lcodeworker -lm -ldl \n";
 		(*pMakeFile) << "CC	= g++\n";
 		(*pMakeFile) << "\n";
 		(*pMakeFile) << "OBJECTS = ";
