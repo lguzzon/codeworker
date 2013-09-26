@@ -30,12 +30,10 @@ To contact the author: codeworker@free.fr
 #include "DtaProject.h"
 #include "DtaClass.h"
 #include "ExprScriptVariable.h"
-#include "ExprScriptFunction.h"
 #include "GrfExecutionContext.h"
 #include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
 #include "DtaBNFScript.h"
-#include "DtaPatternScript.h"
 #include "GrfReturn.h"
 #include "GrfFunction.h"
 

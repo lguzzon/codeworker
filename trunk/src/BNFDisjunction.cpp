@@ -29,7 +29,6 @@ To contact the author: codeworker@free.fr
 
 #include "DtaScriptVariable.h"
 #include "DtaBNFScript.h"
-#include "BNFClause.h"
 #include "DtaVisitor.h"
 #include "BNFDisjunction.h"
 

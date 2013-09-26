@@ -27,7 +27,6 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
 
-#include "DtaBNFScript.h"
 #include "DtaVisitor.h"
 #include "BNFMoveAhead.h"
 

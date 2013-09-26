@@ -26,8 +26,6 @@ To contact the author: codeworker@free.fr
 #include "ScpStream.h"
 #include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
 

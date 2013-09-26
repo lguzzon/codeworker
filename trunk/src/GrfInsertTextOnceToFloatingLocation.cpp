@@ -1,6 +1,6 @@
 /* "CodeWorker":	a scripting language for parsing and generating text.
 
-Copyright (C) 1996-1997, 1999-2010 Cédric Lemaire
+Copyright (C) 1996-1997, 1999-2010 Cï¿½dric Lemaire
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -27,11 +27,9 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
 #include "ExprScriptExpression.h"
-#include <string>
 
 //##protect##"INCLUDE FILES"
 #include "DtaScriptVariable.h"
-#include "DtaPatternScript.h"
 #include "GrfInsertText.h"
 //##protect##"INCLUDE FILES"
 

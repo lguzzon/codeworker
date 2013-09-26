@@ -25,8 +25,6 @@ To contact the author: codeworker@free.fr
 
 #include "UtlException.h"
 #include "DtaProject.h"
-#include "ExprScriptVariable.h"
-#include "GrfBlock.h"
 #include "ScpStream.h"
 #include "CppCompilerEnvironment.h"
 #include "GrfGlobalVariable.h"

@@ -1,6 +1,6 @@
 /* "CodeWorker":	a scripting language for parsing and generating text.
 
-Copyright (C) 1996-1997, 1999-2002 Cédric Lemaire
+Copyright (C) 1996-1997, 1999-2002 CÃ©dric Lemaire
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -23,7 +23,6 @@ To contact the author: codeworker@free.fr
 #pragma warning (disable : 4786)
 #endif
 
-#include <set>
 
 #include "ScpStream.h"
 #include "UtlException.h"
@@ -31,7 +30,6 @@ To contact the author: codeworker@free.fr
 #include "CGRuntime.h"
 #include "DtaProject.h"
 #include "DtaPatternScript.h"
-#include "GrfFunction.h"
 #include "BNFClause.h"
 #include "DynFunction.h"
 #include "DynPackage.h"
@@ -567,6 +565,7 @@ namespace CodeWorker {
 		else if (CGRuntime::existFile(sBinDir + "../bin/libcodeworker.a")) sBinDir += "../bin/";
 		else if (CGRuntime::existFile(sBinDir + "lib/libcodeworker.a")) sBinDir += "lib/";
 		else if (CGRuntime::existFile(sBinDir + "../lib/libcodeworker.a")) sBinDir += "../lib/";
+		else CGRuntime::traceLine("WARNING: (considering '" + sBinDir + "') unable to find file 'libcodeworker.a'");
 		std::string sProjectName = getRadical(_listOfProjectModules.front());
 		std::string::size_type iIndex = sProjectName.find_last_of('_');
 		if ((iIndex != std::string::npos) && (iIndex != 0)) sProjectName = sProjectName.substr(0, iIndex);

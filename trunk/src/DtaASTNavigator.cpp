@@ -30,7 +30,6 @@ To contact the author: codeworker@free.fr
 #include "BNFConjunction.h"
 #include "BNFDisjunction.h"
 #include "BNFFindToken.h"
-#include "BNFIgnore.h"
 #include "BNFInsert.h"
 #include "BNFMoveAhead.h"
 #include "BNFMultiplicity.h"
@@ -42,7 +41,6 @@ To contact the author: codeworker@free.fr
 
 #include "ScpStream.h"
 #include "DtaScriptVariable.h"
-#include "CGRuntime.h"
 #include "ASTCommand.h"
 #include "DtaBNFScript.h"
 //##protect##"INCLUDES"

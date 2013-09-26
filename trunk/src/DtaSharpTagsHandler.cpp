@@ -24,7 +24,6 @@ To contact the author: codeworker@free.fr
 #endif
 
 #include "UtlException.h"
-#include "UtlDate.h"
 #include "ScpStream.h"
 
 #include "DtaProject.h"

@@ -23,9 +23,6 @@ To contact the author: codeworker@free.fr
 #	pragma warning (disable : 4786)
 #endif
 
-#include <iostream>
-#include <fstream>
-#include <memory>
 
 #include "UtlException.h"
 
@@ -39,11 +36,9 @@ To contact the author: codeworker@free.fr
 #include "DtaProject.h"
 #include "CGRuntime.h"
 #include "DtaConsoleScript.h"
-#include "DtaPatternScript.h"
 #include "CppCompilerEnvironment.h"
 #include "CGExternalHandling.h"
 
-#include "ExprScriptVariable.h"
 #include "GrfFunction.h"
 #include "Workspace.h"
 

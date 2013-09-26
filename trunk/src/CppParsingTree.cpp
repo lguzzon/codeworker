@@ -31,7 +31,6 @@ To contact the author: codeworker@free.fr
 #include "UtlException.h"
 
 #include "ExprScriptVariable.h"
-#include "DtaScriptVariable.h"
 #include "DtaProject.h"
 #include "DtaScript.h"
 #include "CppParsingTree.h"

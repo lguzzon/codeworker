@@ -30,7 +30,6 @@ To contact the author: codeworker@free.fr
 #include "ScpStream.h"
 
 #include "ExprScriptVariable.h"
-#include "DtaScriptVariable.h"
 #include "DtaProject.h"
 #include "GrfReadonlyHook.h"
 #include "GrfNop.h"

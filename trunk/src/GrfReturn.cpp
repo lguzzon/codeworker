@@ -24,7 +24,6 @@ To contact the author: codeworker@free.fr
 #endif
 
 #include "DtaScriptVariable.h"
-#include "ExprScriptExpression.h"
 #include "ScpStream.h"
 #include "CppCompilerEnvironment.h"
 #include "GrfFunction.h"

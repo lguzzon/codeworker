@@ -23,17 +23,13 @@ To contact the author: codeworker@free.fr
 #pragma warning (disable : 4786)
 #endif
 
-#include <stdlib.h>
 
 #include "UtlException.h"
-#include "ScpStream.h"
 #include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
 
 #include "ExprScriptVariable.h"
-#include "DtaScriptVariable.h"
 #include "DtaProject.h"
-#include "DtaClass.h"
 #include "BNFDisjunction.h"
 #include "BNFConjunction.h"
 #include "BNFString.h"
@@ -50,7 +46,6 @@ To contact the author: codeworker@free.fr
 #include "BNFCharBoundaries.h"
 #include "BNFPushItem.h"
 #include "BNFInsert.h"
-#include "BNFReadChar.h"
 #include "BNFReadByte.h"
 #include "BNFReadAdaString.h"
 #include "BNFReadCString.h"
@@ -87,10 +82,8 @@ To contact the author: codeworker@free.fr
 #include "GrfGeneratedString.h"
 #include "GrfAppendedFile.h"
 #include "GrfDebugExecution.h"
-#include "DtaBNFScript.h"
 
 #include "DtaTranslateScript.h"
-#include "BNFIgnore.h"
 #include "BNFSkipIgnore.h"
 #include "BNFMoveAhead.h"
 #include "BNFReadUptoIgnore.h"

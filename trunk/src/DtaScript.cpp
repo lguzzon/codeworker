@@ -30,14 +30,12 @@ To contact the author: codeworker@free.fr
 #	include <sys/stat.h>
 #endif
 
-#include "ScpStream.h"
 #include "UtlException.h"
 #include "UtlTrace.h"
 #include "UtlDirectory.h"
 
 #include "CGRuntime.h"
 #include "Workspace.h"
-#include "GrfForeach.h"
 #include "GrfSelect.h"
 #include "GrfIfThenElse.h"
 #include "GrfDelay.h"
@@ -55,7 +53,6 @@ To contact the author: codeworker@free.fr
 #include "GrfBreak.h"
 #include "GrfReturn.h"
 #include "GrfExit.h"
-#include "GrfFunction.h"
 #include "GrfReadonlyHook.h"
 #include "GrfWritefileHook.h"
 #include "GrfWriteText.h"
@@ -89,7 +86,6 @@ To contact the author: codeworker@free.fr
 #include "GrfExecuteString.h"
 #include "GrfExpand.h"
 #include "GrfExtendExecutedScript.h"
-#include "GrfGenerate.h"
 #include "GrfGenerateString.h"
 #include "GrfInsertElementAt.h"
 #include "GrfInvertArray.h"
@@ -135,7 +131,6 @@ To contact the author: codeworker@free.fr
 //##end##"include files"
 #include "ExprScriptVariable.h"
 #include "ExprScriptMotif.h"
-#include "ExprScriptFunction.h"
 #include "ExprScriptBinaryExpression.h"
 #include "DtaProject.h"
 #include "CppCompilerEnvironment.h"
@@ -143,8 +138,6 @@ To contact the author: codeworker@free.fr
 #include "DynFunction.h"
 #include "DynPackage.h"
 
-#include "DtaScript.h"
-#include "DtaPatternScript.h"
 
 namespace CodeWorker {
 	bool DtaScript::_bParseWithSymbols = true;

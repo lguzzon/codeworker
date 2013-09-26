@@ -27,7 +27,6 @@ To contact the author: codeworker@free.fr
 #include "UtlTrace.h"
 #include "ScpStream.h"
 
-#include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
 #include "DtaProject.h"
 #include "CGRuntime.h"

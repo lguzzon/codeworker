@@ -37,7 +37,6 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptVariable.h"
 #include "DtaBNFScript.h"
 #include "BNFClause.h"
-#include "BNFIgnore.h"
 #include "DtaVisitor.h"
 #include "BNFReadUptoIgnore.h"
 

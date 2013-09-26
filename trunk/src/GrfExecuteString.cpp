@@ -23,15 +23,12 @@ To contact the author: codeworker@free.fr
 #pragma warning (disable : 4786)
 #endif
 
-#include <string>
 
 #include "ScpStream.h"
 #include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
 #include "DtaScript.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "ExprScriptExpression.h"
 #include "GrfExecuteString.h"
 
 namespace CodeWorker {

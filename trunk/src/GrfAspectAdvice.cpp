@@ -27,10 +27,8 @@ To contact the author: codeworker@free.fr
 #include "ScpStream.h"
 
 #include "DtaScriptVariable.h"
-#include "ExprScriptExpression.h"
 #include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
-#include "DtaPatternScript.h"
 #include "GrfJointPoint.h"
 #include "GrfAspectAdvice.h"
 

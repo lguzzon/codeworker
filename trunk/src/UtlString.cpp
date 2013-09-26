@@ -25,7 +25,6 @@ To contact the author: codeworker@free.fr
 
 #include <sstream>
 
-#include "UtlString.h"
 
 
 #ifndef WIN32

@@ -28,10 +28,8 @@ To contact the author: codeworker@free.fr
 #include "ScpStream.h"
 #include "UtlTimer.h"
 
-#include "DtaScriptVariable.h"
 #include "GrfExecutionContext.h"
 #include "CppCompilerEnvironment.h"
-#include "GrfCommand.h"
 
 namespace CodeWorker {
 	GrfExecutionContext* GrfCommand::_pExecutionContext = NULL;

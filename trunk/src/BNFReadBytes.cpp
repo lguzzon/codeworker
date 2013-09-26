@@ -23,7 +23,6 @@ To contact the author: codeworker@free.fr
 #pragma warning (disable : 4786)
 #endif
 
-#include "ExprScriptExpression.h"
 #include "CGRuntime.h"
 #include "DtaVisitor.h"
 #include "BNFReadBytes.h"

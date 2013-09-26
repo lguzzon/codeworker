@@ -28,9 +28,7 @@ To contact the author: codeworker@free.fr
 #include "CGRuntime.h"
 #include "DtaProject.h"
 
-#include "ExprScriptFunction.h"
 #include "ExprScriptVariable.h"
-#include "BNFClause.h"
 #include "BNFTransformationMode.h"
 #include "DtaTranslateScript.h"
 

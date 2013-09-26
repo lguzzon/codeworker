@@ -28,11 +28,9 @@ To contact the author: codeworker@free.fr
 
 #include "CGRuntime.h"
 #include "Workspace.h"
-#include "DtaScriptVariable.h"
 #include "DtaProject.h"
 #include "DtaConsoleScript.h"
 
-#include <map>
 
 namespace CodeWorker {
 	DtaConsoleScript::~DtaConsoleScript() {}

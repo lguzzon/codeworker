@@ -173,7 +173,6 @@ extern "C" char **environ;
 
 #include <math.h>
 #include <time.h>
-#include <fstream>
 
 #include "UtlTrace.h"
 #include "UtlDate.h"
@@ -197,8 +196,6 @@ extern "C" char **environ;
 
 #include "CGRuntime.h"
 #include "DtaProject.h"
-#include "CppParsingTree.h"
-#include "DtaPatternScript.h"
 #include "DtaTranslateScript.h"
 #include "Workspace.h"
 

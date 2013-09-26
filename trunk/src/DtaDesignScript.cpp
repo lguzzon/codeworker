@@ -25,7 +25,6 @@ To contact the author: codeworker@free.fr
 
 #include "UtlException.h"
 #include "ScpStream.h"
-#include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
 #include "GrfSetInputLocation.h"
 #include "GrfAttachInputToSocket.h"

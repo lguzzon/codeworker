@@ -44,7 +44,6 @@ To contact the author: codeworker@free.fr
 #include "ExternalValueNode.h"
 #include "DynPackage.h"
 #include "CGExternalHandling.h" // for CGQuietOutput
-#include "DtaScriptVariable.h"
 
 namespace CodeWorker {
 	DtaNodeListener::~DtaNodeListener() {}

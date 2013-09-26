@@ -25,12 +25,9 @@ To contact the author: codeworker@free.fr
 
 #include "UtlException.h"
 
-#include "DtaBNFScript.h"
 #include "DtaDesignScript.h"
-#include "DtaPatternScript.h"
 #include "DtaTranslateScript.h"
 
-#include "DtaScriptFactory.h"
 
 namespace CodeWorker {
 	DtaScript* DtaScriptFactory::create(SCRIPT_TYPE eScriptType, GrfBlock& block) {

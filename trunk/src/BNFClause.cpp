@@ -29,7 +29,6 @@ To contact the author: codeworker@free.fr
 
 #include "CGRuntime.h"
 
-#include "DtaScript.h"
 #include "DtaProject.h"
 #include "DtaClass.h"
 #include "DtaBNFScript.h"

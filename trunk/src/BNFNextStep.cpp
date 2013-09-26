@@ -28,11 +28,8 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
 
-#include "DtaScriptVariable.h"
-#include "ExprScriptVariable.h"
 #include "DtaBNFScript.h"
 #include "BNFStepper.h"
-#include "BNFClause.h"
 #include "DtaVisitor.h"
 #include "BNFNextStep.h"
 

@@ -26,9 +26,6 @@ To contact the author: codeworker@free.fr
 #include "ScpStream.h"
 
 #include "CGRuntime.h"
-#include "DtaScript.h"
-#include "DtaPatternScript.h"
-#include "DtaBNFScript.h"
 #include "DtaTranslateScript.h"
 
 #include "CGCompiler.h"

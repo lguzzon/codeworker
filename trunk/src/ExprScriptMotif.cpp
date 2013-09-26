@@ -23,14 +23,10 @@ To contact the author: codeworker@free.fr
 #pragma warning (disable : 4786)
 #endif
 
-#include <math.h>
 
 #include "UtlException.h"
-#include "ScpStream.h"
 
 #include "DtaProject.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
 
 #include "ExprScriptMotif.h"
 

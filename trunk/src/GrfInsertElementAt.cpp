@@ -28,8 +28,6 @@ To contact the author: codeworker@free.fr
 #include "CGRuntime.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfInsertElementAt.h"
 
 namespace CodeWorker {

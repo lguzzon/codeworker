@@ -30,8 +30,6 @@ To contact the author: codeworker@free.fr
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
 #include "GrfBreak.h"
-#include "GrfError.h"
-#include "GrfBlock.h"
 #include "DtaBNFScript.h"
 #include "CppCompilerEnvironment.h"
 #include "BNFClause.h" // for the coverage recording

@@ -38,12 +38,10 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptVariable.h"
 #include "GrfExecutionContext.h"
 #include "DtaBNFScript.h"
-#include "GrfFunction.h"
 #include "BNFStepintoHook.h"
 #include "BNFStepoutHook.h"
 #include "BNFClause.h"
 #include "DtaVisitor.h"
-#include "ASTCommand.h"
 #include "BNFClauseCall.h"
 
 namespace CodeWorker {

@@ -23,7 +23,6 @@ To contact the author: codeworker@free.fr
 #pragma warning (disable : 4786)
 #endif
 
-#include <math.h>
 
 #include "UtlException.h"
 #include "ScpStream.h"
@@ -37,12 +36,8 @@ To contact the author: codeworker@free.fr
 #include "GrfParseFree.h"
 #include "GrfTranslate.h"
 #include "DtaProject.h"
-#include "DtaDesignScript.h"
-#include "DtaPatternScript.h"
 #include "DtaBNFScript.h"
-#include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "ExprScriptFunction.h"
 
 namespace CodeWorker {
 	class ExprScriptFirst : public ExprScriptFunction {

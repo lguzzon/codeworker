@@ -31,7 +31,6 @@ To contact the author: codeworker@free.fr
 #include "DtaClass.h"
 #include "CppCompilerEnvironment.h"
 #include "DtaScript.h" // declaration of 'GrfScriptBlock'
-#include "GrfBlock.h"
 
 namespace CodeWorker {
 	GrfBlock::~GrfBlock() {

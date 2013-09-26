@@ -23,8 +23,6 @@ To contact the author: codeworker@free.fr
 #pragma warning (disable : 4786)
 #endif
 
-#include "DtaScriptVariable.h"
-#include "ExprScriptExpression.h"
 #include "ScpStream.h"
 #include "CppCompilerEnvironment.h"
 #include "GrfDo.h"

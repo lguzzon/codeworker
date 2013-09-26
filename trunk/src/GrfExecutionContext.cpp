@@ -25,7 +25,6 @@ To contact the author: codeworker@free.fr
 
 #include "UtlException.h"
 #include "DtaScript.h"
-#include "DtaScriptVariable.h"
 #include "GrfFunction.h"
 #include "BNFClauseCall.h"
 #include "GrfExecutionContext.h"

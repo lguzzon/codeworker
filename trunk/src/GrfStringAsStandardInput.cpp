@@ -26,7 +26,6 @@ To contact the author: codeworker@free.fr
 #include "UtlException.h"
 #include "ScpStream.h"
 
-#include "ExprScriptVariable.h"
 #include "CGExternalHandling.h"
 #include "CppCompilerEnvironment.h"
 #include "GrfStringAsStandardInput.h"

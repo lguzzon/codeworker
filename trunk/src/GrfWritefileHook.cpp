@@ -23,7 +23,6 @@ To contact the author: codeworker@free.fr
 #pragma warning (disable : 4786)
 #endif
 
-#include "ExprScriptFunction.h"
 #include "DtaProject.h"
 #include "CppParsingTree.h"
 #include "GrfWritefileHook.h"

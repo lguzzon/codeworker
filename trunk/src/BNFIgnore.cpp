@@ -30,7 +30,6 @@ To contact the author: codeworker@free.fr
 #include "DtaBNFScript.h"
 #include "BNFClause.h"
 #include "DtaVisitor.h"
-#include "BNFIgnore.h"
 
 namespace CodeWorker {
 	BNFIgnoreScope::BNFIgnoreScope(DtaBNFScript* pBNFScript, IGNORE_MODE eNewMode, BNFClause* pNewIgnoreClause) : _pBNFScript(pBNFScript) {

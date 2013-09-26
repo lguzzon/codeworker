@@ -25,7 +25,6 @@ To contact the author: codeworker@free.fr
 #endif
 
 #include <math.h>
-#include <fstream>
 
 #include "ScpStream.h"
 #include "UtlException.h"
@@ -37,8 +36,6 @@ To contact the author: codeworker@free.fr
 
 #include "CGRuntime.h"
 #include "DtaScript.h"
-#include "DtaProject.h"
-#include "ExprScriptFunction.h"
 #include "GrfFunction.h"
 #include "BNFClauseCall.h"
 #include "GrfQuantifyExecution.h"

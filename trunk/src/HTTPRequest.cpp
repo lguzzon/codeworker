@@ -1,6 +1,6 @@
 /* "CodeWorker":	a scripting language for parsing and generating text.
 
-Copyright (C) 1996-1997, 1999-2003 Cédric Lemaire
+Copyright (C) 1996-1997, 1999-2003 Cï¿½dric Lemaire
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -853,13 +853,25 @@ namespace CodeWorker {
 		if (curl_escape == NULL) {
 #ifdef WIN32
 			std::string sLibrary("libcurl.dll");
+      LIBRARY_HANDLE hHandle = DynPackage::loadLibrary(sLibrary);
+      if (hHandle == NULL) {
+        throw UtlException("libcURL error: unable to locate the dynamic library \"" + sLibrary + "\"");
+      }
 #else
 			std::string sLibrary("libcurl.so");
+      LIBRARY_HANDLE hHandle = DynPackage::loadLibrary(sLibrary);
+      if (hHandle == NULL) {
+      sLibrary = "libcurl.so.3";
+      hHandle = DynPackage::loadLibrary(sLibrary);
+      if (hHandle == NULL) {
+      sLibrary = "libcurl.so.4";
+      hHandle = DynPackage::loadLibrary(sLibrary);
+      if (hHandle == NULL) {
+        throw UtlException("libcURL error: unable to locate the dynamic library \"" + sLibrary + "\"");
+      }
+      }
+      }
 #endif
-			LIBRARY_HANDLE hHandle = DynPackage::loadLibrary(sLibrary);
-			if (hHandle == NULL) {
-				throw UtlException("libcURL error: unable to locate the dynamic library \"" + sLibrary + "\"");
-			}
 			curl_escape = (CURL_ESCAPE) DynPackage::findFunction(hHandle, "curl_escape");
 			if (curl_escape == NULL) throw UtlException("libcURL error: unable to find function 'curl_escape' in dynamic library \"" + sLibrary + "\"");
 			curl_free = (CURL_FREE) DynPackage::findFunction(hHandle, "curl_free");

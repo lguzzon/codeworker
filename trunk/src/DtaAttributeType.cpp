@@ -24,7 +24,6 @@ To contact the author: codeworker@free.fr
 #endif
 
 #include "DtaProject.h"
-#include "DtaScriptVariable.h"
 #include "DtaAttributeType.h"
 
 namespace CodeWorker {

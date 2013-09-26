@@ -23,9 +23,6 @@ To contact the author: codeworker@free.fr
 #pragma warning (disable : 4786)
 #endif
 
-#include "CGRuntime.h"
-#include "ScpStream.h"
-#include "DtaProject.h"
 #include "JNIExternalHandling.h"
 
 namespace CodeWorker {
