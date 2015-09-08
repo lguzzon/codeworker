@@ -16,5 +16,5 @@ build_script:
   - 'del .\cs\CodeWorker.NET.vcproj'
   - '%vcupgrade% /overwrite .\java\CodeWorker.JNI.vcproj'
   - 'del .\java\CodeWorker.JNI.vcproj'
-  - '%devenv% /upgrade .\CodeWorker.sln'
+  - 'REM %devenv% /upgrade .\CodeWorker.sln'
   - msbuild .\CodeWorker.sln /m /verbosity:detailed /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
