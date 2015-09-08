@@ -18,3 +18,4 @@ build_script:
   - 'del .\java\CodeWorker.JNI.vcproj'
   - 'REM %devenv% /upgrade .\CodeWorker.sln'
   - msbuild .\CodeWorker.sln /m /verbosity:detailed /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+  - msbuild .\CodeWorkerEXE.vcxproj /m /verbosity:detailed /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
