@@ -1,0 +1,16 @@
+version: '4.5.4-{build}'
+platform: 
+  - x86
+  - x64
+environment:
+  VisualStudioVersion: 10.0
+  vcupgrade: '"C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\Tools\vcupgrade.exe"'
+  devenv: '"C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe"'
+build_script:
+  - cd trunk
+  - '%vcupgrade% /overwrite .\CodeWorker.vcproj'
+  - '%vcupgrade% /overwrite .\CodeWorkerEXE.vcproj'
+  - '%vcupgrade% /overwrite .\cs\CodeWorker.NET.vcproj'
+  - '%vcupgrade% /overwrite .\java\CodeWorker.JNI.vcproj'
+  - '%devenv% /upgrade .\CodeWorker.sln'
+  - msbuild .\CodeWorker.sln /verbosity:detailed /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"

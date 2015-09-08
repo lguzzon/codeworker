@@ -1,18 +1,19 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorker", "CodeWorker.vcproj", "{2F88D263-3F59-4344-81D6-E2CEB0FE48ED}"
+Microsoft Visual Studio Solution File, Format Version 10.0
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorker", "CodeWorker.vcxproj", "{2F88D263-3F59-4344-81D6-E2CEB0FE48ED}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorkerEXE", "CodeWorkerEXE.vcproj", "{FAA4A96B-3244-4DCE-8286-785048DA77E2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorkerEXE", "CodeWorkerEXE.vcxproj", "{FAA4A96B-3244-4DCE-8286-785048DA77E2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2F88D263-3F59-4344-81D6-E2CEB0FE48ED} = {2F88D263-3F59-4344-81D6-E2CEB0FE48ED}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorker.NET", "cs\CodeWorker.NET.vcproj", "{0C6741D4-2A42-451B-80B5-EE480B0FB155}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorker.NET", "cs\CodeWorker.NET.vcxproj", "{0C6741D4-2A42-451B-80B5-EE480B0FB155}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorker.JNI", "java\CodeWorker.JNI.vcproj", "{E123F3E0-BAB6-4845-BB9D-47DE5F0D5575}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorker.JNI", "java\CodeWorker.JNI.vcxproj", "{E123F3E0-BAB6-4845-BB9D-47DE5F0D5575}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
