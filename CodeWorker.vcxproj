@@ -1,0 +1,525 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ASTCommand.h" />
+    <ClInclude Include="src\BNFAndOrJunction.h" />
+    <ClInclude Include="src\BNFBreak.h" />
+    <ClInclude Include="src\BNFCharBoundaries.h" />
+    <ClInclude Include="src\BNFCharLitteral.h" />
+    <ClInclude Include="src\BNFCheck.h" />
+    <ClInclude Include="src\BNFClause.h" />
+    <ClInclude Include="src\BNFClauseCall.h" />
+    <ClInclude Include="src\BNFComplementary.h" />
+    <ClInclude Include="src\BNFConjunction.h" />
+    <ClInclude Include="src\BNFDisjunction.h" />
+    <ClInclude Include="src\BNFEndOfFile.h" />
+    <ClInclude Include="src\BNFEndOfLine.h" />
+    <ClInclude Include="src\BNFFindToken.h" />
+    <ClInclude Include="src\BNFForeach.h" />
+    <ClInclude Include="src\BNFIgnore.h" />
+    <ClInclude Include="src\BNFInsert.h" />
+    <ClInclude Include="src\BNFMoveAhead.h" />
+    <ClInclude Include="src\BNFMultiplicity.h" />
+    <ClInclude Include="src\BNFNextStep.h" />
+    <ClInclude Include="src\BNFNot.h" />
+    <ClInclude Include="src\BNFPushItem.h" />
+    <ClInclude Include="src\BNFRatchet.h" />
+    <ClInclude Include="src\BNFReadAdaString.h" />
+    <ClInclude Include="src\BNFReadByte.h" />
+    <ClInclude Include="src\BNFReadBytes.h" />
+    <ClInclude Include="src\BNFReadCChar.h" />
+    <ClInclude Include="src\BNFReadChar.h" />
+    <ClInclude Include="src\BNFReadChars.h" />
+    <ClInclude Include="src\BNFReadCompleteIdentifier.h" />
+    <ClInclude Include="src\BNFReadCString.h" />
+    <ClInclude Include="src\BNFReadIdentifier.h" />
+    <ClInclude Include="src\BNFReadInteger.h" />
+    <ClInclude Include="src\BNFReadNumeric.h" />
+    <ClInclude Include="src\BNFReadPythonString.h" />
+    <ClInclude Include="src\BNFReadText.h" />
+    <ClInclude Include="src\BNFReadToken.h" />
+    <ClInclude Include="src\BNFReadUptoIgnore.h" />
+    <ClInclude Include="src\BNFScanWindow.h" />
+    <ClInclude Include="src\BNFSkipIgnore.h" />
+    <ClInclude Include="src\BNFStepintoHook.h" />
+    <ClInclude Include="src\BNFStepoutHook.h" />
+    <ClInclude Include="src\BNFStepper.h" />
+    <ClInclude Include="src\BNFString.h" />
+    <ClInclude Include="src\BNFTransformationMode.h" />
+    <ClInclude Include="src\BNFTryCatch.h" />
+    <ClInclude Include="src\CGCompiler.h" />
+    <ClInclude Include="src\CGExternalHandling.h" />
+    <ClInclude Include="src\CGRuntime.h" />
+    <ClInclude Include="src\CppCompilerEnvironment.h" />
+    <ClInclude Include="src\CppParsingTree.h" />
+    <ClInclude Include="src\CW4dl.h" />
+    <ClInclude Include="src\DtaArrayIterator.h" />
+    <ClInclude Include="src\DtaASTNavigator.h" />
+    <ClInclude Include="src\DtaAttributeType.h" />
+    <ClInclude Include="src\DtaBNFScript.h" />
+    <ClInclude Include="src\DtaClass.h" />
+    <ClInclude Include="src\DtaCommandScript.h" />
+    <ClInclude Include="src\DtaConsoleScript.h" />
+    <ClInclude Include="src\DtaDesignScript.h" />
+    <ClInclude Include="src\DtaPatternScript.h" />
+    <ClInclude Include="src\DtaProject.h" />
+    <ClInclude Include="src\DtaProtectedAreasBag.h" />
+    <ClInclude Include="src\DtaScript.h" />
+    <ClInclude Include="src\DtaScriptFactory.h" />
+    <ClInclude Include="src\DtaScriptVariable.h" />
+    <ClInclude Include="src\DtaSharpTagsHandler.h" />
+    <ClInclude Include="src\DtaTranslateScript.h" />
+    <ClInclude Include="src\DtaVisitor.h" />
+    <ClInclude Include="src\DynFunction.h" />
+    <ClInclude Include="src\DynPackage.h" />
+    <ClInclude Include="src\ExprScriptBinaryExpression.h" />
+    <ClInclude Include="src\ExprScriptExpression.h" />
+    <ClInclude Include="src\ExprScriptFunction.h" />
+    <ClInclude Include="src\ExprScriptMotif.h" />
+    <ClInclude Include="src\ExprScriptVariable.h" />
+    <ClInclude Include="src\ExternalValueNode.h" />
+    <ClInclude Include="src\GrfAlienInstruction.h" />
+    <ClInclude Include="src\GrfAllFloatingLocations.h" />
+    <ClInclude Include="src\GrfAppendedFile.h" />
+    <ClInclude Include="src\GrfAppendFile.h" />
+    <ClInclude Include="src\GrfAspectAdvice.h" />
+    <ClInclude Include="src\GrfAttachInputToSocket.h" />
+    <ClInclude Include="src\GrfAttachOutputToSocket.h" />
+    <ClInclude Include="src\GrfAutoexpand.h" />
+    <ClInclude Include="src\GrfBlock.h" />
+    <ClInclude Include="src\GrfBreak.h" />
+    <ClInclude Include="src\GrfClearVariable.h" />
+    <ClInclude Include="src\GrfCloseSocket.h" />
+    <ClInclude Include="src\GrfCommand.h" />
+    <ClInclude Include="src\GrfCompileToCpp.h" />
+    <ClInclude Include="src\GrfContinue.h" />
+    <ClInclude Include="src\GrfCopyFile.h" />
+    <ClInclude Include="src\GrfCopyGenerableFile.h" />
+    <ClInclude Include="src\GrfCopySmartDirectory.h" />
+    <ClInclude Include="src\GrfCutString.h" />
+    <ClInclude Include="src\GrfDebugExecution.h" />
+    <ClInclude Include="src\GrfDelay.h" />
+    <ClInclude Include="src\GrfDetachInputFromSocket.h" />
+    <ClInclude Include="src\GrfDetachOutputFromSocket.h" />
+    <ClInclude Include="src\GrfDo.h" />
+    <ClInclude Include="src\GrfEnvironTable.h" />
+    <ClInclude Include="src\GrfError.h" />
+    <ClInclude Include="src\GrfExecuteString.h" />
+    <ClInclude Include="src\GrfExecutionContext.h" />
+    <ClInclude Include="src\GrfExit.h" />
+    <ClInclude Include="src\GrfExpand.h" />
+    <ClInclude Include="src\GrfExtendExecutedScript.h" />
+    <ClInclude Include="src\GrfFileAsStandardInput.h" />
+    <ClInclude Include="src\GrfForeach.h" />
+    <ClInclude Include="src\GrfFunction.h" />
+    <ClInclude Include="src\GrfGenerate.h" />
+    <ClInclude Include="src\GrfGeneratedFile.h" />
+    <ClInclude Include="src\GrfGeneratedString.h" />
+    <ClInclude Include="src\GrfGenerateString.h" />
+    <ClInclude Include="src\GrfGlobalVariable.h" />
+    <ClInclude Include="src\GrfGoBack.h" />
+    <ClInclude Include="src\GrfIfThenElse.h" />
+    <ClInclude Include="src\GrfIncrementIndentLevel.h" />
+    <ClInclude Include="src\GrfInsertAssignment.h" />
+    <ClInclude Include="src\GrfInsertElementAt.h" />
+    <ClInclude Include="src\GrfInsertText.h" />
+    <ClInclude Include="src\GrfInsertTextOnce.h" />
+    <ClInclude Include="src\GrfInsertTextOnceToFloatingLocation.h" />
+    <ClInclude Include="src\GrfInsertTextToFloatingLocation.h" />
+    <ClInclude Include="src\GrfInvertArray.h" />
+    <ClInclude Include="src\GrfJointPoint.h" />
+    <ClInclude Include="src\GrfJointPointCall.h" />
+    <ClInclude Include="src\GrfListAllGeneratedFiles.h" />
+    <ClInclude Include="src\GrfLoadProject.h" />
+    <ClInclude Include="src\GrfLocalReference.h" />
+    <ClInclude Include="src\GrfLocalVariable.h" />
+    <ClInclude Include="src\GrfMerge.h" />
+    <ClInclude Include="src\GrfNewProject.h" />
+    <ClInclude Include="src\GrfNop.h" />
+    <ClInclude Include="src\GrfOpenLogFile.h" />
+    <ClInclude Include="src\GrfOverwritePortion.h" />
+    <ClInclude Include="src\GrfParseAsBNF.h" />
+    <ClInclude Include="src\GrfParsedFile.h" />
+    <ClInclude Include="src\GrfParsedString.h" />
+    <ClInclude Include="src\GrfParseFree.h" />
+    <ClInclude Include="src\GrfParseStringAsBNF.h" />
+    <ClInclude Include="src\GrfPopulateProtectedArea.h" />
+    <ClInclude Include="src\GrfProduceHTML.h" />
+    <ClInclude Include="src\GrfPushItem.h" />
+    <ClInclude Include="src\GrfPutEnv.h" />
+    <ClInclude Include="src\GrfQuantifyExecution.h" />
+    <ClInclude Include="src\GrfQuiet.h" />
+    <ClInclude Include="src\GrfRandomSeed.h" />
+    <ClInclude Include="src\GrfReadonlyHook.h" />
+    <ClInclude Include="src\GrfReference.h" />
+    <ClInclude Include="src\GrfRemoveAllElements.h" />
+    <ClInclude Include="src\GrfRemoveElement.h" />
+    <ClInclude Include="src\GrfRemoveFirstElement.h" />
+    <ClInclude Include="src\GrfRemoveLastElement.h" />
+    <ClInclude Include="src\GrfRemoveRecursive.h" />
+    <ClInclude Include="src\GrfRemoveVariable.h" />
+    <ClInclude Include="src\GrfResizeOutputStream.h" />
+    <ClInclude Include="src\GrfReturn.h" />
+    <ClInclude Include="src\GrfSaveBinaryToFile.h" />
+    <ClInclude Include="src\GrfSaveProject.h" />
+    <ClInclude Include="src\GrfSaveProjectTypes.h" />
+    <ClInclude Include="src\GrfSaveToFile.h" />
+    <ClInclude Include="src\GrfSelect.h" />
+    <ClInclude Include="src\GrfSetAll.h" />
+    <ClInclude Include="src\GrfSetAssignment.h" />
+    <ClInclude Include="src\GrfSetCommentBegin.h" />
+    <ClInclude Include="src\GrfSetCommentEnd.h" />
+    <ClInclude Include="src\GrfSetFloatingLocation.h" />
+    <ClInclude Include="src\GrfSetGenerationHeader.h" />
+    <ClInclude Include="src\GrfSetIncludePath.h" />
+    <ClInclude Include="src\GrfSetInputLocation.h" />
+    <ClInclude Include="src\GrfSetNow.h" />
+    <ClInclude Include="src\GrfSetOutputLocation.h" />
+    <ClInclude Include="src\GrfSetProperty.h" />
+    <ClInclude Include="src\GrfSetProtectedArea.h" />
+    <ClInclude Include="src\GrfSetTextMode.h" />
+    <ClInclude Include="src\GrfSetVersion.h" />
+    <ClInclude Include="src\GrfSetWorkingPath.h" />
+    <ClInclude Include="src\GrfSetWriteMode.h" />
+    <ClInclude Include="src\GrfSleep.h" />
+    <ClInclude Include="src\GrfSlideNodeContent.h" />
+    <ClInclude Include="src\GrfSortArray.h" />
+    <ClInclude Include="src\GrfStringAsStandardInput.h" />
+    <ClInclude Include="src\GrfSwitch.h" />
+    <ClInclude Include="src\GrfText.h" />
+    <ClInclude Include="src\GrfTraceEngine.h" />
+    <ClInclude Include="src\GrfTraceLine.h" />
+    <ClInclude Include="src\GrfTraceObject.h" />
+    <ClInclude Include="src\GrfTraceStack.h" />
+    <ClInclude Include="src\GrfTraceText.h" />
+    <ClInclude Include="src\GrfTranslate.h" />
+    <ClInclude Include="src\GrfTryCatch.h" />
+    <ClInclude Include="src\GrfWhile.h" />
+    <ClInclude Include="src\GrfWriteBytes.h" />
+    <ClInclude Include="src\GrfWritefileHook.h" />
+    <ClInclude Include="src\GrfWriteText.h" />
+    <ClInclude Include="src\GrfWriteTextOnce.h" />
+    <ClInclude Include="src\HTTPRequest.h" />
+    <ClInclude Include="src\JNIExternalHandling.h" />
+    <ClInclude Include="src\md5.h" />
+    <ClInclude Include="src\NetSocket.h" />
+    <ClInclude Include="src\ScpStream.h" />
+    <ClInclude Include="src\UtlDate.h" />
+    <ClInclude Include="src\UtlDirectory.h" />
+    <ClInclude Include="src\UtlException.h" />
+    <ClInclude Include="src\UtlString.h" />
+    <ClInclude Include="src\UtlTimer.h" />
+    <ClInclude Include="src\UtlTrace.h" />
+    <ClInclude Include="src\UtlXMLStream.h" />
+    <ClInclude Include="src\Workspace.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\ASTCommand.cpp" />
+    <ClCompile Include="src\BNFAndOrJunction.cpp" />
+    <ClCompile Include="src\BNFBreak.cpp" />
+    <ClCompile Include="src\BNFCharBoundaries.cpp" />
+    <ClCompile Include="src\BNFCharLitteral.cpp" />
+    <ClCompile Include="src\BNFCheck.cpp" />
+    <ClCompile Include="src\BNFClause.cpp" />
+    <ClCompile Include="src\BNFClauseCall.cpp" />
+    <ClCompile Include="src\BNFComplementary.cpp" />
+    <ClCompile Include="src\BNFConjunction.cpp" />
+    <ClCompile Include="src\BNFDisjunction.cpp" />
+    <ClCompile Include="src\BNFEndOfFile.cpp" />
+    <ClCompile Include="src\BNFEndOfLine.cpp" />
+    <ClCompile Include="src\BNFFindToken.cpp" />
+    <ClCompile Include="src\BNFForeach.cpp" />
+    <ClCompile Include="src\BNFIgnore.cpp" />
+    <ClCompile Include="src\BNFInsert.cpp" />
+    <ClCompile Include="src\BNFMoveAhead.cpp" />
+    <ClCompile Include="src\BNFMultiplicity.cpp" />
+    <ClCompile Include="src\BNFNextStep.cpp" />
+    <ClCompile Include="src\BNFNot.cpp" />
+    <ClCompile Include="src\BNFPushItem.cpp" />
+    <ClCompile Include="src\BNFRatchet.cpp" />
+    <ClCompile Include="src\BNFReadAdaString.cpp" />
+    <ClCompile Include="src\BNFReadByte.cpp" />
+    <ClCompile Include="src\BNFReadBytes.cpp" />
+    <ClCompile Include="src\BNFReadCChar.cpp" />
+    <ClCompile Include="src\BNFReadChar.cpp" />
+    <ClCompile Include="src\BNFReadChars.cpp" />
+    <ClCompile Include="src\BNFReadCompleteIdentifier.cpp" />
+    <ClCompile Include="src\BNFReadCString.cpp" />
+    <ClCompile Include="src\BNFReadIdentifier.cpp" />
+    <ClCompile Include="src\BNFReadInteger.cpp" />
+    <ClCompile Include="src\BNFReadNumeric.cpp" />
+    <ClCompile Include="src\BNFReadPythonString.cpp" />
+    <ClCompile Include="src\BNFReadText.cpp" />
+    <ClCompile Include="src\BNFReadToken.cpp" />
+    <ClCompile Include="src\BNFReadUptoIgnore.cpp" />
+    <ClCompile Include="src\BNFScanWindow.cpp" />
+    <ClCompile Include="src\BNFSkipIgnore.cpp" />
+    <ClCompile Include="src\BNFStepintoHook.cpp" />
+    <ClCompile Include="src\BNFStepoutHook.cpp" />
+    <ClCompile Include="src\BNFStepper.cpp" />
+    <ClCompile Include="src\BNFString.cpp" />
+    <ClCompile Include="src\BNFTransformationMode.cpp" />
+    <ClCompile Include="src\BNFTryCatch.cpp" />
+    <ClCompile Include="src\CGCompiler.cpp" />
+    <ClCompile Include="src\CGExternalHandling.cpp" />
+    <ClCompile Include="src\CGRuntime.cpp" />
+    <ClCompile Include="src\CppCompilerEnvironment.cpp" />
+    <ClCompile Include="src\CppParsingTree.cpp" />
+    <ClCompile Include="src\DtaArrayIterator.cpp" />
+    <ClCompile Include="src\DtaASTNavigator.cpp" />
+    <ClCompile Include="src\DtaAttributeType.cpp" />
+    <ClCompile Include="src\DtaBNFScript.cpp" />
+    <ClCompile Include="src\DtaClass.cpp" />
+    <ClCompile Include="src\DtaCommandScript.cpp" />
+    <ClCompile Include="src\DtaConsoleScript.cpp" />
+    <ClCompile Include="src\DtaDesignScript.cpp" />
+    <ClCompile Include="src\DtaPatternScript.cpp" />
+    <ClCompile Include="src\DtaProject.cpp" />
+    <ClCompile Include="src\DtaProtectedAreasBag.cpp" />
+    <ClCompile Include="src\DtaScript.cpp" />
+    <ClCompile Include="src\DtaScriptFactory.cpp" />
+    <ClCompile Include="src\DtaScriptVariable.cpp" />
+    <ClCompile Include="src\DtaSharpTagsHandler.cpp" />
+    <ClCompile Include="src\DtaTranslateScript.cpp" />
+    <ClCompile Include="src\DtaVisitor.cpp" />
+    <ClCompile Include="src\DynPackage.cpp" />
+    <ClCompile Include="src\ExprScriptBinaryExpression.cpp" />
+    <ClCompile Include="src\ExprScriptExpression.cpp" />
+    <ClCompile Include="src\ExprScriptFunction.cpp" />
+    <ClCompile Include="src\ExprScriptMotif.cpp" />
+    <ClCompile Include="src\ExprScriptVariable.cpp" />
+    <ClCompile Include="src\ExternalValueNode.cpp" />
+    <ClCompile Include="src\GrfAlienInstruction.cpp" />
+    <ClCompile Include="src\GrfAllFloatingLocations.cpp" />
+    <ClCompile Include="src\GrfAppendedFile.cpp" />
+    <ClCompile Include="src\GrfAppendFile.cpp" />
+    <ClCompile Include="src\GrfAspectAdvice.cpp" />
+    <ClCompile Include="src\GrfAttachInputToSocket.cpp" />
+    <ClCompile Include="src\GrfAttachOutputToSocket.cpp" />
+    <ClCompile Include="src\GrfAutoexpand.cpp" />
+    <ClCompile Include="src\GrfBlock.cpp" />
+    <ClCompile Include="src\GrfBreak.cpp" />
+    <ClCompile Include="src\GrfClearVariable.cpp" />
+    <ClCompile Include="src\GrfCloseSocket.cpp" />
+    <ClCompile Include="src\GrfCommand.cpp" />
+    <ClCompile Include="src\GrfCompileToCpp.cpp" />
+    <ClCompile Include="src\GrfContinue.cpp" />
+    <ClCompile Include="src\GrfCopyFile.cpp" />
+    <ClCompile Include="src\GrfCopyGenerableFile.cpp" />
+    <ClCompile Include="src\GrfCopySmartDirectory.cpp" />
+    <ClCompile Include="src\GrfCutString.cpp" />
+    <ClCompile Include="src\GrfDebugExecution.cpp" />
+    <ClCompile Include="src\GrfDelay.cpp" />
+    <ClCompile Include="src\GrfDetachInputFromSocket.cpp" />
+    <ClCompile Include="src\GrfDetachOutputFromSocket.cpp" />
+    <ClCompile Include="src\GrfDo.cpp" />
+    <ClCompile Include="src\GrfEnvironTable.cpp" />
+    <ClCompile Include="src\GrfError.cpp" />
+    <ClCompile Include="src\GrfExecuteString.cpp" />
+    <ClCompile Include="src\GrfExecutionContext.cpp" />
+    <ClCompile Include="src\GrfExit.cpp" />
+    <ClCompile Include="src\GrfExpand.cpp" />
+    <ClCompile Include="src\GrfExtendExecutedScript.cpp" />
+    <ClCompile Include="src\GrfFileAsStandardInput.cpp" />
+    <ClCompile Include="src\GrfForeach.cpp" />
+    <ClCompile Include="src\GrfFunction.cpp" />
+    <ClCompile Include="src\GrfGenerate.cpp" />
+    <ClCompile Include="src\GrfGeneratedFile.cpp" />
+    <ClCompile Include="src\GrfGeneratedString.cpp" />
+    <ClCompile Include="src\GrfGenerateString.cpp" />
+    <ClCompile Include="src\GrfGlobalVariable.cpp" />
+    <ClCompile Include="src\GrfGoBack.cpp" />
+    <ClCompile Include="src\GrfIfThenElse.cpp" />
+    <ClCompile Include="src\GrfIncrementIndentLevel.cpp" />
+    <ClCompile Include="src\GrfInsertAssignment.cpp" />
+    <ClCompile Include="src\GrfInsertElementAt.cpp" />
+    <ClCompile Include="src\GrfInsertText.cpp" />
+    <ClCompile Include="src\GrfInsertTextOnce.cpp" />
+    <ClCompile Include="src\GrfInsertTextOnceToFloatingLocation.cpp" />
+    <ClCompile Include="src\GrfInsertTextToFloatingLocation.cpp" />
+    <ClCompile Include="src\GrfInvertArray.cpp" />
+    <ClCompile Include="src\GrfJointPoint.cpp" />
+    <ClCompile Include="src\GrfJointPointCall.cpp" />
+    <ClCompile Include="src\GrfListAllGeneratedFiles.cpp" />
+    <ClCompile Include="src\GrfLoadProject.cpp" />
+    <ClCompile Include="src\GrfLocalReference.cpp" />
+    <ClCompile Include="src\GrfLocalVariable.cpp" />
+    <ClCompile Include="src\GrfMerge.cpp" />
+    <ClCompile Include="src\GrfNewProject.cpp" />
+    <ClCompile Include="src\GrfNop.cpp" />
+    <ClCompile Include="src\GrfOpenLogFile.cpp" />
+    <ClCompile Include="src\GrfOverwritePortion.cpp" />
+    <ClCompile Include="src\GrfParseAsBNF.cpp" />
+    <ClCompile Include="src\GrfParsedFile.cpp" />
+    <ClCompile Include="src\GrfParsedString.cpp" />
+    <ClCompile Include="src\GrfParseFree.cpp" />
+    <ClCompile Include="src\GrfParseStringAsBNF.cpp" />
+    <ClCompile Include="src\GrfPopulateProtectedArea.cpp" />
+    <ClCompile Include="src\GrfProduceHTML.cpp" />
+    <ClCompile Include="src\GrfPushItem.cpp" />
+    <ClCompile Include="src\GrfPutEnv.cpp" />
+    <ClCompile Include="src\GrfQuantifyExecution.cpp" />
+    <ClCompile Include="src\GrfQuiet.cpp" />
+    <ClCompile Include="src\GrfRandomSeed.cpp" />
+    <ClCompile Include="src\GrfReadonlyHook.cpp" />
+    <ClCompile Include="src\GrfReference.cpp" />
+    <ClCompile Include="src\GrfRemoveAllElements.cpp" />
+    <ClCompile Include="src\GrfRemoveElement.cpp" />
+    <ClCompile Include="src\GrfRemoveFirstElement.cpp" />
+    <ClCompile Include="src\GrfRemoveLastElement.cpp" />
+    <ClCompile Include="src\GrfRemoveRecursive.cpp" />
+    <ClCompile Include="src\GrfRemoveVariable.cpp" />
+    <ClCompile Include="src\GrfResizeOutputStream.cpp" />
+    <ClCompile Include="src\GrfReturn.cpp" />
+    <ClCompile Include="src\GrfSaveBinaryToFile.cpp" />
+    <ClCompile Include="src\GrfSaveProject.cpp" />
+    <ClCompile Include="src\GrfSaveProjectTypes.cpp" />
+    <ClCompile Include="src\GrfSaveToFile.cpp" />
+    <ClCompile Include="src\GrfSelect.cpp" />
+    <ClCompile Include="src\GrfSetAll.cpp" />
+    <ClCompile Include="src\GrfSetAssignment.cpp" />
+    <ClCompile Include="src\GrfSetCommentBegin.cpp" />
+    <ClCompile Include="src\GrfSetCommentEnd.cpp" />
+    <ClCompile Include="src\GrfSetFloatingLocation.cpp" />
+    <ClCompile Include="src\GrfSetGenerationHeader.cpp" />
+    <ClCompile Include="src\GrfSetIncludePath.cpp" />
+    <ClCompile Include="src\GrfSetInputLocation.cpp" />
+    <ClCompile Include="src\GrfSetNow.cpp" />
+    <ClCompile Include="src\GrfSetOutputLocation.cpp" />
+    <ClCompile Include="src\GrfSetProperty.cpp" />
+    <ClCompile Include="src\GrfSetProtectedArea.cpp" />
+    <ClCompile Include="src\GrfSetTextMode.cpp" />
+    <ClCompile Include="src\GrfSetVersion.cpp" />
+    <ClCompile Include="src\GrfSetWorkingPath.cpp" />
+    <ClCompile Include="src\GrfSetWriteMode.cpp" />
+    <ClCompile Include="src\GrfSleep.cpp" />
+    <ClCompile Include="src\GrfSlideNodeContent.cpp" />
+    <ClCompile Include="src\GrfSortArray.cpp" />
+    <ClCompile Include="src\GrfStringAsStandardInput.cpp" />
+    <ClCompile Include="src\GrfSwitch.cpp" />
+    <ClCompile Include="src\GrfText.cpp" />
+    <ClCompile Include="src\GrfTraceEngine.cpp" />
+    <ClCompile Include="src\GrfTraceLine.cpp" />
+    <ClCompile Include="src\GrfTraceObject.cpp" />
+    <ClCompile Include="src\GrfTraceStack.cpp" />
+    <ClCompile Include="src\GrfTraceText.cpp" />
+    <ClCompile Include="src\GrfTranslate.cpp" />
+    <ClCompile Include="src\GrfTryCatch.cpp" />
+    <ClCompile Include="src\GrfWhile.cpp" />
+    <ClCompile Include="src\GrfWriteBytes.cpp" />
+    <ClCompile Include="src\GrfWritefileHook.cpp" />
+    <ClCompile Include="src\GrfWriteText.cpp" />
+    <ClCompile Include="src\GrfWriteTextOnce.cpp" />
+    <ClCompile Include="src\HTTPRequest.cpp" />
+    <ClCompile Include="src\JNIExternalHandling.cpp" />
+    <ClCompile Include="src\md5.cpp" />
+    <ClCompile Include="src\NetSocket.cpp" />
+    <ClCompile Include="src\ScpStream.cpp" />
+    <ClCompile Include="src\UtlDate.cpp" />
+    <ClCompile Include="src\UtlDirectory.cpp" />
+    <ClCompile Include="src\UtlException.cpp" />
+    <ClCompile Include="src\UtlString.cpp" />
+    <ClCompile Include="src\UtlTimer.cpp" />
+    <ClCompile Include="src\UtlTrace.cpp" />
+    <ClCompile Include="src\UtlXMLStream.cpp" />
+    <ClCompile Include="src\Workspace.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <SccProjectName />
+    <SccLocalPath />
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)bin\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)bin\$(Configuration)\Int\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)bin\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)bin\$(Configuration)\Int\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;LIB;CODEWORKER_CURL_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>$(IntDir)ASMList\</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)OBJs\</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)PDB\</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)\$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x040c</Culture>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;CODEWORKER_CURL_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>$(IntDir)ASMList\</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)OBJs\</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)PDB\</ProgramDataBaseFileName>      
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <CompileAs>Default</CompileAs>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)\$(ProjectName).lib</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x040c</Culture>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
