@@ -1,2 +1,0 @@
-parseAsBNF("CSVparser.cpp.cwp", this, "example.csv");
-traceObject(this, 10);
