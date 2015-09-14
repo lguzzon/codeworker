@@ -1,8 +1,11 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorker", "CodeWorker.vcxproj", "{FF80BAEB-9EB0-4F05-8FC7-D508E8717F47}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorkerLIB", "CodeWorkerLIB.vcxproj", "{AF364B52-7867-B5A6-5FE0-8C117E6499F5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorkerEXE", "CodeWorkerEXE.vcxproj", "{70ABBEEA-68AA-6721-221C-B85965940313}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AF364B52-7867-B5A6-5FE0-8C117E6499F5} = {AF364B52-7867-B5A6-5FE0-8C117E6499F5}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodeWorker.NET", "cs\CodeWorker.NET.vcxproj", "{0C6741D4-2A42-451B-80B5-EE480B0FB155}"
 EndProject
@@ -14,18 +17,18 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FF80BAEB-9EB0-4F05-8FC7-D508E8717F47}.Debug|Win32.ActiveCfg = Debug|Win32
-		{FF80BAEB-9EB0-4F05-8FC7-D508E8717F47}.Release|Win32.ActiveCfg = Release|Win32
+		{AF364B52-7867-B5A6-5FE0-8C117E6499F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AF364B52-7867-B5A6-5FE0-8C117E6499F5}.Debug|Win32.Build.0 = Debug|Win32
+		{AF364B52-7867-B5A6-5FE0-8C117E6499F5}.Release|Win32.ActiveCfg = Release|Win32
+		{AF364B52-7867-B5A6-5FE0-8C117E6499F5}.Release|Win32.Build.0 = Release|Win32
 		{70ABBEEA-68AA-6721-221C-B85965940313}.Debug|Win32.ActiveCfg = Debug|Win32
+		{70ABBEEA-68AA-6721-221C-B85965940313}.Debug|Win32.Build.0 = Debug|Win32
 		{70ABBEEA-68AA-6721-221C-B85965940313}.Release|Win32.ActiveCfg = Release|Win32
+		{70ABBEEA-68AA-6721-221C-B85965940313}.Release|Win32.Build.0 = Release|Win32
 		{0C6741D4-2A42-451B-80B5-EE480B0FB155}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0C6741D4-2A42-451B-80B5-EE480B0FB155}.Debug|Win32.Build.0 = Debug|Win32
 		{0C6741D4-2A42-451B-80B5-EE480B0FB155}.Release|Win32.ActiveCfg = Release|Win32
-		{0C6741D4-2A42-451B-80B5-EE480B0FB155}.Release|Win32.Build.0 = Release|Win32
 		{E123F3E0-BAB6-4845-BB9D-47DE5F0D5575}.Debug|Win32.ActiveCfg = Debug|Win32
-		{E123F3E0-BAB6-4845-BB9D-47DE5F0D5575}.Debug|Win32.Build.0 = Debug|Win32
 		{E123F3E0-BAB6-4845-BB9D-47DE5F0D5575}.Release|Win32.ActiveCfg = Release|Win32
-		{E123F3E0-BAB6-4845-BB9D-47DE5F0D5575}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

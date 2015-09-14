@@ -62,10 +62,10 @@ namespace CodeWorker {
 	void GrfDelay::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
 		CW_BODY_INDENT << "clock_t _compiler_start = clock();";
 		CW_BODY_ENDL;
-		CW_BODY_INDENT << "clock_t _compiler_finish = clock();";
-		CW_BODY_ENDL;
 		CW_BODY_INDENT;
 		GrfBlock::compileCpp(theCompilerEnvironment);
+		CW_BODY_INDENT << "clock_t _compiler_finish = clock();";
+		CW_BODY_ENDL;
 		CW_BODY_INDENT << "double _compiler_duration = (double)(_compiler_finish - _compiler_start) / CLOCKS_PER_SEC;";
 		CW_BODY_ENDL;
 		CW_BODY_INDENT << "CGRuntime::setLastDelay(_compiler_duration);";

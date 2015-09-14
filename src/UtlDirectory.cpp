@@ -114,8 +114,9 @@ namespace CodeWorker {
 		} else {
 			char pcFullPath[CW_PATH_MAX];
 			pcFullPath[0] = '\0';
-			getcwd(pcFullPath, CW_PATH_MAX - 1);
-			sFullPath= pcFullPath;
+			// getcwd(pcFullPath, CW_PATH_MAX - 1);
+			// sFullPath= pcFullPath;
+			sFullPath= getcwd(pcFullPath, CW_PATH_MAX - 1);
 			if (!sFullPath.empty()) {
 				if (sFullPath[sFullPath.size() - 1] != '/') sFullPath += "/";
 				sFullPath += sRelativePath;

@@ -343,6 +343,7 @@ namespace CodeWorker {
 			static std::string getHTTPRequest(const std::string& sURL, CppParsingTree_var pHTTPSession, CppParsingTree_var pArguments);
 			static std::string getIncludePath();
 			static double getLastDelay();
+			static void setLastDelay(double dDelay);
 			static std::string getNow();
 			static std::string getProperty(const std::string& sDefine);
 			static std::string getShortFilename(const std::string& sPathFilename);
