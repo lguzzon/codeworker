@@ -9,7 +9,8 @@ build:
   verbosity: normal
 after_build:
   - upx --best .\bin\Release\CodeWorkerEXE\CodeWorkerEXE.exe
-  - copy .\bin\Release\CodeWorkerEXE\CodeWorkerEXE.exe codeworker.exe
+  - copy .\bin\Release\CodeWorkerEXE\CodeWorkerEXE.exe .\codeworker.exe
+test: off
 artifacts:
-  - path: codeworker.exe
+  - path: .\codeworker.exe
     name: codewoker
