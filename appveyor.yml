@@ -1,6 +1,6 @@
 version: 4.5.4-{build}
-configuration:
-- Release
+configuration: Release
+image: Visual Studio 2015
 install:
   - curl -L -o upx.zip http://upx.sourceforge.net/download/upx391w.zip && 7z e upx.zip *.exe -r
 build:
