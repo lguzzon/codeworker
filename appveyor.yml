@@ -1,6 +1,6 @@
 version: 4.5.4-{build}
 configuration: Release
-image: Visual Studio 2017
+image: Visual Studio 2017 RC
 install:
   - curl -L -o upx.zip http://upx.sourceforge.net/download/upx391w.zip && 7z e upx.zip *.exe -r
 build:
