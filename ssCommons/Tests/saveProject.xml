@@ -1,0 +1,87 @@
+<project>
+	<graph>
+		<nodes>
+			<__ARRAY_ENTRY __KEY="A" __VALUE="A">
+				<adjacentNodes>
+					<__ARRAY_ENTRY __KEY="B" __VALUE="B" />
+				</adjacentNodes>
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="B" __VALUE="B">
+				<adjacentNodes>
+					<__ARRAY_ENTRY __KEY="C" __VALUE="C" />
+					<__ARRAY_ENTRY __KEY="F" __VALUE="F" />
+				</adjacentNodes>
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="C" __VALUE="C">
+				<adjacentNodes>
+					<__ARRAY_ENTRY __KEY="D" __VALUE="D" />
+				</adjacentNodes>
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="F" __VALUE="F">
+				<adjacentNodes>
+					<__ARRAY_ENTRY __KEY="G" __VALUE="G" />
+				</adjacentNodes>
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="D" __VALUE="D">
+				<adjacentNodes>
+					<__ARRAY_ENTRY __KEY="E" __VALUE="E" />
+				</adjacentNodes>
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="E" __VALUE="E">
+				<adjacentNodes>
+					<__ARRAY_ENTRY __KEY="A" __VALUE="A" />
+				</adjacentNodes>
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="G" __VALUE="G">
+				<adjacentNodes>
+					<__ARRAY_ENTRY __KEY="H" __VALUE="H" />
+					<__ARRAY_ENTRY __KEY="I" __VALUE="I" />
+				</adjacentNodes>
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="H" __VALUE="H">
+				<adjacentNodes>
+					<__ARRAY_ENTRY __KEY="D" __VALUE="D" />
+				</adjacentNodes>
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="I" __VALUE="I">
+				<adjacentNodes>
+					<__ARRAY_ENTRY __KEY="L" __VALUE="L" />
+				</adjacentNodes>
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="L" __VALUE="L">
+				<adjacentNodes>
+					<__ARRAY_ENTRY __KEY="H" __VALUE="H" />
+				</adjacentNodes>
+			</__ARRAY_ENTRY>
+		</nodes>
+		<cycles>
+			<__ARRAY_ENTRY __KEY="0">
+				<__ARRAY_ENTRY __KEY="0" __VALUE="A" />
+				<__ARRAY_ENTRY __KEY="1" __VALUE="B" />
+				<__ARRAY_ENTRY __KEY="2" __VALUE="C" />
+				<__ARRAY_ENTRY __KEY="3" __VALUE="D" />
+				<__ARRAY_ENTRY __KEY="4" __VALUE="E" />
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="1">
+				<__ARRAY_ENTRY __KEY="0" __VALUE="A" />
+				<__ARRAY_ENTRY __KEY="1" __VALUE="B" />
+				<__ARRAY_ENTRY __KEY="2" __VALUE="F" />
+				<__ARRAY_ENTRY __KEY="3" __VALUE="G" />
+				<__ARRAY_ENTRY __KEY="4" __VALUE="H" />
+				<__ARRAY_ENTRY __KEY="5" __VALUE="D" />
+				<__ARRAY_ENTRY __KEY="6" __VALUE="E" />
+			</__ARRAY_ENTRY>
+			<__ARRAY_ENTRY __KEY="2">
+				<__ARRAY_ENTRY __KEY="0" __VALUE="A" />
+				<__ARRAY_ENTRY __KEY="1" __VALUE="B" />
+				<__ARRAY_ENTRY __KEY="2" __VALUE="F" />
+				<__ARRAY_ENTRY __KEY="3" __VALUE="G" />
+				<__ARRAY_ENTRY __KEY="4" __VALUE="I" />
+				<__ARRAY_ENTRY __KEY="5" __VALUE="L" />
+				<__ARRAY_ENTRY __KEY="6" __VALUE="H" />
+				<__ARRAY_ENTRY __KEY="7" __VALUE="D" />
+				<__ARRAY_ENTRY __KEY="8" __VALUE="E" />
+			</__ARRAY_ENTRY>
+		</cycles>
+	</graph>
+</project>

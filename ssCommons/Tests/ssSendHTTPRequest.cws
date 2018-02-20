@@ -1,0 +1,36 @@
+
+#include "ssProcs.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+#if existFunction(ssProcs)
+    ssProcsFinalize();
+#end
+}
+
+function mainTest()
+{
+    local lURL = "www.google.com";
+    local lHTTPSession;
+    setProxy(lHTTPSession);
+    traceObject(lHTTPSession, 2);
+    local lResult = sendHTTPRequest(lURL, lHTTPSession);
+    traceLineEx("--> ", "sendHTTPRequest", lResult);
+    traceObject(lHTTPSession, 2);
+    // Call this function always on function exit
+    finally {
+        finalizeTest();
+    }
+}
+
+// Test begin
+traceLineEx("<--     Test begin     --> ");
+delay {
+    mainTest();
+}
+traceLineEx("<--     Test end       --> ", "Elapsed", getLastDelayString());
+// Test end
+
+

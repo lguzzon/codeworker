@@ -1,0 +1,28 @@
+
+
+#include "ssProcs.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+#if existFunction(ssProcs)
+    systemExecFinalize();
+#end
+}
+
+function mainTest()
+{
+    // Insert here test code \/
+    traceLineEx("-->Header<--");
+    traceLineEx("-->Header<--", "-->Label<--");
+    traceLineEx("-->Header<--", "-->Label<--", "11111111112222222222333333333344444444445555555555666666666677777777778888888888");
+    // Call this function always on function exit
+    finalizeTest();
+}
+
+// Test begin
+traceLineEx("<--     Test begin     --> ");
+delay mainTest();
+traceLineEx("<--     Test end       --> ", "Elapsed", getLastDelayString());
+// Test end

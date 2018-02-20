@@ -1,0 +1,66 @@
+
+#include "ssProcs.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+#if existFunction(ssProcs)
+    ssProcsFinalize();
+#end
+}
+
+function mainTest()
+{
+    // Insert here test code \/
+    local lPath = canonizePath(getWorkingPath());
+    local lTemplateTestBat = lPath + "/" + "templateTest.bat";
+
+    if (existFile(lTemplateTestBat)) {
+        local lTemplateTestSh = lPath + "/" + "templateTest.sh";
+
+        if (existFile(lTemplateTestSh)) {
+            if (existVariable(_ARGS[0])) {
+                local lParam0 = canonizePath(_ARGS[0]);
+
+                if (existDirectory(lParam0)) {
+                    lPath = lParam0;
+                }
+            }
+
+            local lFiles;
+            traceLineEx("> ", "Scan files", lPath);
+
+            if (scanFiles(lFiles, lPath, "*.cws", true)) {
+                foreach lFile in lFiles {
+                    if (toLowerString(extractFile(lFile)) != "templatetest.cws")
+                    {
+                        local lFilePath = extractPath(lFile);
+                        local lFileName = extractFileName(lFile);
+                        local lFileBat = lFilePath + "/" + lFileName + ".bat";
+                        local lFileSh = lFilePath + "/" + lFileName + ".sh";
+                        traceLineEx("--->", "lFileBat", lFileBat);
+                        traceLineEx("--->", "lFileSh", lFileSh);
+                        copyFile(lTemplateTestBat, lFileBat);
+                        copyFile(lTemplateTestSh, lFileSh);
+                    }
+                }
+            }
+        } else {
+            traceLineEx("--> ", "Error", "File not found!!! [" + lTemplateTestSh + "]");
+        }
+    } else {
+        traceLineEx("--> ", "Error", "File not found!!! [" + lTemplateTestBat + "]");
+    }
+
+    // Call this function always on function exit
+    finally {
+        finalizeTest();
+    }
+}
+
+// Test begin
+traceLineEx("<--     Script begin     --> ");
+delay mainTest();
+traceLineEx("<--     Script end       --> ", "Elapsed", getLastDelayString());
+// Test end

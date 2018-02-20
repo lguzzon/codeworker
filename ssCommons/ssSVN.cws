@@ -1,0 +1,299 @@
+
+#if ! existFunction(ssSVN)
+
+// Function to state that already included
+function ssSVN()
+{
+    return "ssSVN";
+}
+
+#include "ssProcs.cws"
+
+
+global gSVN_APP_UNIX = "svn";
+global gSVN_APP_WINDOWS = "svn.exe";
+global gSVN_APP_VERSION = "";
+global gSVN_APP = "";
+
+global gSYSTEM_EXEC_SVN_INFO = "SVN";
+
+function systemExecSVNCommand()
+{
+    return systemExecCommand(gSYSTEM_EXEC_SVN_INFO);
+}
+
+function systemExecSVNResult()
+{
+    return systemExecResult(gSYSTEM_EXEC_SVN_INFO);
+}
+
+function systemExecSVNStandardInput()
+{
+    return systemExecStandardInput(gSYSTEM_EXEC_SVN_INFO);
+}
+
+function systemExecSVNStandardOutput()
+{
+    return systemExecStandardOutput(gSYSTEM_EXEC_SVN_INFO);
+}
+
+function systemExecSVNErrorOutput()
+{
+    return systemExecErrorOutput(gSYSTEM_EXEC_SVN_INFO);
+}
+
+global gPROPERTYNAME_SVN_EXTERNALS = "svn:externals";
+
+function svnApp()
+{
+    return searchApp(gSVN_APP, gSVN_APP_WINDOWS, gSVN_APP_UNIX, gSVN_APP_VERSION, " --version --quiet", "", endl());
+}
+
+function svnAppVersion()
+{
+    svnApp();
+    local lResult = gSVN_APP_VERSION;
+    return lResult;
+}
+
+function traceLastSVNSystemExec(aHeaderMessage = "SVN System Exec")
+{
+    return traceLastSystemExec(gSYSTEM_EXEC_SVN_INFO, aHeaderMessage + " using: " + svnApp() + " [" + svnAppVersion() + "]");
+}
+
+global gSVN_PROXY_OPTIONS = "";
+function getSVN_PROXY_OPTIONS()
+{
+    local lResult = gSVN_PROXY_OPTIONS;
+
+    if (lResult = "") {
+        getProxyInfosFromOS();
+
+        if (gProxy != "") {
+            lResult = " --config-option servers:global:http-proxy-host=" + gProxy;
+
+            if (gProxyPort != "") {
+                lResult = lResult + " --config-option servers:global:http-proxy-port=" + gProxyPort;
+            }
+
+            gSVN_PROXY_OPTIONS = lResult;
+        }
+    }
+
+    return lResult;
+}
+
+function systemExecSVN(aArgs, aOptions = "")
+{
+    local lResult = "";
+    local lOptions = "";
+
+    if (aOptions != "") {
+        lOptions = aOptions;
+        trim(lOptions);
+        lOptions = lOptions + " ";
+    }
+
+    local lCommand = svnApp() + getSVN_PROXY_OPTIONS() + " --non-interactive --trust-server-cert " + lOptions + aArgs;
+    systemExec(lCommand, "", gSYSTEM_EXEC_SVN_INFO);
+
+    if (systemExecSVNErrorOutput() != "") {
+        traceLastSVNSystemExec();
+    }
+
+    lResult = systemExecSVNStandardOutput();
+    return lResult;
+}
+
+function systemSVN_info(aPath_URL, aTag = "", aOptions = "")
+{
+    local lResult = "";
+    lResult = systemExecSVN("info " + aPath_URL, "--xml " + aOptions);
+
+    if (aTag != "") {
+        lResult = xmlExtractTagValue(lResult, aTag);
+    }
+
+    return lResult;
+}
+
+function systemSVN_propget(aPropertyName , aTarget, aOptions = "")
+{
+    local lResult = "";
+    lResult = systemExecSVN("propget " + aPropertyName + " " + aTarget, "--strict --xml " + aOptions);
+    lResult = midStrings(lResult, dquoteString(aPropertyName) + ">", "<");
+    return lResult;
+}
+
+function systemSVN_propget_svn_externals(aTarget, aOptions = "")
+{
+    return systemSVN_propget(gPROPERTYNAME_SVN_EXTERNALS , aTarget, aOptions);
+}
+function systemSVN_propset(aPropertyName , aPropertyValue: value, aTarget, aOptions = "")
+{
+    local lResult = "";
+    lResult = systemExecSVN("propset " + aPropertyName + " " + dquoteString(aPropertyValue) + " " + aTarget, aOptions);
+    return lResult;
+}
+
+function systemSVN_propset_svn_externals(aPropertyValue: value, aTarget, aOptions = "")
+{
+    return systemSVN_propset(gPROPERTYNAME_SVN_EXTERNALS, aPropertyValue, aTarget, aOptions);
+}
+
+function systemSVN_propset_append(aPropertyName , aPropertyValue: value, aTarget, aAddIfNotPresent = true, aOptions = "")
+{
+    local lResult = "";
+
+    switch (aPropertyName) {
+    case "svn:externals" : {
+            local lCurrentPropertyValue = systemSVN_propget(aPropertyName, aTarget, aOptions);
+            local lContinue = true;
+
+            if (aAddIfNotPresent) {
+                lContinue = (equal(findString(lCurrentPropertyValue, aPropertyValue), -1));
+            }
+
+            if (lContinue) {
+                local lFileWithPropertyValues = tempFilename();
+                local lPropertyValue = lCurrentPropertyValue + appendStringIfNotPresent(aPropertyValue, endl());
+                saveToFile(lFileWithPropertyValues, lPropertyValue);
+                lResult = systemExecSVN("propset " + aPropertyName + " -F " + dquoteString(osEncodePath(lFileWithPropertyValues)) + " " + aTarget, aOptions);
+                deleteFile(lFileWithPropertyValues);
+            }
+
+            break;
+        }
+    }
+
+    return lResult;
+}
+
+function systemSVN_propset_append_svn_externals(aPropertyValue: value, aTarget, aAddIfNotPresent = true, aOptions = "")
+{
+    return systemSVN_propset_append(gPROPERTYNAME_SVN_EXTERNALS , aPropertyValue, aTarget, aAddIfNotPresent, aOptions);
+}
+
+function systemSVN_propdel(aPropertyName , aTarget, aOptions = "")
+{
+    local lResult = "";
+    lResult = systemExecSVN("propdel " + aPropertyName + " " + aTarget, aOptions);
+    return lResult;
+}
+
+function systemSVN_update(aPath, aOptions = "")
+{
+    local lResult = "";
+    lResult = systemExecSVN("update " + aPath, aOptions);
+    return lResult;
+}
+
+function systemSVN_commit(aPath, aMessage = "", aOptions = "")
+{
+    local lResult = "";
+    local lMessage = " ";
+
+    if (aMessage != "") {
+        lMessage = "--message " + dquoteString(aMessage) + " ";
+    }
+
+    lResult = systemExecSVN("commit " + aPath, lMessage + aOptions);
+    return lResult;
+}
+
+function systemSVN_copy(aFromPath, aToPath, aMessage = "", aOptions = "")
+{
+    local lResult = "";
+    local lOptions;
+
+    if (aMessage != "") {
+        pushItem lOptions = "--message " + dquoteString(aMessage);
+    }
+
+    if (aOptions != "") {
+        pushItem lOptions = aOptions;
+    }
+
+    local lCommandLine = "copy " + aFromPath + " " + aToPath;
+    local lOptionString = joinStrings(lOptions, " ");
+    trim(lOptionString);
+    lResult = systemExecSVN(lCommandLine, lOptionString);
+    //traceLineEx("Debug ", "systemSVN_copy()", "[" + aFromPath + ", " + aToPath + ", " + aMessage + "]" + endl() + lResult);
+    return lResult;
+}
+
+function systemSVN_move(aFromPath, aToPath, aMessage = "", aOptions = "")
+{
+    local lResult = "";
+    local lOptions;
+
+    if (aMessage != "") {
+        pushItem lOptions = "--message " + dquoteString(aMessage);
+    }
+
+    if (aOptions != "") {
+        pushItem lOptions = aOptions;
+    }
+
+    local lCommandLine = "move " + aFromPath + " " + aToPath;
+    local lOptionString = joinStrings(lOptions, " ");
+    trim(lOptionString);
+    lResult = systemExecSVN(lCommandLine, lOptionString);
+    //traceLineEx("Debug ", "systemSVN_copy()", "[" + aFromPath + ", " + aToPath + ", " + aMessage + "]" + endl() + lResult);
+    return lResult;
+}
+
+function systemSVN_mkDir(aToPath, aMessage = "", aMakeParentsToo = true, aOptions = "")
+{
+    local lResult = "";
+    local lOptions;
+
+    if (aMessage != "") {
+        pushItem lOptions = "--message " + dquoteString(aMessage);
+    }
+
+    if (aMakeParentsToo) {
+        pushItem lOptions = "--parents";
+    }
+
+    if (aOptions != "") {
+        pushItem lOptions = aOptions;
+    }
+
+    local lOptionString = joinStrings(lOptions, " ");
+    trim(lOptionString);
+    local lCommandLine = "mkdir " + aToPath;
+    lResult = systemExecSVN(lCommandLine, lOptionString);
+    //traceLineEx("Debug ", "systemSVN_mkDir()", "[" + lCommandLine + ", " + lOptions + "]" + endl() + lResult);
+    return lResult;
+}
+
+//// Intialization Finalization code goes here
+
+// All initialize code goes here
+function ssSVNInitialize()
+{
+    //traceLine("ssSVNInitialize Begin");
+    //traceLine("ssSVNInitialize End");
+}
+
+global ssSVNFinalized = false;
+// All finalize code goes here
+function ssSVNFinalize()
+{
+    if (!ssSVNFinalized) {
+        //traceLine("ssSVNFinalize Begin");
+#if existFunction(ssProcs)
+        ssProcsFinalize();
+#end
+
+        ssSVNFinalized = true;
+        //traceLine("ssSVNFinalize End");
+    }
+}
+
+
+// Init code goes here
+ssSVNInitialize();
+#else
+#end

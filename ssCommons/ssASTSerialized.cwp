@@ -1,0 +1,40 @@
+ASTSerialized 
+	::=
+	#continue
+	[	ASTNode(this)
+	]?
+	#empty	
+	=>	insert this.isRoot;
+	;
+
+ASTNode(aNode: node)
+	::=
+	[	ASTNodeValue(aNode)
+		#continue
+		'('
+		[	#pushItem(aNode)
+			ASTNode(aNode#back)
+		]*
+		')'
+	]
+	;
+
+ASTNodeValue(aNode: node)
+	::=
+	=>	local lValue = "";
+	[	[	[	'\\'
+				[	'('
+				|	')'
+				|	'\\'
+				]:lChar
+				=>	lValue += lChar;			
+			]
+		|	![	'('
+			|	')'
+			]
+			#readChar:lChar
+			=>	lValue += lChar;
+		]+
+	]
+	=>	insert aNode = lValue;
+	;

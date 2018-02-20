@@ -1,0 +1,346 @@
+
+#if !existFunction(ssAST)
+
+// Function to state that already included
+function ssAST()
+{
+    return "ssAST";
+}
+
+#include "ssProcs.cws"
+
+// AST functions
+function ssAST_IsLeaf(aASTNode: node)
+{
+    local lResult = equal(aASTNode.size(), 0);
+    return lResult;
+}
+
+function ssAST_IsFather(aASTNode: node)
+{
+    local lResult = sup(aASTNode.size(), 0);
+    return lResult;
+}
+
+function ssAST_IsGood(aASTNode: node)
+{
+    local lResult = ssAST_IsLeaf(aASTNode) || ssAST_IsFather(aASTNode);
+    return lResult;
+}
+
+function ssAST_IsRoot(aASTNode: node)
+{
+    local lResult = existVariable(aASTNode.isRoot);
+    return lResult;
+}
+
+function ssAST_Check(aASTNode: node, lDebug = false)
+{
+    local lResult = ssAST_IsGood(aASTNode);
+
+    if (lResult) {
+        if (ssAST_IsFather(aASTNode)) {
+            foreach lASTNode in aASTNode {
+                if (!ssAST_Check(lASTNode))
+                {
+                    if (lDebug) {
+                        traceLine("lASTNode is not Good !!!");
+                        traceObject(lASTNode);
+                    }
+
+                    lResult = false;
+                    break;
+                }
+            }
+        }
+    } else {
+        if (lDebug) {
+            traceLine("aASTNode is not Good !!!");
+            traceObject(aASTNode);
+        }
+    }
+
+    return lResult;
+}
+
+// ASTNode Attributes
+function ssAST_Name(aASTNode: node)
+{
+    local lResult = "";
+
+    if (ssAST_IsFather(aASTNode)) {
+        lResult = aASTNode;
+    }
+
+    return lResult;
+}
+
+function ssAST_Value(aASTNode: node)
+{
+    local lResult = "";
+
+    if (ssAST_IsFather(aASTNode)) {
+        foreach lASTNode in aASTNode {
+            lResult += ssAST_Value(lASTNode);
+        }
+    } else {
+        if (ssAST_IsLeaf(aASTNode)) {
+            lResult = aASTNode;
+        }
+    }
+
+    return lResult;
+}
+
+function ssAST_Parent(aASTNode: node, aParent: reference)
+{
+    local lResult = !ssAST_IsRoot(aASTNode);
+
+    if (lResult) {
+        ref aParent = aASTNode#parent;
+    }
+
+    return lResult;
+}
+
+function ssAST_ParentKey(aASTNode: node, aParentKey: node)
+{
+    local lResult = true;
+
+    if (existVariable(aASTNode.parentKey)) {
+        aParentKey = aASTNode.parentKey;
+    } else {
+        local lParent;
+        lResult = ssAST_Parent(aASTNode, lParent);
+
+        if (lResult) {
+            foreach lASTNode in lParent {
+                insert lASTNode.parentKey = lASTNode.key();
+            }
+            aParentKey = aASTNode.parentKey;
+        }
+    }
+
+    return lResult;
+}
+
+function ssAST_ASTNodeToString(aASTNode: node, aLevel = 0)
+{
+    local lResult = "";
+
+    if (ssAST_IsLeaf(aASTNode)) {
+        lResult += ssAST_Value(aASTNode);
+    } else {
+        lResult += ssAST_Name(aASTNode);
+    }
+
+    local lChars = {'(', ')'};
+    lResult = escapeString(lResult, '\\', lChars);
+
+    if (equal(aLevel, 0) || sup(aLevel, 1)) {
+        if (sup(aLevel, 1)) {
+            aLevel = sub(aLevel, 1);
+        }
+
+        lResult += '(';
+        foreach lASTNode in aASTNode {
+            lResult += ssAST_ASTNodeToString(lASTNode, aLevel);
+        }
+        lResult += ')';
+    }
+
+    return lResult;
+}
+
+function ssAST_ASTNodeFromString(aString, aASTNode: reference)
+{
+    local lResult = false;
+    local lSSASTSerialized_CWPFile = resolveFilePath("ssASTSerialized.cwp");
+
+    if (lSSASTSerialized_CWPFile != "") {
+        clearVariable(aASTNode);
+        parseStringAsBNF(lSSASTSerialized_CWPFile, aASTNode, aString);
+        lResult = true;
+    }
+
+    return lResult;
+}
+
+function ssAST_ASTNodeToFile(aASTNode: node, aFile, aLevel = 0)
+{
+    local lResult = false;
+    local lASTNodeToString = ssAST_ASTNodeToString(aASTNode, aLevel);
+    saveToFile(aFile, lASTNodeToString);
+    lResult = existFile(aFile);
+    return lResult;
+}
+
+function ssAST_ASTNodeFromFile(aFile, aASTNode: reference)
+{
+    local lResult = false;
+    local lString;
+
+    if (fileToString(aFile, lString)) {
+        lResult = ssAST_ASTNodeFromString(lString, aASTNode);
+    }
+
+    return lResult;
+}
+
+function ssAST_ASTNodeAsString(aASTNode: node, aTabs, aLevel = 0)
+{
+    local lResult = "";
+    local lHeader = repeatString("\t", aTabs);
+
+    if (ssAST_IsLeaf(aASTNode)) {
+        lResult += lHeader + "value: " + ssAST_Value(aASTNode) + '\n';
+    } else {
+        lResult += lHeader + "name: " + ssAST_Name(aASTNode) + '\n';
+    }
+
+    local lParent;
+
+    if (ssAST_Parent(aASTNode, lParent)) {
+        local lName = ssAST_Name(lParent);
+
+        if (lName != "") {
+            lResult += lHeader + "parent (name): " + lName + '\n';
+        }
+    }
+
+    local lParentKey;
+
+    if (ssAST_ParentKey(aASTNode, lParentKey)) {
+        lResult += lHeader + "parentKey: " + lParentKey + '\n';
+    }
+
+    if (equal(aLevel, 0) || sup(aLevel, 1)) {
+        if (sup(aLevel, 1)) {
+            aLevel = sub(aLevel, 1);
+        }
+
+        foreach lASTNode in aASTNode {
+            lResult += lHeader + "[" + lASTNode.key() + "]" + '\n';
+            lResult += ssAST_ASTNodeAsString(lASTNode, add(aTabs, 1), aLevel);
+        }
+    }
+
+    return lResult;
+}
+
+function ssAST_ASTNodeEqual(aASTNode: node,  aName = "", aValue = "")
+{
+    local lNameOk = (aName == "");
+
+    if (! lNameOk) {
+        lNameOk = (ssAST_Name(aASTNode) == aName);
+    }
+
+    local lResult = lNameOk;
+
+    if (lNameOk) {
+        local lValueOk = (aValue == "");
+
+        if (! lValueOk) {
+            lValueOk = (ssAST_Value(aASTNode) == aValue);
+        }
+
+        lResult = lValueOk;
+    }
+
+    return lResult;
+}
+
+function ssAST_AllWith(aASTNode: node, aResultArray: node,  aName = "", aValue = "")
+{
+    if (ssAST_ASTNodeEqual(aASTNode, aName, aValue)) {
+        pushItem aResultArray;
+        ref aResultArray#back = aASTNode;
+    }
+
+    foreach lASTNode in aASTNode {
+        ssAST_AllWith(lASTNode, aResultArray, aName, aValue);
+    }
+}
+
+
+function ssAST_AllNamed(aASTNode: node, aResultArray: node)
+{
+    if (ssAST_Name(aASTNode) != "") {
+        pushItem aResultArray;
+        ref aResultArray#back = aASTNode;
+        foreach lASTNode in aASTNode {
+            ssAST_AllNamed(lASTNode, aResultArray);
+        }
+    }
+}
+
+function ssAST_FirstWith(aASTNode: node, aResult: reference,  aName = "", aValue = "")
+{
+    local lResult = false;
+
+    if (ssAST_ASTNodeEqual(aASTNode, aName, aValue)) {
+        ref aResult = aASTNode;
+        lResult = true;
+    } else {
+        foreach lASTNode in aASTNode {
+            if (ssAST_FirstWith(lASTNode, aResult, aName, aValue))
+            {
+                lResult = true;
+                break;
+            }
+        }
+    }
+
+    return lResult;
+}
+
+function ssAST_gotParent(aASTNode: node, aParentName, aParent: reference)
+{
+    local lResult = false;
+    localref lCurrent =  aASTNode;
+    local lCurrentParent;
+
+    while (ssAST_Parent(lCurrent, lCurrentParent)) {
+        if (ssAST_Name(lCurrentParent) == aParentName) {
+            ref aParent = lCurrentParent;
+            lResult = true;
+            break;
+        }
+
+        ref lCurrent = lCurrentParent;
+    }
+
+    return lResult;
+}
+
+
+//// Intialization Finalization code goes here
+
+// All initialize code goes here
+function ssASTInitialize()
+{
+    //traceLine("ssASTInitialize Begin");
+    //traceLine("ssASTInitialize End");
+}
+
+
+global ssAST_Finalized = false;
+// All finalize code goes here
+function ssASTFinalize()
+{
+    if (!ssAST_Finalized) {
+        //traceLine("ssAST_Finalize Begin");
+#if existFunction(ssProcs)
+        ssProcsFinalize();
+#end
+        ssAST_Finalized = true;
+        //traceLine("ssAST_Finalize End");
+    }
+}
+
+// Init code goes here
+ssASTInitialize();
+
+#else
+#end

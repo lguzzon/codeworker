@@ -1,0 +1,24 @@
+
+#include "ssSVN.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+#if existFunction(ssSVN)
+    ssSVNFinalize();
+#end
+}
+
+function mainTest()
+{
+    traceLineEx("  ", "svnApp", svnApp());
+    // Call this function always on function exit
+    finalizeTest();
+}
+
+// Test begin
+traceLineEx("<--     Test begin     --> ");
+delay mainTest();
+traceLineEx("<--     Test end       --> ", "Elapsed", getLastDelayString());
+// Test end
