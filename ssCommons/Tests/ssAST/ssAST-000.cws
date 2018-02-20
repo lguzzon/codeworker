@@ -1,0 +1,93 @@
+
+#include "ssProcs.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+#if existFunction(ssProcs)
+    ssProcsFinalize();
+#end
+}
+
+
+function check000()
+{
+    local lToken = "T1";
+    local lTokens;
+    insert lTokens[lToken] = "10";
+    ref lTokens[lToken] = lTokens[lToken];
+    localref lTokenRef = lTokens[lToken];
+    local lAst;
+    pushItem lAst;
+    ref lAst#back = lTokenRef;
+    traceObject(lTokens, 5);
+    traceObject(lTokenRef, 5);
+    // traceLineEx("--> ", "systemSVN_info('" + lPath + "', '" + lTag + "')", systemSVN_info(lPath, lTag));
+    // Call this function always on function exit
+}
+
+function checkParent000()
+{
+    local lItem = "lItemValue";
+    insert lItem.SubItem = "SubItemValue";
+    traceObject(lItem, 5);
+    traceObject(lItem.SubItem#parent,5);
+}
+
+function checkParent001()
+{
+    local lItem = "lItemValue";
+    pushItem lItem = "SubItemValue";
+    localref lSubItem = lItem#back;
+    traceObject(lItem, 5);
+    traceObject(lSubItem#parent,5);
+}
+
+function checkParent002()
+{
+    local lItem = "lItemValue";
+    traceObject(lItem, 5);
+    traceObject(lItem#parent,5);
+    traceObject(lItem#root,5);
+}
+
+function checkParent003()
+{
+    local lItem = "lItemValue";
+    insert lItem.SubItem = "SubItemValue";
+    insert lItem.SubItem.SubSubItem = "SubSubItem";
+    traceObject(lItem, 5);
+    traceObject(lItem.SubItem#parent,5);
+    traceObject(lItem.SubItem.SubSubItem#parent,5);
+    traceObject(lItem.SubItem.SubSubItem#root,5);
+}
+
+function checkParent004()
+{
+    local lItem = "lItemValue";
+    pushItem lItem = "SubItemValue";
+    localref lSubItem = lItem#back;
+    pushItem lSubItem = "SubSubItem";
+    localref lSubSubItem = lSubItem#back;
+    traceObject(lItem, 5);
+    traceObject(lSubItem#parent,5);
+    traceObject(lSubSubItem#parent,5);
+    traceObject(lSubSubItem#root,5);
+}
+
+
+
+function mainTest()
+{
+    checkParent004();
+    finally {
+        finalizeTest();
+    }
+}
+
+// Test begin
+traceLineEx("<--     Test begin     --> ");
+delay mainTest();
+traceLineEx("<--     Test end       --> ", "Elapsed", getLastDelayString());
+// Test end

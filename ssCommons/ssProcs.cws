@@ -1,0 +1,1123 @@
+
+#if !existFunction(ssProcs)
+
+// Function to state that already included
+function ssProcs()
+{
+    return "ssProcs";
+}
+
+// OS functions
+global gUnixOS = "UNIX";
+global gWindowsOS = "WINDOWS";
+global gCurrentOS = "";
+function currentOS()
+{
+    if (gCurrentOS == "") {
+        if (equal(lengthString(endl()), 1)) {
+            gCurrentOS = gUnixOS;
+        } else {
+            gCurrentOS = gWindowsOS;
+        }
+    }
+
+    return gCurrentOS;
+}
+
+function currentOSIsWindows()
+{
+    return (currentOS() == gWindowsOS);
+}
+
+function currentOSIsUnix()
+{
+    return (currentOS() == gUnixOS);
+}
+
+//Date functions
+function getNowSortable(aNow = "")
+{
+    if (aNow == "") {
+        aNow = getNow();
+    }
+
+    trim(aNow);
+    return formatDate(aNow, "%Y%m%d-%H%M%S-%L");
+}
+
+//Random functions
+function randomize()
+{
+    randomSeed(-1);
+}
+
+//UUID functions
+function getUUID()
+{
+    if (currentOS() == gWindowsOS) {
+        return toUpperString(UUID());
+    } else {
+        local lResult = "";
+        local lToDo = 32;
+        local lNext = 0;
+        local lToAdd;
+
+        while (sup(lToDo, 0)) {
+            lNext = mod(randomInteger(), 16);
+            lToAdd = lNext;
+
+            switch (lNext) {
+            case "15":
+                lToAdd = "F";
+                break;
+
+            case "14":
+                lToAdd = "E";
+                break;
+
+            case "13":
+                lToAdd = "D";
+                break;
+
+            case "12":
+                lToAdd = "C";
+                break;
+
+            case "11":
+                lToAdd = "B";
+                break;
+
+            case "10":
+                lToAdd = "A";
+                break;
+
+            default:
+                lToAdd = lNext;
+                break;
+            }
+
+            lResult = lResult + lToAdd;
+            lToDo = sub(lToDo, 1);
+
+            switch (lToDo) {
+            case "24":
+            case "20":
+            case "16":
+            case "12":
+                lResult = lResult + "-";
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        return lResult;
+    }
+}
+
+function getLastDelayString()
+{
+    local lSeconds = getLastDelay();
+    local lMinutes = div(lSeconds, 60);
+    local lMinutesMod = mod(lMinutes, 60);
+    local lHours = div(lMinutes, 60);
+    local lHoursMod = mod(lHours, 24);
+    local lDisplay = "";
+    local lAddSpace = false;
+
+    if (sup(lHours, 1)) {
+        lDisplay = lHoursMod + " - H";
+        lAddSpace = true;
+    }
+
+    if (sup(lMinutes, 1)) {
+        if (lAddSpace) {
+            lDisplay += " ";
+        }
+
+        lDisplay += lMinutesMod + " - M";
+        lAddSpace = true;
+    }
+
+    local lDisplaySeconds = sub(sub(lSeconds, mult(lMinutesMod, 60)), mult(lHoursMod, 3600));
+
+    if (sup(lDisplaySeconds, 0)) {
+        if (lAddSpace) {
+            lDisplay += " ";
+        }
+
+        lDisplay += lDisplaySeconds + " - S";
+    }
+
+    return lDisplay;
+}
+
+
+// Display handling
+function innerTraceLineEx(lMessageMaxLength: reference, lLength: reference, lToDo: reference, lHeader: reference, aMessage: reference, lPos: reference)
+{
+    if (sup(lMessageMaxLength, lLength)) {
+        lToDo = lLength;
+    } else {
+        lToDo = lMessageMaxLength;
+    }
+
+    traceLine(lHeader + midString(aMessage, lPos, lToDo));
+    lLength = sub(lLength, lToDo);
+    lPos = add(lPos, lToDo);
+}
+
+function traceLineEx(aHeader, aLabel = "", aMessage = "")
+{
+    local lSpace = ": ";
+    local lPos = 0;
+
+    if (aLabel == "") {
+        traceLine(aHeader);
+    } else {
+        if (aMessage == "") {
+            traceLine(aHeader + aLabel);
+        } else {
+            local lHeaderLenght = add(add(lengthString(aHeader), lengthString(aLabel)), lengthString(lSpace));
+            local lHeaderTemplate = repeatString(" ", lHeaderLenght);
+            local lMessageMaxLength = sub(79, lHeaderLenght);
+            local lToDo;
+            aHeader = aHeader + aLabel + lSpace;
+            local lLength = lengthString(aMessage);
+            innerTraceLineEx(lMessageMaxLength, lLength, lToDo, aHeader, aMessage, lPos);
+            local lHeader = lHeaderTemplate;
+
+            while (sup(lLength, 0)) {
+                innerTraceLineEx(lMessageMaxLength, lLength, lToDo, lHeader, aMessage, lPos);
+            }
+        }
+    }
+}
+
+function traceFunctionError(aFunction, aErrorMessage)
+{
+    traceLineEx("--> ", "Error [" + aFunction + "]", aErrorMessage);
+}
+
+//Assert functions
+function assertString(aTest, aReference, aDescription)
+{
+    local lResult = (aTest == aReference);
+
+    if (! lResult) {
+        traceLineEx("Error !!! ", aDescription , "String --> aTest [" + aTest + "] != [" + aReference + "] aReference");
+    }
+
+    return lResult;
+}
+
+// String handling
+function escapeString(aString, aEscapeChar, aCharsToEscape: reference)
+{
+    local lResult = replaceString(aEscapeChar, aEscapeChar + aEscapeChar, aString);
+    foreach lChar in aCharsToEscape {
+        lResult = replaceString(lChar, aEscapeChar + lChar, lResult);
+    }
+    return lResult;
+}
+
+function unescapeString(aString, aEscapeChar, aCharsToEscape: reference)
+{
+    local lResult = aString;
+    foreach lChar in aCharsToEscape {
+        lResult = replaceString(aEscapeChar + lChar, lChar, lResult);
+    }
+    lResult = replaceString(aEscapeChar + aEscapeChar, aEscapeChar, lResult);
+    return lResult;
+}
+
+function dquoteString(aString)
+{
+    return '"' + aString + '"';
+}
+
+function quoteString(aString)
+{
+    return "'" + aString + "'";
+}
+
+function midStrings(aString, aBeginString, aEndString)
+{
+    local lResult = "";
+    local lFromPosition = 0;
+
+    if (aBeginString != "") {
+        lFromPosition = findString(aString, aBeginString);
+    }
+
+    if (sup(lFromPosition, -1)) {
+        lFromPosition = add(lFromPosition, aBeginString.length());
+        local lToPosition = aString.length();
+
+        if (aEndString != "") {
+            lToPosition = findNextString(aString, aEndString, lFromPosition);
+        }
+
+        if (sup(lToPosition, -1)) {
+            lResult = midString(aString, lFromPosition, sub(lToPosition, lFromPosition));
+        }
+    }
+
+    return lResult;
+}
+
+function startStrings(aString, aStartValues: node, aCaseInsensitive = false)
+{
+    local lResult = "";
+
+    if (aCaseInsensitive) {
+        local lString = toLowerString(aString);
+        foreach lStartValue in aStartValues {
+            if (startString(lString, toLowerString(lStartValue)))
+            {
+                lResult = lStartValue;
+                break;
+            }
+        }
+    } else {
+        foreach lStartValue in aStartValues {
+            if (startString(aString, lStartValue))
+            {
+                lResult = lStartValue;
+                break;
+            }
+        }
+    }
+
+    return lResult;
+}
+
+function appendStringIfNotPresent(aString: reference, aStringToAppend)
+{
+    if (! aString.endString(aStringToAppend)) {
+        aString += aStringToAppend;
+    }
+
+    return aString;
+}
+
+function appendSlashIfNotPresent(aPath: reference)
+{
+    return appendStringIfNotPresent(aPath, "/");
+}
+
+function removeTail(aString: reference, aTail)
+{
+    if (aString.endString(aTail)) {
+        aString = rsubString(aString, lengthString(aTail));
+    }
+
+    return aString;
+}
+
+function removeTailNewLine(aString: reference)
+{
+    removeTail(aString, byteToChar("0A"));
+    removeTail(aString, byteToChar("0D"));
+    return aString;
+}
+
+// Path handling
+function pathToParam(aString)
+{
+    local lResult = aString;
+
+    if (sup(lResult.findString(" "), -1)) {
+        lResult = dquoteString(lResult);
+    }
+
+    return lResult;
+}
+
+function extractPath(aPath)
+{
+    local lResult = "";
+    local lPath = canonizePath(aPath);
+    local lLastPosition = findLastString(lPath, "/");
+
+    if (sup(lLastPosition, 0)) {
+        lResult = leftString(lPath, lLastPosition);
+    }
+
+    return lResult;
+}
+
+function upPath(aPath: reference)
+{
+    aPath = extractPath(aPath);
+    return aPath;
+}
+
+function extractFile(aPath)
+{
+    local lResult = canonizePath(aPath);
+    local lLastPosition = findLastString(lResult, "/");
+
+    if (sup(lLastPosition, -1)) {
+        lResult = subString(lResult, add(lLastPosition, 1));
+    }
+
+    return lResult;
+}
+
+function extractFileName(aPath)
+{
+    local lFile = extractFile(aPath);
+    local lResult = lFile;
+    local lLastPosition = findLastString(lFile, ".");
+
+    if (sup(lLastPosition, -1)) {
+        lResult = leftString(lFile, lLastPosition);
+    }
+
+    return lResult;
+}
+
+function extractFileExtension(aPath)
+{
+    local lResult = "";
+    local lLastPosition = findLastString(aPath, ".");
+
+    if (sup(lLastPosition, -1)) {
+        lResult = subString(aPath, add(lLastPosition, 1));
+    }
+
+    return lResult;
+}
+
+function changeFileExtension(aPath, aNewExtension)
+{
+    local lResult = aPath;
+    local lLastPosition = findLastString(aPath, ".");
+
+    if (sup(lLastPosition, -1)) {
+        if (aNewExtension != "") {
+            lResult = leftString(aPath, add(lLastPosition, 1)) + aNewExtension;
+        } else {
+            lResult = leftString(aPath, lLastPosition);
+        }
+    } else {
+        if (aNewExtension != "") {
+            lResult += "." + aNewExtension;
+        }
+    }
+
+    return lResult;
+}
+
+function sameFileExtension(aFromPath, aToPath)
+{
+    return changeFileExtension(aFromPath, extractFileExtension(aToPath));
+}
+
+function backSlashEncodePath(aPath)
+{
+    local lResult;
+    lResult = replaceString("/", "\\", aPath);
+    return lResult;
+}
+
+function slashEncodePath(aPath)
+{
+    local lResult;
+    lResult = replaceString("\\", "/", aPath);
+    return lResult;
+}
+
+function osEncodePath(aPath)
+{
+    local lResult;
+
+    if (currentOS() == gWindowsOS) {
+        lResult = backSlashEncodePath(aPath);
+    } else {
+        lResult = slashEncodePath(aPath);
+    }
+
+    return lResult;
+}
+
+function createDirectoryNew(aDirectory)
+{
+    local lResult = true;
+
+    if (existDirectory(aDirectory)) {
+        lResult = removeDirectory(aDirectory);
+    }
+
+    if (lResult && (! existDirectory(aDirectory))) {
+        lResult = createDirectory(aDirectory);
+    } else {
+        lResult = false;
+    }
+
+    return lResult;
+}
+
+function deleteFileIfExist(aFilename)
+{
+    local lResult = true;
+
+    if existFile(aFilename) {
+        deleteFile(aFilename);
+    } else {
+        lResult = false;
+    }
+
+    return lResult;
+}
+
+function moveFile(aFrom, aTo)
+{
+    local lResult = true;
+    copyFile(aFrom, aTo);
+
+    if (lResult) {
+        lResult = deleteFile(aFrom);
+    }
+
+    return lResult;
+}
+
+function fileToString(aFile, aString: reference)
+{
+    local lResult = false;
+
+    if existFile(aFile) {
+        aString = loadFile(aFile);
+        lResult = true;
+    }
+
+    return lResult;
+}
+
+function fileToStrings(aFile, aStrings: reference)
+{
+    local lResult = false;
+
+    if existFile(aFile) {
+        local lFileContent = loadFile(aFile);
+        cutString(replaceString("\r", "", lFileContent), "\n", aStrings);
+        lResult = true;
+    }
+
+    return lResult;
+}
+
+// XML handling
+function xmlExtractTagValue(aXML, aTag)
+{
+    local lResult = midStrings(aXML, "<" + aTag + ">", "</" + aTag + ">");
+
+    if (lResult = "") {
+        lResult = midStrings(aXML, "<" + aTag, ">");
+    }
+
+    return lResult;
+}
+
+// Filename handling
+function workingPath()
+{
+    local lResult = canonizePath(getWorkingPath());
+    appendSlashIfNotPresent(lResult);
+    return lResult;
+}
+
+global gTempDirectoryPath_Delete = false;
+global gTempDirectoryPath;
+
+function getTempDirectoryPath()
+{
+    local lResult = "";
+
+    if (gTempDirectoryPath == "") {
+        local lTempDir = "";
+
+        if (existEnv("TMP")) {
+            lTempDir = getEnv("TMP");
+
+            if (! existDirectory(lTempDir)) {
+                if (! createDirectory(lTempDir)) {
+                    local lTempDir = "";
+                }
+            }
+        }
+
+        if (lTempDir == "") {
+            if (existEnv("TEMP")) {
+                lTempDir = getEnv("TEMP");
+
+                if (! existDirectory(lTempDir)) {
+                    if (! createDirectory(lTempDir)) {
+                        local lTempDir = "";
+                    }
+                }
+            }
+        }
+
+        if (lTempDir == "") {
+            lTempDir = workingPath() + "ssTemp/";
+            // traceLineEx("Debug ", "lTempDir", lTempDir);
+
+            if (! existDirectory(lTempDir)) {
+                if (! createDirectory(lTempDir)) {
+                    local lTempDir = "";
+                } else {
+                    gTempDirectoryPath_Delete = true;
+                    // traceLineEx("Debug ", "gTempDirectoryPath_Delete", gTempDirectoryPath_Delete);
+                }
+            }
+        }
+
+        lResult = canonizePath(lTempDir);
+        appendSlashIfNotPresent(lResult);
+        gTempDirectoryPath = lResult;
+    }
+
+    return gTempDirectoryPath;
+}
+
+function tempFilename()
+{
+    local lResult = getTempDirectoryPath() + getUUID() + ".tmp";
+    return lResult;
+}
+
+function searchInPath(aResult: reference, aPattern, aPath = ".", aScanSubPaths = true)
+{
+    // Local variables
+    local lPath = canonizePath(aPath);
+    // Local code
+    clearVariable(aResult);
+
+    if (aPattern != "") {
+        if (existDirectory(lPath)) {
+            while ((lPath != "") && (isEmpty(aResult))) {
+                if (scanFiles(aResult, lPath, aPattern, aScanSubPaths)) {
+                    upPath(lPath);
+                }
+            }
+        }
+    }
+
+    return ! isEmpty(aResult);
+}
+
+// Execute program procs
+global gSystemExecInfos;
+global gDefaultSystemExecInfo = "Default";
+
+function systemExecFinalize()
+{
+    foreach lSystemExecInfo in gSystemExecInfos {
+        if (existVariable(lSystemExecInfo.standardOutput))
+        {
+            deleteFileIfExist(lSystemExecInfo.standardOutput);
+        }
+
+        if (existVariable(lSystemExecInfo.errorOutput))
+        {
+            deleteFileIfExist(lSystemExecInfo.errorOutput);
+        }
+    }
+    clearVariable(gSystemExecInfos);
+}
+
+function systemExecInitialize(aSystemExecInfos: reference)
+{
+    if (!(existVariable(aSystemExecInfos.initialized) && aSystemExecInfos.initialized)) {
+        insert aSystemExecInfos.initialized = true;
+        insert aSystemExecInfos.command;
+        insert aSystemExecInfos.result;
+        insert aSystemExecInfos.standardInput;
+        insert aSystemExecInfos.standardOutput = tempFilename();
+        insert aSystemExecInfos.errorOutput = tempFilename();
+    }
+}
+
+function systemExecCommand(aSystemExecInfos = gDefaultSystemExecInfo)
+{
+    local lResult = "";
+
+    if (existVariable(gSystemExecInfos[aSystemExecInfos].command)) {
+        localref lCommand = gSystemExecInfos[aSystemExecInfos].command;
+        lResult = lCommand;
+    }
+
+    return lResult;
+}
+
+function systemExecResult(aSystemExecInfos = gDefaultSystemExecInfo)
+{
+    local lResult = "";
+
+    if (existVariable(gSystemExecInfos[aSystemExecInfos].result)) {
+        localref lValue = gSystemExecInfos[aSystemExecInfos].result;
+        lResult = lValue;
+    }
+
+    return lResult;
+}
+
+function systemExecStandardInput(aSystemExecInfos = gDefaultSystemExecInfo)
+{
+    local lResult = "";
+
+    if (existVariable(gSystemExecInfos[aSystemExecInfos].standardInput)) {
+        localref lValue = gSystemExecInfos[aSystemExecInfos].standardInput;
+        lResult = lValue;
+    }
+
+    return lResult;
+}
+
+function systemExecStandardOutput(aSystemExecInfos = gDefaultSystemExecInfo)
+{
+    local lResult = "";
+
+    if (existVariable(gSystemExecInfos[aSystemExecInfos].standardOutput)) {
+        localref lStandardOutput = gSystemExecInfos[aSystemExecInfos].standardOutput;
+
+        if existFile(lStandardOutput) {
+            lResult = loadFile(lStandardOutput);
+        }
+    }
+
+    return lResult;
+}
+
+function systemExecErrorOutput(aSystemExecInfos = gDefaultSystemExecInfo)
+{
+    local lResult = "";
+
+    if (existVariable(gSystemExecInfos[aSystemExecInfos].errorOutput)) {
+        localref lErrorOutput = gSystemExecInfos[aSystemExecInfos].errorOutput;
+
+        if existFile(lErrorOutput) {
+            lResult = loadFile(lErrorOutput);
+        }
+    }
+
+    return lResult;
+}
+
+function systemExec(aSystemCommand,  aSystemCommandStandardInput = "", aSystemExecInfos = gDefaultSystemExecInfo)
+{
+    insert gSystemExecInfos[aSystemExecInfos];
+    localref lSystemExecInfos = gSystemExecInfos[aSystemExecInfos];
+    systemExecInitialize(lSystemExecInfos);
+    lSystemExecInfos.command = aSystemCommand;
+
+    if (aSystemCommandStandardInput != "") {
+        appendStringIfNotPresent(lSystemExecInfos.command, " ");
+        lSystemExecInfos.standardInput = aSystemCommandStandardInput;
+        lSystemExecInfos.command += "<" + aSystemCommandStandardInput;
+    }
+
+    appendStringIfNotPresent(lSystemExecInfos.command, " ");
+    lSystemExecInfos.command += ">" + pathToParam(lSystemExecInfos.standardOutput);
+    appendStringIfNotPresent(lSystemExecInfos.command, " ");
+    lSystemExecInfos.command += "2>" + pathToParam(lSystemExecInfos.errorOutput);
+    local lResult;
+
+    if (currentOS() == gWindowsOS) {
+        local lBatchFile = osEncodePath(getTempDirectoryPath() + "cwSystem.bat");
+        saveToFile(lBatchFile, "@" + lSystemExecInfos.command);
+        lResult = system(pathToParam(lBatchFile));
+        deleteFileIfExist(lBatchFile);
+    } else {
+        lResult = system(lSystemExecInfos.command);
+    }
+
+    lSystemExecInfos.result = lResult;
+    return lResult;
+}
+
+function traceLastSystemExec(aSystemExecInfos = gDefaultSystemExecInfo, aHeaderMessage = "")
+{
+    if (aHeaderMessage != "") {
+        traceLineEx("-->  ", "Message                 ", replaceString("\n", "][", replaceString("\r", "", aHeaderMessage)));
+    }
+
+    traceLineEx("-->  ", "systemExecCommand       ", replaceString("\n", "][", replaceString("\r", "", systemExecCommand(aSystemExecInfos))));
+    traceLineEx("-->  ", "systemExecResult        ", replaceString("\n", "][", replaceString("\r", "", systemExecResult(aSystemExecInfos))));
+    traceLineEx("-->  ", "systemExecStandardInput ", replaceString("\n", "][", replaceString("\r", "", systemExecStandardInput(aSystemExecInfos))));
+    traceLineEx("-->  ", "systemExecStandardOutput", replaceString("\n", "][", replaceString("\r", "", systemExecStandardOutput(aSystemExecInfos))));
+    traceLineEx("-->  ", "systemExecErrorOutput   ", replaceString("\n", "][", replaceString("\r", "", systemExecErrorOutput(aSystemExecInfos))));
+}
+
+function systemExecResultBetweenString(aSystemCommand, aBegin, aEnd, aSystemCommandStandardInput = "", aSystemExecInfos = gDefaultSystemExecInfo)
+{
+    local lResult = "";
+
+    if (systemExec(aSystemCommand, aSystemCommandStandardInput, aSystemExecInfos) == "") {
+        lResult = midStrings(systemExecStandardOutput(aSystemExecInfos), aBegin, aEnd);
+    }
+
+    return lResult;
+}
+
+function searchApp(aApp: reference, aApp_Windows, aApp_Unix, aAppVersion: reference, aVersionOption, aStartTag, aEndTag, aSearchPath = "")
+{
+    if (aApp == "") {
+        local lCurrentOS = currentOS();
+
+        if (lCurrentOS == gWindowsOS) {
+            aApp = aApp_Windows;
+        } else {
+            if (lCurrentOS == gUnixOS) {
+                aApp = aApp_Unix;
+            } else {
+                aApp = "ErrorApp";
+            }
+        }
+
+        aApp = pathToParam(aApp);
+        aAppVersion = systemExecResultBetweenString(aApp + aVersionOption, aStartTag, aEndTag);
+
+        //if (systemExecErrorOutput() != "") {
+        //    traceLastSystemExec(gDefaultSystemExecInfo, "in function [ssProcs.searchApp] at first try");
+        //}
+
+        if (aAppVersion == "") {
+            local lPathsToSearchFor;
+            local lSearchPaths;
+
+            if (aSearchPath != "") {
+                cutString(aSearchPath, ";", lSearchPaths);
+            }
+
+            foreach lSearchPath in lSearchPaths {
+                local lSPath = canonizePath(lSearchPath);
+
+                if existDirectory(lSPath)
+                {
+                    pushItem lPathsToSearchFor = lSPath;
+                }
+            }
+            pushItem lPathsToSearchFor = workingPath();
+
+            if (existEnv("ProgramFiles")) {
+                pushItem lPathsToSearchFor = canonizePath(getEnv("ProgramFiles"));
+            }
+
+            foreach lPathToSearchFor in lPathsToSearchFor {
+                local lApps;
+
+                if (searchInPath(lApps, aApp, lPathToSearchFor))
+                {
+                    foreach lApp in lApps {
+                        local lAppOk = pathToParam(lApp);
+                        aAppVersion = systemExecResultBetweenString(lAppOk + aVersionOption, aStartTag, aEndTag);
+
+                        if (systemExecErrorOutput() != "")
+                        {
+                            traceLastSystemExec(gDefaultSystemExecInfo, "in function [ssProcs.searchApp] at lPathsToSearchFor loop");
+                        }
+
+                        trim(aAppVersion);
+
+                        if (aAppVersion != "")
+                        {
+                            aApp = lAppOk;
+                            break;
+                        }
+                    }
+                }
+
+                if (aAppVersion != "")
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    //traceLine(aApp);
+    //traceLine("["+aAppVersion+"]");
+    return aApp;
+}
+
+// Array handling
+function createTreeFromArray(aArray: node, aTree: reference)
+{
+    clearVariable(aTree);
+    foreach lElement in aArray {
+        insert aTree[lElement] = lElement;
+    }
+}
+
+function createTreeFromArrayCI(aArray: node, aTree: reference)
+{
+    clearVariable(aTree);
+    foreach lElement in aArray {
+        insert aTree[lElement] = lElement;
+        insert aTree[toLowerString(lElement)] = lElement;
+    }
+}
+
+//OS set proxy
+global gProxy = "";
+global gProxyPort = "";
+function getProxyInfosFromOS(aReloadFromOS = false)
+{
+    if (aReloadFromOS) {
+        gProxy = "";
+        gProxyPort = "";
+    }
+
+    if (gProxy == "") {
+        local lHttpProxyValue = "";
+
+        if (currentOS() == gUnixOS) {
+            local lEnvHttpProxy = "http_proxy";
+
+            if existEnv(lEnvHttpProxy) {
+                lHttpProxyValue =  midStrings(getEnv(lEnvHttpProxy), "//", "/");
+            }
+        } else {
+            if (currentOS() == gWindowsOS) {
+                local lRegistryToExtract = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
+                local lExecCommandLine =  "reg query " + dquoteString(lRegistryToExtract) + "| find /I " + dquoteString("ProxyEnable") + "| find /C " + dquoteString("0x1");
+
+                if (systemExec(lExecCommandLine) = "") {
+                    local lRegistryExported = systemExecStandardOutput();
+
+                    if (sup(lRegistryExported.findString("1"), -1)) {
+                        local lExecCommandLine1 =  "reg query " + dquoteString(lRegistryToExtract) + "| find /I " + dquoteString("proxyserver");
+
+                        if (systemExec(lExecCommandLine1) = "") {
+                            local lRegistryExported1 = systemExecStandardOutput();
+                            lHttpProxyValue =  midStrings(lRegistryExported1, "REG_SZ", endl());
+                            trim(lHttpProxyValue);
+                        }
+                    }
+                }
+            }
+        }
+
+        gProxy = midStrings(lHttpProxyValue, "", ":");
+        gProxyPort = midStrings(lHttpProxyValue, ":", "");
+    }
+}
+
+function setProxy(aHTTPSession: reference, aReloadFromOS = false)
+{
+    getProxyInfosFromOS(aReloadFromOS);
+
+    if (gProxy != "") {
+        insert aHTTPSession.proxy.host = gProxy;
+
+        if (gProxyPort != "") {
+            insert aHTTPSession.proxy.port = gProxyPort;
+        }
+    }
+}
+
+// Command line params handling
+global gOptionPrefix = ":";
+
+// The first call add the first param, the second one the second param and so on ...
+function paramsAddApplicationHelp(aParams: node, aHelp)
+{
+    local lResult = true;
+    insert aParams.help = aHelp;
+    return lResult;
+}
+
+function paramsAddParamDefinition(aParams: node, aHelp)
+{
+    local lResult = true;
+    pushItem aParams.defs.param;
+    insert aParams.defs.param#back.help = aHelp;
+    return lResult;
+}
+
+function paramsAddOptionDefinition(aParams: node, aShortID, aLongID, aHelp, aNeedOption = "")
+{
+    local lResult = false;
+
+    if (sup(aShortID.size(), aLongID.size())) {
+        traceFunctionError("paramsAddOptionDefinition", "Long param ID shorter than short param ID [" + aLongID + " < " + aShortID + "]");
+    } else {
+        if (aShortID == aLongID) {
+            traceFunctionError("paramsAddOptionDefinition", "Long param ID equal to short param ID [" + aLongID + " == " + aShortID + "]");
+        } else {
+            if (!existVariable(aParams.defs.option)) {
+                insert aParams.defs.option;
+                insert aParams.defs.option.byID;
+            }
+
+            localref lDefsOption = aParams.defs.option;
+            localref lDefsOptionByID = aParams.defs.option.byID;
+
+            if (!existVariable(lDefsOptionByID[aShortID])) {
+                if (!existVariable(lDefsOptionByID[aLongID])) {
+                    insert lDefsOption[aShortID];
+                    localref lNewParam = lDefsOption#back;
+                    insert lNewParam.shortID =  aShortID;
+                    insert lNewParam.longID = aLongID;
+                    insert lNewParam.help = aHelp;
+                    insert lNewParam.option = aNeedOption;
+                    ref lDefsOptionByID[lNewParam.shortID] = lNewParam;
+                    ref lDefsOptionByID[lNewParam.longID] = lNewParam;
+                    lResult = true;
+                } else {
+                    traceFunctionError("paramsAddOptionDefinition", "Long param ID already defined [" + aLongID + "]");
+                }
+            } else {
+                traceFunctionError("paramsAddOptionDefinition", "Short param ID already defined [" + aShortID + "]");
+            }
+        }
+    }
+
+    return lResult;
+}
+
+function paramsCompute(aParams: node, aOptionPrefix = gOptionPrefix)
+{
+    // check params in input
+    local lResult = true;
+    foreach lParam in _ARGS {
+        local lIsOption = false;
+
+        if existVariable(aParams.defs.option.byID)
+        {
+            sortArray(aParams.defs.option.byID);
+            foreach lParamDefByID in reverse aParams.defs.option.byID {
+                local lParamDefByIDKeyIndex = lParamDefByID.shortID;
+                local lParamDefByIDKey = lParamDefByID.key();
+
+                if (startString(lParam, aOptionPrefix + lParamDefByIDKey))
+                {
+                    local lParamOption = subString(lParam, add(lengthString(lParamDefByIDKey), lengthString(aOptionPrefix)));
+
+                    if (existVariable(aParams.options[lParamDefByIDKeyIndex])) {
+                        traceFunctionError("paramsCompute", "A option specified two times \"" + lParamDefByIDKey + "\" [" + lParamOption + "]");
+                        lResult = false;
+                    } else {
+                        insert aParams.options[lParamDefByIDKeyIndex];
+                    }
+
+                    if (lParamOption != "") {
+                        if (lParamDefByID.option == "") {
+                            traceFunctionError("paramsCompute", "A option specified when not needed for \"" + lParamDefByIDKey + "\" [" + lParamOption + "]");
+                            lResult = false;
+                        }
+
+                        insert aParams.options[lParamDefByIDKeyIndex].value = lParamOption;
+                    } else {
+                        if (lParamDefByID.option != "") {
+                            traceFunctionError("paramsCompute", "A option not specified when is needed for \"" + lParamDefByIDKey + "\"");
+                            lResult = false;
+                        }
+                    }
+
+                    lIsOption = true;
+                    break;
+                }
+            }
+        }
+
+        if (!lIsOption)
+        {
+            pushItem aParams.params;
+            insert aParams.params#back = lParam;
+        }
+    }
+
+    // Check that the parameters count are ok
+    if (lResult) {
+        if (existVariable(aParams.defs.param)) {
+            if (existVariable(aParams.params)) {
+                lResult = equal(aParams.defs.param.size(), aParams.params.size());
+            } else {
+                lResult = false;
+            }
+        }
+    }
+
+    return lResult;
+}
+
+function paramsTraceDef(aShortID, aLongID, aHelp, aNeedOption, aOptionPrefix = gOptionPrefix)
+{
+    local lOptionValue = "";
+
+    if (aNeedOption != "") {
+        lOptionValue = "<" + aNeedOption + ">";
+    }
+
+    traceLineEx("    ", aOptionPrefix + aShortID + lOptionValue + " [" + aOptionPrefix + aLongID + lOptionValue + "]", aHelp);
+}
+
+function paramsTraceHelp(aParams: reference, aOptionPrefix = gOptionPrefix)
+{
+    if (existVariable(aParams.help)) {
+        traceLineEx("Help", " ", aParams.help);
+    } else {
+        traceLineEx("Help");
+    }
+
+    if (existVariable(aParams.defs.param)) {
+        traceLine("");
+        traceLineEx("Description of params follows");
+        foreach lDefsParam in aParams.defs.param {
+            traceLineEx("    ", lDefsParam.key(), lDefsParam.help);
+        }
+    }
+
+    if (existVariable(aParams.defs.option)) {
+        traceLine("");
+        traceLineEx("Description of option follows");
+        foreach lDefsOption in sorted no_case aParams.defs.option {
+            paramsTraceDef(lDefsOption.shortID, lDefsOption.longID, lDefsOption.help, lDefsOption.option, aOptionPrefix);
+        }
+    }
+}
+
+
+//// Intialization Finalization code goes here
+
+// All initialize code goes here
+function ssProcsInitialize()
+{
+    //traceLine("ssProcsInitialize Begin");
+    randomize();
+    //traceLine("ssProcsInitialize End");
+}
+
+global ssProcsFinalized = false;
+// All finalize code goes here
+function ssProcsFinalize()
+{
+    if (!ssProcsFinalized) {
+        //traceLine("ssProcsFinalize Begin");
+        systemExecFinalize();
+
+        if (gTempDirectoryPath_Delete) {
+            // traceLineEx("Debug ", "removeDirectory", gTempDirectoryPath);
+
+            if (! removeDirectory(gTempDirectoryPath)) {
+                traceFunctionError("ssProcsFinalize-->removeDirectory", "Removing: " + gTempDirectoryPath);
+            }
+        }
+
+        ssProcsFinalized = true;
+        //traceLine("ssProcsFinalize End");
+    }
+}
+
+
+// Init code goes here
+ssProcsInitialize();
+
+#else
+#end

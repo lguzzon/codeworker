@@ -1,0 +1,33 @@
+
+#include "ssSVN.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+#if existFunction(ssProcs)
+    ssSVNFinalize();
+#end
+}
+
+function mainTest()
+{
+    local lPath = ".";
+
+    if (existVariable(_ARGS[0])) {
+        lPath = _ARGS[0];
+    }
+
+    traceLineEx("--> ", "systemSVN_update('" + lPath + "')", systemSVN_update(lPath));
+    traceLastSVNSystemExec();
+    // Call this function always on function exit
+    finally {
+        finalizeTest();
+    }
+}
+
+// Test begin
+traceLineEx("<--     Test begin     --> ");
+delay mainTest();
+traceLineEx("<--     Test end       --> ", "Elapsed", getLastDelayString());
+// Test end

@@ -1,0 +1,30 @@
+
+#include "ssGraphTheory.cws"
+
+
+insert project.graph;
+local graph;
+ref graph = project.graph;
+
+addArcToGraph("A", "B", graph);
+addArcToGraph("B", "C", graph);
+addArcToGraph("B", "F", graph);
+addArcToGraph("C", "D", graph);
+addArcToGraph("D", "E", graph);
+addArcToGraph("E", "A", graph);
+addArcToGraph("F", "G", graph);
+addArcToGraph("G", "H", graph);
+addArcToGraph("G", "I", graph);
+addArcToGraph("H", "D", graph);
+addArcToGraph("I", "L", graph);
+addArcToGraph("L", "H", graph);
+
+findCyclesInGraph(graph);
+
+if existFile("saveProject.xml")
+{
+    copyFile("saveProject.xml", "saveProject-old.xml");
+    deleteFile("saveProject.xml");
+}
+
+saveProject("saveProject.xml", project);

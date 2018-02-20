@@ -1,0 +1,32 @@
+
+
+#include "ssProcs.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+#if existFunction(ssProcs)
+    systemExecFinalize();
+#end
+}
+
+function mainTest()
+{
+    // Insert here test code \/
+    local lPath = ".";
+
+    while (lPath != "") {
+        traceLineEx("  ", "upPath", lPath);
+        upPath(lPath);
+    }
+
+    // Call this function always on function exit
+    finalizeTest();
+}
+
+// Test begin
+traceLineEx("<--     Test begin     --> ");
+delay mainTest();
+traceLineEx("<--     Test end       --> ", "Elapsed", getLastDelayString());
+// Test end

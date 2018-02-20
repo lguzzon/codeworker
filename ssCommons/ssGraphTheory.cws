@@ -1,0 +1,113 @@
+
+#if !existFunction(ssGraphTheory)
+
+// Function to state that already included
+function ssGraphTheory()
+{
+    return "ssGraphTheory";
+}
+
+
+function addArcToGraph(aFromNode, aToNode, aGraph: node)
+{
+    insert aGraph.nodes[aFromNode] = aFromNode;
+    insert aGraph.nodes[aToNode] = aToNode;
+    insert aGraph.nodes[aFromNode].adjacentNodes[aToNode] = aToNode;
+}
+
+function addEdgeToGraph(aFromNode, aToNode, aGraph: node)
+{
+    addArcToGraph(aFromNode, aToNode, aGraph);
+    addArcToGraph(aToNode, aFromNode, aGraph);
+}
+
+function sameCycle(aACycle: node, aBCycle: node)
+{
+    local  result = (aACycle.size() = aBCycle.size());
+
+    if (result) {
+        foreach lNode in aACycle {
+            if (!findElement(lNode, aBCycle))
+            {
+                result = false;
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+function getGraphCyclesPath(aGraphNode: node, aGraph: node, aPath: node)
+{
+    if (findElement(aGraphNode, aPath)) {
+        // Compute the cycle
+        local bSkip = true;
+        local cycle;
+        foreach lNode in aPath {
+            bSkip = (bSkip
+            && (lNode != aGraphNode));
+
+            if (!bSkip)
+            {
+                insert cycle[lNode] = lNode;
+            }
+        }
+        // Check if already found
+        local addCycle = true;
+
+        if (existVariable(aGraph.cycles)) {
+            foreach lCycle in aGraph.cycles {
+                if (sameCycle(lCycle, cycle))
+                {
+                    addCycle = false;
+                    break;
+                }
+            }
+        }
+
+        if (addCycle) {
+            pushItem aGraph.cycles;
+            foreach lNode in cycle {
+                pushItem aGraph.cycles#back = lNode;
+            }
+        }
+    } else {
+        insert aPath[aGraphNode] = aGraphNode;
+
+        if (existVariable(aGraph.nodes[aGraphNode].adjacentNodes)) {
+            foreach aToNode in aGraph.nodes[aGraphNode].adjacentNodes {
+                local lPath;
+                setall lPath = aPath;
+                getGraphCyclesPath(aToNode, aGraph, lPath);
+            }
+        }
+    }
+}
+
+function findCyclesInGraph(aGraph: node)
+{
+    local result = 0;
+
+    if (existVariable(aGraph.nodes)) {
+        foreach graphNode in aGraph.nodes {
+            if (existVariable(aGraph.nodes[graphNode].adjacentNodes))
+            {
+                foreach aToNode in aGraph.nodes[graphNode].adjacentNodes {
+                    local lPath;
+                    insert lPath[graphNode] = graphNode;
+                    getGraphCyclesPath(aToNode, aGraph, lPath);
+                }
+            }
+        }
+    }
+
+    if (existVariable(aGraph.cycles)) {
+        result = aGraph.cycles.size();
+    }
+
+    return result;
+}
+
+#else
+#end

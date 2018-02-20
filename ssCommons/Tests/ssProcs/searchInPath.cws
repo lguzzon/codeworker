@@ -1,0 +1,37 @@
+
+
+#include "ssProcs.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+    finally {
+#if existFunction(ssProcs)
+        systemExecFinalize();
+#end
+    }
+}
+
+function mainTest()
+{
+    // Insert here test code \/
+    local gFiles;
+
+    if (searchInPath(gFiles, "svn.exe")) {
+        foreach lFile in sorted gFiles {
+            traceLine("---> " + lFile);
+        }
+    }
+
+    // Call this function always on function exit
+    finally {
+        finalizeTest();
+    }
+}
+
+// Test begin
+traceLineEx("<--     Test begin     --> ");
+delay mainTest();
+traceLineEx("<--     Test end       --> ", "Elapsed", getLastDelayString());
+// Test end

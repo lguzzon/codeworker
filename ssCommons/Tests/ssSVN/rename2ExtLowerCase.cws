@@ -1,0 +1,160 @@
+
+#include "ssSVN.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+#if existFunction(ssProcs)
+    systemExecFinalize();
+#end
+}
+
+function mainTest()
+{
+    if (existVariable(_ARGS[0])) {
+        local lPath = canonizePath(_ARGS[0]);
+        local lPathOsEncoded = dquoteString(osEncodePath(lPath));
+
+        if (existDirectory(lPath)) {
+            systemSVN_info(lPathOsEncoded);
+
+            if (!systemExecSVNResult()) {
+                traceLineEx("> ", "SVN update", lPath);
+                delay systemSVN_update(lPathOsEncoded);
+                traceLineEx("< ", "SVN update [" + getLastDelayString() + "]", lPath);
+
+                if (!systemExecSVNResult()) {
+                    local lFiles;
+                    traceLineEx("> ", "Scan files", lPath);
+
+                    if (scanFiles(lFiles, lPath, "*.*", true)) {
+                        local lToDos;
+                        foreach lFile in sorted lFiles {
+                            local lExtension = extractFileExtension(lFile);
+
+                            if (toLowerString(lExtension) != lExtension)
+                            {
+                                local lFullPath = canonizePath(lFile);
+                                pushItem lToDos;
+                                localref lToDoRef = lToDos#back;
+                                insert lToDoRef.fromPath = osEncodePath(lFullPath);
+                                local lTempPathAndFile = extractPath(lFile) + "/" + extractFileName(lFile) + ".";
+                                insert lToDoRef.toPathFirstStep = osEncodePath(lTempPathAndFile + toLowerString(lExtension) + "_");
+
+                                while (existFile(lToDoRef.toPathFirstStep)) {
+                                    lToDoRef.toPathFirstStep += "_";
+                                }
+
+                                insert lToDoRef.toPathSecondStep = osEncodePath(lTempPathAndFile + toLowerString(lExtension));
+                                //traceLineEx("> ", "Full path", osEncodePath(lFullPath));
+                                //traceLineEx("> ", "Path", osEncodePath(extractPath(lFile)));
+                                //traceLineEx("> ", "File", extractFile(lFile));
+                                //traceLineEx("> ", "FileName", extractFileName(lFile));
+                                //traceLineEx("> ", "FileExtension", lExtension);
+                                //traceLineEx("-> ", "lInfo.fromPath        ", lInfo.fromPath);
+                                //traceLineEx("-> ", "lInfo.toPathFirstStep ", lInfo.toPathFirstStep);
+                                //traceLineEx("-> ", "lInfo.toPathSecondStep", lInfo.toPathSecondStep);
+                            }
+                        }
+                        local lToDo2s;
+                        traceLineEx("> ", "First Step", "Moving " + lToDos.size() + " files");
+                        foreach lToDo in lToDos {
+                            systemSVN_info(dquoteString(osEncodePath(lToDo.fromPath)));
+                            insert lToDo.skip = systemExecSVNResult();
+
+                            if (!lToDo.skip)
+                            {
+                                // traceLineEx("-> ", "lToDo.fromPath        ", lToDo.fromPath);
+                                // traceLineEx("-> ", "lToDo.toPathFirstStep ", lToDo.toPathFirstStep);
+                                // traceLineEx("-> ", "lToDo.toPathSecondStep", lToDo.toPathSecondStep);
+                                traceLineEx("-> ", "SVN move", lToDo.fromPath + "-->" + lToDo.toPathFirstStep);
+                                local lSVNMove = systemSVN_move(dquoteString(osEncodePath(lToDo.fromPath)), dquoteString(osEncodePath(lToDo.toPathFirstStep)));
+
+                                if (systemExecSVNResult()) {
+                                    traceLineEx("--> ", "Error", "During SVN move!!! [" + lToDo.fromPath + "-->" + lToDo.toPathFirstStep + "]");
+                                    traceLastSVNSystemExec();
+                                } else {
+                                    pushItem lToDo2s;
+                                    localref lToDo2Ref = lToDo2s#back;
+                                    ref lToDo2Ref.toPathFirstStep = lToDo.toPathFirstStep;
+                                    ref lToDo2Ref.toPathSecondStep = lToDo.toPathSecondStep;
+                                }
+                            } else {
+                                traceLineEx("-> ", "filesystem move", lToDo.fromPath + "-->" + lToDo.toPathSecondStep);
+                                moveFile(lToDo.fromPath, lToDo.toPathFirstStep);
+                                moveFile(lToDo.toPathFirstStep, lToDo.toPathSecondStep);
+                            }
+                        }
+
+                        if (sup(lToDo2s.size(), 0)) {
+                            traceLineEx("> ", "SVN commit", lPath);
+                            systemSVN_commit(lPathOsEncoded, "First step renaming filename extensions to lowercase");
+
+                            if (systemExecSVNResult()) {
+                                traceLineEx("--> ", "Error", "During first step SVN commit!!!");
+                                traceLastSVNSystemExec();
+                            } else {
+                                traceLineEx("> ", "SVN update", lPath);
+                                systemSVN_update(lPathOsEncoded);
+
+                                if (systemExecSVNResult()) {
+                                    traceLineEx("-- > ", "Error", "During first step SVN update!!!");
+                                    traceLastSVNSystemExec();
+                                } else {
+                                    traceLineEx("> ", "Second Step", "Moving " + lToDo2s.size() + " files");
+                                    foreach lToDo2 in lToDo2s {
+                                        // traceLineEx("--> ", "lToDo2.toPathFirstStep ", lToDo2.toPathFirstStep);
+                                        // traceLineEx("--> ", "lToDo2.toPathSecondStep", lToDo2.toPathSecondStep);
+                                        traceLineEx("-> ", "SVN move", lToDo2.toPathFirstStep + "-->" + lToDo2.toPathSecondStep);
+                                        local lSVNMove = systemSVN_move(dquoteString(osEncodePath(lToDo2.toPathFirstStep)), dquoteString(osEncodePath(lToDo2.toPathSecondStep)));
+
+                                        if (systemExecSVNResult())
+                                        {
+                                            traceLastSVNSystemExec();
+                                        }
+                                    }
+                                    traceLineEx("> ", "SVN commit", lPath);
+                                    systemSVN_commit(lPathOsEncoded, "Second and final step renaming filename extensions to lowercase");
+
+                                    if (systemExecSVNResult()) {
+                                        traceLineEx("--> ", "Error", "During second step SVN commit!!!");
+                                        traceLastSVNSystemExec();
+                                    } else {
+                                        traceLineEx("> ", "SVN update", lPath);
+                                        systemSVN_update(lPathOsEncoded);
+
+                                        if (systemExecSVNResult()) {
+                                            traceLineEx("-- > ", "Error", "During second step SVN update!!!");
+                                            traceLastSVNSystemExec();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        traceLineEx("--> ", "Error", "During scanning for files!!! [" + lPath + "]");
+                    }
+                } else {
+                    traceLineEx("--> ", "Error", "During SVN update!!! [" + lPath + "]");
+                }
+            } else {
+                traceLineEx("--> ", "Error", "Directory not versioned in svn!!! [" + lPath + "]");
+            }
+        } else {
+            traceLineEx("--> ", "Error", "Directory do not exist!!! [" + lPath + "]");
+        }
+    } else {
+        traceLineEx("--> ", "Error", "Need a path as argument!!!");
+    }
+
+    finally {
+        finalizeTest();
+    }
+}
+
+// Test begin
+traceLineEx("<--     rename2ExtLowerCase begin     --> ");
+delay mainTest();
+traceLineEx("<--     rename2ExtLowerCase end       --> ", "Elapsed", getLastDelayString());
+// Test end

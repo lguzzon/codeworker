@@ -1,0 +1,33 @@
+
+#include "ssProcs.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+#if existFunction(ssProcs)
+    ssProcsFinalize();
+#end
+}
+
+function mainTest()
+{
+    assertString("Uno", "Due", "Test Uno Due");
+    assertString(extractFile("fileName"), "fileName", "fileName");
+    assertString(extractFile("fileName.ext"), "fileName.ext", "fileName.ext");
+    assertString(extractFile("fileName.ext1.ext2"), "fileName.ext1.ext2", "fileName.ext1.ext2");
+    assertString(osEncodePath(extractFile("path/fileName.ext1.ext2")), "fileName.ext1.ext2", "fileName.ext1.ext2");
+    assertString(osEncodePath(extractFile("path\\fileName.ext1.ext2")), "fileName.ext1.ext2", "fileName.ext1.ext2");
+    assertString(osEncodePath(extractFile("/fileName.ext1.ext2")), "fileName.ext1.ext2", "fileName.ext1.ext2");
+    assertString(osEncodePath(extractFile("\\fileName.ext1.ext2")), "fileName.ext1.ext2", "fileName.ext1.ext2");
+    // Call this function always on function exit
+    finally {
+        finalizeTest();
+    }
+}
+
+// Test begin
+traceLineEx("<--     Test begin     --> ");
+delay mainTest();
+traceLineEx("<--     Test end       --> ", "Elapsed", getLastDelayString());
+// Test end

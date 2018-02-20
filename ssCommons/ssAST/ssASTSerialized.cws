@@ -1,0 +1,54 @@
+
+#include "ssProcs.cws"
+#include "ssAST.cws"
+
+function finalizeTest()
+{
+    // Manadtory Code
+    // Clear all the temporary files used by systemExec
+#if existFunction(ssAST)
+    ssASTFinalize();
+#end
+#if existFunction(ssProcs)
+    ssProcsFinalize();
+#end
+}
+
+function mainTest()
+{
+    // Insert here test code \/
+    local lParsed;
+    local lASTSerializedFile = canonizePath(_ARGS[0]);
+    // local lCWPFile=canonizePath(resolveFilePath("ssASTSerialized.cwp"));
+    // parseAsBNF(lCWPFile, lParsed, lASTSerializedFile);
+    // traceObject(lParsed,100);
+    local lASTSerializedString;
+
+    if (fileToString(lASTSerializedFile, lASTSerializedString)) {
+        local lAST;
+        traceLine('< ' + lASTSerializedString);
+
+        if (ssAST_ASTNodeFromString(lASTSerializedString, lAST)) {
+            if (ssAST_Check(lAST, true)) {
+                traceObject(lAST, 10);
+                traceLine(ssAST_ASTNodeAsString(lAST, 0));
+                local lNewASTSerializedString = ssAST_ASTNodeToString(lAST);
+                traceLine('> ' + lNewASTSerializedString);
+                assertString(lNewASTSerializedString, lASTSerializedString, "AST Serialize do not match");
+            } else {
+                traceLine("LAST check not passed!!!");
+            }
+        }
+    }
+
+    // Call this function always on function exit
+    finally {
+        finalizeTest();
+    }
+}
+
+// Test begin
+traceLineEx("<--     Test begin     --> ");
+delay mainTest();
+traceLineEx("<--     Test end       --> ", "Elapsed", getLastDelayString());
+// Test end
