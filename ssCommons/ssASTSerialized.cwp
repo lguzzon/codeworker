@@ -27,7 +27,7 @@ ASTNodeValue(aNode: node)
 				|	')'
 				|	'\\'
 				]:lChar
-				=>	lValue += lChar;			
+				=>	lValue += lChar;
 			]
 		|	![	'('
 			|	')'
