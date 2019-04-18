@@ -45,8 +45,8 @@ CC			= g++
 ## If you want to take advantage of GNU Readline, uncomment the following
 ## 2 lines and add the include path to this library
 ##-----------------------------------------------------------------------------
-#LFLAGS	+= -lreadline -lcurses
-#CC	+= -DCODEWORKER_GNU_READLINE
+LFLAGS	+= -lreadline -lcurses
+CC	+= -DCODEWORKER_GNU_READLINE
 
 ##-----------------------------------------------------------------------------
 ## Under HP, using g++:
@@ -153,8 +153,8 @@ build: codeworker
 
 codeworker: precoditions $(OBJECTS)
 	$(CC) -c generator.cpp
-	$(CC) -o codeworker $(OBJECTS) generator.o $(LFLAGS) 
-	
+	$(CC) -o codeworker $(OBJECTS) generator.o $(LFLAGS)
+
 lib: precoditions $(OBJECTS)
 	ar -r libcodeworker.a $(OBJECTS)
 
@@ -162,25 +162,28 @@ clean:
 	-rm -f *.o *.a CodeWorker codeworker core
 	-rm -R deploy/
 
-deploy: CXXFLAGS += -O3
+deployStatic: CXXFLAGS += -O4 -static
+deployStatic: CC += -O4 -static
+deployStatic: deploy
+
 deploy: clean all
 	-rm -R deploy/
 	mkdir deploy
 	mkdir deploy/lib
 	strip -s codeworker
-	./cpDeps.sh	
+	./cpDeps.sh
 	upx --best codeworker
 	mv codeworker deploy/
 	mv libcodeworker.a deploy/lib/
 	./mvToDeploy.sh
 
-deployTest: CXXFLAGS += -O3
+deployTest: CXXFLAGS += -O2
 deployTest: all
 	-rm -R deploy/
 	mkdir deploy
 	mkdir deploy/lib
 	strip -s codeworker
-	./cpDeps.sh	
+	./cpDeps.sh
 	# upx --best codeworker
 	mv codeworker deploy/
 	mv libcodeworker.a deploy/lib/

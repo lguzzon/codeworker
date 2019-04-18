@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 To contact the author: codeworker@free.fr
 */
 
+#include "ss.h"
+
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #pragma warning (disable : 4503)
@@ -1385,7 +1387,11 @@ namespace CodeWorker {
 	DtaScriptVariable* DtaScriptVariable::pushItem(const std::string& sValue) {
 		char tcNumber[32];
 		if (_pArray == NULL) _pArray = new NodeArrayType;
+#ifdef ENVIRONMENT64
+		sprintf(tcNumber, "%ld", _pArray->items.size());
+#else
 		sprintf(tcNumber, "%d", _pArray->items.size());
+#endif		
 		std::string sNumber = tcNumber;
 		DtaScriptVariable* pVariable = new DtaScriptVariable(this, sNumber);
 		_pArray->items.push_back(pVariable);

@@ -1471,7 +1471,7 @@ SEQUENCE_INTERRUPTION_LIST CGRuntime::insertText(int iLocation, const std::strin
 	if (!_pOutputStream->insertText(sText, iLocation, 0)) {
 		std::string sMessage = "unable to insert \"" + composeCLikeString(sText) + "\" at position ";
 		char tcNumber[32];
-		sprintf(tcNumber, "%d/%ld", iLocation, _pOutputStream->size());
+		sprintf(tcNumber, "%d/%d", iLocation, _pOutputStream->size());
 		sMessage += tcNumber;
 		throw UtlException(sMessage);
 	}
@@ -1485,7 +1485,7 @@ SEQUENCE_INTERRUPTION_LIST CGRuntime::insertTextOnce(int iLocation, const std::s
 		if ((iLocation < 0) || (iLocation > _pOutputStream->size())) {
 			std::string sMessage = "unable to insert \"" + composeCLikeString(sText) + "\" at position ";
 			char tcNumber[32];
-			sprintf(tcNumber, "%d/%ld", iLocation, _pOutputStream->size());
+			sprintf(tcNumber, "%d/%d", iLocation, _pOutputStream->size());
 			sMessage += tcNumber;
 			throw UtlException(sMessage);
 		}
@@ -1502,7 +1502,7 @@ SEQUENCE_INTERRUPTION_LIST CGRuntime::insertTextToFloatingLocation(const std::st
 	if (!pOwner->insertText(sText, iLocation, 0)) {
 		std::string sMessage = "unable to insert \"" + composeCLikeString(sText) + "\" at position ";
 		char tcNumber[32];
-		sprintf(tcNumber, "%d/%ld", iLocation, pOwner->size());
+		sprintf(tcNumber, "%d/%d", iLocation, pOwner->size());
 		sMessage += tcNumber;
 		throw UtlException(sMessage);
 	}
@@ -1519,7 +1519,7 @@ SEQUENCE_INTERRUPTION_LIST CGRuntime::insertTextOnceToFloatingLocation(const std
 		if ((iLocation < 0) || (iLocation > pOwner->size())) {
 			std::string sMessage = "unable to insert \"" + composeCLikeString(sText) + "\" at position ";
 			char tcNumber[32];
-			sprintf(tcNumber, "%d/%ld", iLocation, pOwner->size());
+			sprintf(tcNumber, "%d/%d", iLocation, pOwner->size());
 			sMessage += tcNumber;
 			throw UtlException(sMessage);
 		}
@@ -1533,7 +1533,7 @@ SEQUENCE_INTERRUPTION_LIST CGRuntime::overwritePortion(int iLocation, const std:
 	if (!_pOutputStream->insertText(sText, iLocation, iSize)) {
 		std::string sMessage = "unable to overwrite \"" + composeCLikeString(sText) + "\" at position ";
 		char tcNumber[32];
-		sprintf(tcNumber, "%d/%ld", iLocation, _pOutputStream->size());
+		sprintf(tcNumber, "%d/%d", iLocation, _pOutputStream->size());
 		sMessage += tcNumber;
 		throw UtlException(sMessage);
 	}

@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 To contact the author: codeworker@free.fr
 */
 
+#include "ss.h"
+
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #endif
@@ -198,7 +200,11 @@ namespace CodeWorker {
 
 	void DtaBNFScript::traceInternalEngine() const {
 		char tcMessage[80];
+#ifdef ENVIRONMENT64
+		sprintf(tcMessage, "\tNumber of production rules = %ld", _listOfClauses.size());
+#else
 		sprintf(tcMessage, "\tNumber of production rules = %d", _listOfClauses.size());
+#endif		
 		CGRuntime::traceLine(tcMessage);
 		if (_eIgnoreMode == NOT_IGNORE) CGRuntime::traceLine("\tignore insignificant chars = OFF");
 		else if (_pIgnoreClause == NULL) CGRuntime::traceLine("\tignore insignificant chars = " + IGNORE_MODEtoString(_eIgnoreMode));

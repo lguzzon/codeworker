@@ -1,6 +1,6 @@
 /* "CodeWorker":	a scripting language for parsing and generating text.
 
-Copyright (C) 1996-1997, 1999-2002 Cédric Lemaire
+Copyright (C) 1996-1997, 1999-2008 CÃ©dric Lemaire
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 To contact the author: codeworker@free.fr
 */
+
+#include "ss.h"
 
 #ifdef WIN32
 #pragma warning (disable : 4786)
@@ -180,13 +182,21 @@ namespace CodeWorker {
 		if (myClause.isPropagatedParameter()) {
 			if (myClause.getParameters().size() < _listOfParameters.size()) {
 				char tcExpectedNumber[96];
+#ifdef ENVIRONMENT64
+				sprintf(tcExpectedNumber, "' requires less than %lu parameters (%lu parameters, propagated)", _listOfParameters.size(), myClause.getParameters().size());
+#else
 				sprintf(tcExpectedNumber, "' requires less than %d parameters (%d parameters, propagated)", _listOfParameters.size(), myClause.getParameters().size());
+#endif
 				throw UtlException("call to non-terminal '" + myClause.getSignature() + tcExpectedNumber);
 			}
 		} else {
 			if (myClause.getParameters().size() != _listOfParameters.size()) {
 				char tcExpectedNumber[64];
+#ifdef ENVIRONMENT64
+				sprintf(tcExpectedNumber, "' doesn't require %lu parameters", _listOfParameters.size());
+#else
 				sprintf(tcExpectedNumber, "' doesn't require %d parameters", _listOfParameters.size());
+#endif
 				throw UtlException("call to non-terminal '" + myClause.getSignature() + tcExpectedNumber);
 			}
 		}
