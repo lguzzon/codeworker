@@ -46,6 +46,7 @@ CC			= g++
 ## 2 lines and add the include path to this library
 ##-----------------------------------------------------------------------------
 LFLAGS	+= -lreadline -lcurses
+# ubuntu: sudo apt -y install libreadline-dev libncurses5-dev
 CC	+= -DCODEWORKER_GNU_READLINE
 
 ##-----------------------------------------------------------------------------
