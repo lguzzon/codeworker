@@ -37,6 +37,9 @@ function installIfNotExist() {
   fi
 }
 
-
-installIfNotExist "c++" "build-essential"
+# Install libcurl, libreadline, ...
+sudo -s -- apt-get install --yes libcurl4-gnutls-dev
+sudo -s -- apt-get install --yes libreadline-dev
+sudo -s -- apt-get install --yes libncurses5-dev 
+installIfNotExist "g++" "build-essential"
 installIfNotExist "upx" "upx-ucl"
