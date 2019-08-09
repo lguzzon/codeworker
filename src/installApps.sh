@@ -6,13 +6,13 @@
 current_dir=$(pwd)
 script_dir="$0"
 # Need this for relative symlinks.
-while [ -h "$script_dir" ] ; do
-  ls=`ls -ld "$script_dir"`
-  link=`expr "$ls" : '.*-> \(.*\)$'`
-  if expr "$link" : '/.*' > /dev/null; then
+while [ -h "$script_dir" ]; do
+  ls=$(ls -ld "$script_dir")
+  link=$(expr "$ls" : '.*-> \(.*\)$')
+  if expr "$link" : '/.*' >/dev/null; then
     script_dir="$link"
   else
-    script_dir=`dirname "$script_dir"`"/$link"
+    script_dir=$(dirname "$script_dir")"/$link"
   fi
 done
 script_dir=$(readlink -f "${script_dir%/*}")
@@ -38,8 +38,8 @@ function installIfNotExist() {
 }
 
 # Install libcurl, libreadline, ...
-sudo -s -- apt-get install --yes libcurl4-gnutls-dev
-sudo -s -- apt-get install --yes libreadline-dev
-sudo -s -- apt-get install --yes libncurses5-dev 
+sudo apt-get install --yes libcurl4-gnutls-dev
+sudo apt-get install --yes libreadline-dev
+sudo apt-get install --yes libncurses5-dev
 installIfNotExist "g++" "build-essential"
 installIfNotExist "upx" "upx-ucl"
