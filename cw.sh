@@ -23,7 +23,7 @@ codeworkerAppDir=${script_dir}/bin/linux/$(lscpu | grep Architecture | awk '{ pr
 codeworkerApp=${codeworkerAppDir}/codeworker
 if ! [ -f "${codeworkerApp}" ]; then
   cd "${script_dir}/src" || (echo "ERROR - Directory does not exist [${script_dir}/src]" && exit)
-  make deploy
+  make deployStatic
   if ! [ -f "${codeworkerApp}" ]; then
     echo "Error can not find and build codeworker [${codeworkerApp}]"
   else

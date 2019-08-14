@@ -173,7 +173,6 @@ deploy: clean all
 	mkdir deploy/lib
 	strip -s codeworker
 	./cpDeps.sh
-	upx --best codeworker
 	mv codeworker deploy/
 	mv libcodeworker.a deploy/lib/
 	./mvToDeploy.sh
@@ -185,7 +184,6 @@ deployTest: all
 	mkdir deploy/lib
 	strip -s codeworker
 	./cpDeps.sh
-	# upx --best codeworker
 	mv codeworker deploy/
 	mv libcodeworker.a deploy/lib/
 	./mvToDeploy.sh

@@ -42,4 +42,4 @@ sudo apt-get install --yes libcurl4-gnutls-dev
 sudo apt-get install --yes libreadline-dev
 sudo apt-get install --yes libncurses5-dev
 installIfNotExist "g++" "build-essential"
-installIfNotExist "upx" "upx-ucl"
+# installIfNotExist "upx" "upx-ucl"
