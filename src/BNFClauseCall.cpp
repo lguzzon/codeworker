@@ -1,6 +1,6 @@
 /* "CodeWorker":	a scripting language for parsing and generating text.
 
-Copyright (C) 1996-1997, 1999-2008 CÃ©dric Lemaire
+Copyright (C) 1996-1997, 1999-2008 Cédric Lemaire
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
