@@ -814,10 +814,10 @@ namespace CodeWorker {
 
 	bool DynPackage::addFunction(DynFunction* pFunction) {
 		if (getFunction(pFunction->getFunctionName()) != NULL) {
-			delete pFunction;
 			std::string sError = "function '" + _sPackage + "::";
 			sError += pFunction->getFunctionName();
 			sError += "' already exists";
+			delete pFunction;
 			throw UtlException(sError);
 		}
 		void* pfFunctionCall = findFunction(_hHandle, pFunction->getFunctionName());
