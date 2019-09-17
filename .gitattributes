@@ -5,14 +5,13 @@
 .editorconfig text eol=lf
 .travis.yml text eol=lf
 appveyor.yml text eol=lf
-
 **/.gitattributes text eol=lf
 **/.gitignore text eol=lf
+
 **/*.csv text eol=lf
 **/*.redis text eol=lf
 **/*.sh text eol=lf
+**/*.md text eol=lf
 
 **/*.cpp text eol=lf
 **/*.h text eol=lf
-
-**/*.md text eol=lf
