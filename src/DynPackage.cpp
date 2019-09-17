@@ -1,6 +1,6 @@
 /* "CodeWorker":	a scripting language for parsing and generating text.
 
-Copyright (C) 1996-1997, 1999-2003 Cédric Lemaire
+Copyright (C) 1996-1997, 1999-2003 Cï¿½dric Lemaire
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -540,7 +540,7 @@ namespace CodeWorker {
 //--------------------------------------------------------------------------------
 //                                  Dynamic function
 //--------------------------------------------------------------------------------
-	
+
 	DynFunction::DynFunction(Interpreter* pInterpreter, const char* tcName, bool bIsP1Node) : GrfFunction(NULL, tcName, "", false), _pInterpreter(pInterpreter) {
 		init();
 		addParameterAndType("p1", ((bIsP1Node) ? NODE_EXPRTYPE : VALUE_EXPRTYPE), NULL);
