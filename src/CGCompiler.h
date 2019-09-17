@@ -24,88 +24,116 @@ To contact the author: codeworker@free.fr
 #include "CppParsingTree.h"
 
 namespace CodeWorker {
-	class DtaScript;
-	class DtaPatternScript;
-	class DtaBNFScript;
-	class DtaTranslateScript;
+class DtaScript;
+class DtaPatternScript;
+class DtaBNFScript;
+class DtaTranslateScript;
 
-	class CGCompiledCommonScript {
-		private:
-			DtaScript* _pScript;
+class CGCompiledCommonScript
+{
+private:
+  DtaScript* _pScript;
 
-		public:
-			inline CGCompiledCommonScript() : _pScript(NULL) {}
-			inline CGCompiledCommonScript(DtaScript* pScript) : _pScript(pScript) {}
-			virtual ~CGCompiledCommonScript();
+public:
+  inline CGCompiledCommonScript()
+    : _pScript(NULL)
+  {}
+  inline CGCompiledCommonScript(DtaScript* pScript)
+    : _pScript(pScript)
+  {}
+  virtual ~CGCompiledCommonScript();
 
-			void buildFromString(const std::string& sText);
-			void buildFromFile(const std::string& sScriptFile);
+  void buildFromString(const std::string& sText);
+  void buildFromFile(const std::string& sScriptFile);
 
-			void execute(DtaScriptVariable* pContext);
-			void execute(CppParsingTree_var pContext);
-	};
+  void execute(DtaScriptVariable* pContext);
+  void execute(CppParsingTree_var pContext);
+};
 
-	class CGCompiledTemplateScript {
-		private:
-			DtaPatternScript* _pScript;
+class CGCompiledTemplateScript
+{
+private:
+  DtaPatternScript* _pScript;
 
-		public:
-			inline CGCompiledTemplateScript() : _pScript(NULL) {}
-			CGCompiledTemplateScript(const std::string& sFile);
-			inline CGCompiledTemplateScript(DtaPatternScript* pScript) : _pScript(pScript) {}
-			virtual ~CGCompiledTemplateScript();
+public:
+  inline CGCompiledTemplateScript()
+    : _pScript(NULL)
+  {}
+  CGCompiledTemplateScript(const std::string& sFile);
+  inline CGCompiledTemplateScript(DtaPatternScript* pScript)
+    : _pScript(pScript)
+  {}
+  virtual ~CGCompiledTemplateScript();
 
-			void buildFromString(const std::string& sText);
-			void buildFromFile(const std::string& sScriptFile);
+  void buildFromString(const std::string& sText);
+  void buildFromFile(const std::string& sScriptFile);
 
-			void generate(DtaScriptVariable* pContext, const std::string& sOutputFile);
-			void generateString(DtaScriptVariable* pContext, std::string& sOutputText);
-			void expand(DtaScriptVariable* pContext, const std::string& sOutputFile);
+  void generate(DtaScriptVariable* pContext, const std::string& sOutputFile);
+  void generateString(DtaScriptVariable* pContext, std::string& sOutputText);
+  void expand(DtaScriptVariable* pContext, const std::string& sOutputFile);
 
-			void generate(CppParsingTree_var pContext, const std::string& sOutputFile);
-			void generateString(CppParsingTree_var pContext, std::string& sOutputText);
-			void expand(CppParsingTree_var pContext, const std::string& sOutputFile);
-	};
+  void generate(CppParsingTree_var pContext, const std::string& sOutputFile);
+  void generateString(CppParsingTree_var pContext, std::string& sOutputText);
+  void expand(CppParsingTree_var pContext, const std::string& sOutputFile);
+};
 
-	class CGCompiledBNFScript {
-		private:
-			DtaBNFScript* _pScript;
+class CGCompiledBNFScript
+{
+private:
+  DtaBNFScript* _pScript;
 
-		public:
-			inline CGCompiledBNFScript() : _pScript(NULL) {}
-			CGCompiledBNFScript(const std::string& sFile);
-			inline CGCompiledBNFScript(DtaBNFScript* pScript) : _pScript(pScript) {}
-			virtual ~CGCompiledBNFScript();
+public:
+  inline CGCompiledBNFScript()
+    : _pScript(NULL)
+  {}
+  CGCompiledBNFScript(const std::string& sFile);
+  inline CGCompiledBNFScript(DtaBNFScript* pScript)
+    : _pScript(pScript)
+  {}
+  virtual ~CGCompiledBNFScript();
 
-			void buildFromString(const std::string& sText);
-			void buildFromFile(const std::string& sScriptFile);
+  void buildFromString(const std::string& sText);
+  void buildFromFile(const std::string& sScriptFile);
 
-			void parse(DtaScriptVariable* pContext, const std::string& sParsedFile);
-			void parseString(DtaScriptVariable* pContext, const std::string& sText);
+  void parse(DtaScriptVariable* pContext, const std::string& sParsedFile);
+  void parseString(DtaScriptVariable* pContext, const std::string& sText);
 
-			void parse(CppParsingTree_var pContext, const std::string& sParsedFile);
-			void parseString(CppParsingTree_var pContext, const std::string& sText);
-	};
+  void parse(CppParsingTree_var pContext, const std::string& sParsedFile);
+  void parseString(CppParsingTree_var pContext, const std::string& sText);
+};
 
-	class CGCompiledTranslationScript {
-		private:
-			DtaTranslateScript* _pScript;
+class CGCompiledTranslationScript
+{
+private:
+  DtaTranslateScript* _pScript;
 
-		public:
-			inline CGCompiledTranslationScript() : _pScript(NULL) {}
-			CGCompiledTranslationScript(const std::string& sFile);
-			inline CGCompiledTranslationScript(DtaTranslateScript* pScript) : _pScript(pScript) {}
-			virtual ~CGCompiledTranslationScript();
+public:
+  inline CGCompiledTranslationScript()
+    : _pScript(NULL)
+  {}
+  CGCompiledTranslationScript(const std::string& sFile);
+  inline CGCompiledTranslationScript(DtaTranslateScript* pScript)
+    : _pScript(pScript)
+  {}
+  virtual ~CGCompiledTranslationScript();
 
-			void buildFromString(const std::string& sText);
-			void buildFromFile(const std::string& sScriptFile);
+  void buildFromString(const std::string& sText);
+  void buildFromFile(const std::string& sScriptFile);
 
-			void translate(DtaScriptVariable* pContext, const std::string& sParsedFile, const std::string& sOutputFile);
-			void translateString(DtaScriptVariable* pContext, const std::string& sInputText, std::string& sOutputText);
-			void translateString(CppParsingTree_var pContext, const std::string& sInputText, std::string& sOutputText);
+  void translate(DtaScriptVariable* pContext,
+                 const std::string& sParsedFile,
+                 const std::string& sOutputFile);
+  void translateString(DtaScriptVariable* pContext,
+                       const std::string& sInputText,
+                       std::string& sOutputText);
+  void translateString(CppParsingTree_var pContext,
+                       const std::string& sInputText,
+                       std::string& sOutputText);
 
-			void translate(CppParsingTree_var pContext, const std::string& sParsedFile, const std::string& sOutputFile);
-	};
+  void translate(CppParsingTree_var pContext,
+                 const std::string& sParsedFile,
+                 const std::string& sOutputFile);
+};
 }
 
 #endif

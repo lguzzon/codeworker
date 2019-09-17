@@ -20,38 +20,46 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfCompileToCpp.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfCompileToCpp::~GrfCompileToCpp() {
-		delete _pScriptFileName;
-		delete _pProjectDirectory;
-		delete _pCodeWorkerDirectory;
-	}
+GrfCompileToCpp::~GrfCompileToCpp()
+{
+  delete _pScriptFileName;
+  delete _pProjectDirectory;
+  delete _pCodeWorkerDirectory;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfCompileToCpp::executeInternal(DtaScriptVariable& visibility) {
-		std::string sScriptFileName = _pScriptFileName->getValue(visibility);
-		std::string sProjectDirectory = _pProjectDirectory->getValue(visibility);
-		std::string sCodeWorkerDirectory = _pCodeWorkerDirectory->getValue(visibility);
-		return CGRuntime::compileToCpp(sScriptFileName, sProjectDirectory, sCodeWorkerDirectory);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfCompileToCpp::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sScriptFileName = _pScriptFileName->getValue(visibility);
+  std::string sProjectDirectory = _pProjectDirectory->getValue(visibility);
+  std::string sCodeWorkerDirectory =
+    _pCodeWorkerDirectory->getValue(visibility);
+  return CGRuntime::compileToCpp(
+    sScriptFileName, sProjectDirectory, sCodeWorkerDirectory);
+}
 
-	void GrfCompileToCpp::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::compileToCpp(";
-		_pScriptFileName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pProjectDirectory->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pCodeWorkerDirectory->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfCompileToCpp::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::compileToCpp(";
+  _pScriptFileName->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pProjectDirectory->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pCodeWorkerDirectory->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

@@ -27,23 +27,27 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptVariable;
 
-	class GrfRemoveFirstElement : public GrfCommand {
-		private:
-			ExprScriptVariable* _pList;
+class GrfRemoveFirstElement : public GrfCommand
+{
+private:
+  ExprScriptVariable* _pList;
 
-		public:
-			GrfRemoveFirstElement() : _pList(NULL) {}
-			virtual ~GrfRemoveFirstElement();
+public:
+  GrfRemoveFirstElement()
+    : _pList(NULL)
+  {}
+  virtual ~GrfRemoveFirstElement();
 
-			virtual const char* getFunctionName() const { return "removeFirstElement"; }
+  virtual const char* getFunctionName() const { return "removeFirstElement"; }
 
-			inline void setList(ExprScriptVariable* pList) { _pList = pList; }
+  inline void setList(ExprScriptVariable* pList) { _pList = pList; }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

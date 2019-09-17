@@ -20,46 +20,63 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ExprScriptFunction.h"
-#include "DtaProject.h"
-#include "DtaBNFScript.h"
-#include "DtaVisitor.h"
 #include "BNFStepoutHook.h"
+#include "DtaBNFScript.h"
+#include "DtaProject.h"
+#include "DtaVisitor.h"
+#include "ExprScriptFunction.h"
 
 namespace CodeWorker {
-	BNFStepoutHook::BNFStepoutHook(DtaBNFScript* pBNFScript, GrfBlock* pParent) : GrfFunction(pParent, "stepintoHook", "", false), _pBNFScript(pBNFScript) {
-		pBNFScript->setStepoutHook(this);
-	}
+BNFStepoutHook::BNFStepoutHook(DtaBNFScript* pBNFScript, GrfBlock* pParent)
+  : GrfFunction(pParent, "stepintoHook", "", false)
+  , _pBNFScript(pBNFScript)
+{
+  pBNFScript->setStepoutHook(this);
+}
 
-	BNFStepoutHook::~BNFStepoutHook() {
-		_pBNFScript->setStepintoHook(NULL);
-	}
+BNFStepoutHook::~BNFStepoutHook()
+{
+  _pBNFScript->setStepintoHook(NULL);
+}
 
-	void BNFStepoutHook::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFStepoutHook(*this, env);
-	}
+void
+BNFStepoutHook::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+  visitor.visitBNFStepoutHook(*this, env);
+}
 
-	bool BNFStepoutHook::setParameters(const char* sParameters) {
-		return addParameterAndType(sParameters, NODE_EXPRTYPE, NULL);
-	}
+bool
+BNFStepoutHook::setParameters(const char* sParameters)
+{
+  return addParameterAndType(sParameters, NODE_EXPRTYPE, NULL);
+}
 
-	bool BNFStepoutHook::setClauseSignature(const char* sSignature) {
-		return addParameterAndType(sSignature, VALUE_EXPRTYPE, NULL);
-	}
+bool
+BNFStepoutHook::setClauseSignature(const char* sSignature)
+{
+  return addParameterAndType(sSignature, VALUE_EXPRTYPE, NULL);
+}
 
-	bool BNFStepoutHook::setSuccess(const char* sSuccess) {
-		return addParameterAndType(sSuccess, VALUE_EXPRTYPE, NULL);
-	}
+bool
+BNFStepoutHook::setSuccess(const char* sSuccess)
+{
+  return addParameterAndType(sSuccess, VALUE_EXPRTYPE, NULL);
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFStepoutHook::executeHook(DtaScriptVariable& visibility, const std::string& sSignature, DtaScriptVariable& parameters, bool bSuccess) {
-		std::auto_ptr<ExprScriptFunction> pFunctionCall(new ExprScriptFunction(this));
-		pFunctionCall->addParameter(new ExprScriptConstant(sSignature.c_str()));
-		pFunctionCall->addParameter(new ExprScriptResolvedVariable(&parameters));
-		pFunctionCall->addParameter(new ExprScriptConstant(bSuccess));
-		launchExecution(visibility, *pFunctionCall);
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+BNFStepoutHook::executeHook(DtaScriptVariable& visibility,
+                            const std::string& sSignature,
+                            DtaScriptVariable& parameters,
+                            bool bSuccess)
+{
+  std::auto_ptr<ExprScriptFunction> pFunctionCall(new ExprScriptFunction(this));
+  pFunctionCall->addParameter(new ExprScriptConstant(sSignature.c_str()));
+  pFunctionCall->addParameter(new ExprScriptResolvedVariable(&parameters));
+  pFunctionCall->addParameter(new ExprScriptConstant(bSuccess));
+  launchExecution(visibility, *pFunctionCall);
+  return NO_INTERRUPTION;
+}
 }

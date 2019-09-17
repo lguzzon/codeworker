@@ -20,34 +20,39 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfPutEnv.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfPutEnv::~GrfPutEnv() {
-		delete _pName;
-		delete _pValue;
-	}
+GrfPutEnv::~GrfPutEnv()
+{
+  delete _pName;
+  delete _pValue;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfPutEnv::executeInternal(DtaScriptVariable& visibility) {
-		std::string sName = _pName->getValue(visibility);
-		std::string sValue = _pValue->getValue(visibility);
-		return CGRuntime::putEnv(sName, sValue);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfPutEnv::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sName = _pName->getValue(visibility);
+  std::string sValue = _pValue->getValue(visibility);
+  return CGRuntime::putEnv(sName, sValue);
+}
 
-	void GrfPutEnv::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::putEnv(";
-		_pName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pValue->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfPutEnv::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::putEnv(";
+  _pName->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pValue->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

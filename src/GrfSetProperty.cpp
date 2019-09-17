@@ -20,34 +20,39 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfSetProperty.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfSetProperty::~GrfSetProperty() {
-		delete _pDefine;
-		delete _pValue;
-	}
+GrfSetProperty::~GrfSetProperty()
+{
+  delete _pDefine;
+  delete _pValue;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetProperty::executeInternal(DtaScriptVariable& visibility) {
-		std::string sDefine = _pDefine->getValue(visibility);
-		std::string sValue = _pValue->getValue(visibility);
-		return CGRuntime::setProperty(sDefine, sValue);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSetProperty::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sDefine = _pDefine->getValue(visibility);
+  std::string sValue = _pValue->getValue(visibility);
+  return CGRuntime::setProperty(sDefine, sValue);
+}
 
-	void GrfSetProperty::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setProperty(";
-		_pDefine->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pValue->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSetProperty::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::setProperty(";
+  _pDefine->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pValue->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

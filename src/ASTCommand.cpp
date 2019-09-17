@@ -20,99 +20,126 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
-#include "ScpStream.h"
-#include "ExprScriptVariable.h"
-#include "DtaScript.h"
 #include "ASTCommand.h"
+#include "DtaScript.h"
+#include "ExprScriptVariable.h"
+#include "ScpStream.h"
+#include "UtlException.h"
 
 namespace CodeWorker {
-	ASTCommand::~ASTCommand() {}
+ASTCommand::~ASTCommand() {}
 
-	ExprScriptExpression* ASTCommand::parseExpression(ScpStream& script) {
-		DtaScript theEmptyScript(NULL);
-		GrfBlock* pBlock = NULL;
-		GrfBlock& myNullBlock = *pBlock;
-		return theEmptyScript.parseExpression(myNullBlock, script);
-	}
+ExprScriptExpression*
+ASTCommand::parseExpression(ScpStream& script)
+{
+  DtaScript theEmptyScript(NULL);
+  GrfBlock* pBlock = NULL;
+  GrfBlock& myNullBlock = *pBlock;
+  return theEmptyScript.parseExpression(myNullBlock, script);
+}
 
-	ExprScriptVariable* ASTCommand::parseVariableExpression(ScpStream& script) {
-		DtaScript theEmptyScript(NULL);
-		GrfBlock* pBlock = NULL;
-		GrfBlock& myNullBlock = *pBlock;
-		return theEmptyScript.parseVariableExpression(myNullBlock, script);
-	}
+ExprScriptVariable*
+ASTCommand::parseVariableExpression(ScpStream& script)
+{
+  DtaScript theEmptyScript(NULL);
+  GrfBlock* pBlock = NULL;
+  GrfBlock& myNullBlock = *pBlock;
+  return theEmptyScript.parseVariableExpression(myNullBlock, script);
+}
 
+ASTThisCommand::ASTThisCommand(ScpStream& script)
+  : _pVariable(NULL)
+{
+  script.skipEmpty();
+  std::string sAlias;
+  if (script.readIdentifier(sAlias)) {
+    script.skipEmpty();
+    _pVariable = new ExprScriptVariable(sAlias.c_str());
+  }
+  if (!script.isEqualTo('='))
+    throw UtlException(
+      script, "syntax error in #thisAST; '=' expected before the non-terminal");
+}
 
-	ASTThisCommand::ASTThisCommand(ScpStream& script) : _pVariable(NULL) {
-		script.skipEmpty();
-		std::string sAlias;
-		if (script.readIdentifier(sAlias)) {
-			script.skipEmpty();
-			_pVariable = new ExprScriptVariable(sAlias.c_str());
-		}
-		if (!script.isEqualTo('=')) throw UtlException(script, "syntax error in #thisAST; '=' expected before the non-terminal");
-	}
+ASTThisCommand::~ASTThisCommand()
+{
+  delete _pVariable;
+}
 
-	ASTThisCommand::~ASTThisCommand() {
-		delete _pVariable;
-	}
+void
+ASTThisCommand::execute(ASTCommandEnvironment& env)
+{}
 
-	void ASTThisCommand::execute(ASTCommandEnvironment& env) {
-	}
+ASTValueCommand::ASTValueCommand(ScpStream& script)
+  : _pVariable(NULL)
+{
+  script.skipEmpty();
+  if (script.peekChar() != '=') {
+    _pVariable = parseVariableExpression(script);
+    script.skipEmpty();
+  }
+  if (!script.isEqualTo('='))
+    throw UtlException(
+      script,
+      "syntax error in #valueAST; '=' expected before the non-terminal");
+}
 
+ASTValueCommand::~ASTValueCommand()
+{
+  delete _pVariable;
+}
 
-	ASTValueCommand::ASTValueCommand(ScpStream& script) : _pVariable(NULL) {
-		script.skipEmpty();
-		if (script.peekChar() != '=') {
-			_pVariable = parseVariableExpression(script);
-			script.skipEmpty();
-		}
-		if (!script.isEqualTo('=')) throw UtlException(script, "syntax error in #valueAST; '=' expected before the non-terminal");
-	}
+void
+ASTValueCommand::execute(ASTCommandEnvironment& env)
+{}
 
-	ASTValueCommand::~ASTValueCommand() {
-		delete _pVariable;
-	}
+ASTRefCommand::ASTRefCommand(ScpStream& script)
+  : _pVariable(NULL)
+{
+  _pVariable = parseVariableExpression(script);
+  script.skipEmpty();
+  if (!script.isEqualTo('='))
+    throw UtlException(
+      script, "syntax error in #refAST; '=' expected before the non-terminal");
+}
 
-	void ASTValueCommand::execute(ASTCommandEnvironment& env) {
-	}
+ASTRefCommand::~ASTRefCommand()
+{
+  delete _pVariable;
+}
 
+void
+ASTRefCommand::execute(ASTCommandEnvironment& env)
+{}
 
-	ASTRefCommand::ASTRefCommand(ScpStream& script) : _pVariable(NULL) {
-		_pVariable = parseVariableExpression(script);
-		script.skipEmpty();
-		if (!script.isEqualTo('=')) throw UtlException(script, "syntax error in #refAST; '=' expected before the non-terminal");
-	}
+ASTSlideCommand::ASTSlideCommand(ScpStream& script)
+  : _pVariable(NULL)
+{
+  script.skipEmpty();
+  if (!script.isEqualTo('('))
+    throw UtlException(script, "syntax error in #slideAST; '(' expected");
+  script.skipEmpty();
+  _pVariable = parseVariableExpression(script);
+  script.skipEmpty();
+  if (!script.isEqualTo(','))
+    throw UtlException(script, "syntax error in #slideAST; ',' expected");
+  script.skipEmpty();
+  if (!script.readIdentifier(_sAttribute))
+    throw UtlException(script, "syntax error in #slideAST; attribute expected");
+  script.skipEmpty();
+  if (!script.isEqualTo(')'))
+    throw UtlException(script, "syntax error in #slideAST; ')' expected");
+}
 
-	ASTRefCommand::~ASTRefCommand() {
-		delete _pVariable;
-	}
+ASTSlideCommand::~ASTSlideCommand()
+{
+  delete _pVariable;
+}
 
-	void ASTRefCommand::execute(ASTCommandEnvironment& env) {
-	}
-
-
-	ASTSlideCommand::ASTSlideCommand(ScpStream& script) : _pVariable(NULL) {
-		script.skipEmpty();
-		if (!script.isEqualTo('(')) throw UtlException(script, "syntax error in #slideAST; '(' expected");
-		script.skipEmpty();
-		_pVariable = parseVariableExpression(script);
-		script.skipEmpty();
-		if (!script.isEqualTo(',')) throw UtlException(script, "syntax error in #slideAST; ',' expected");
-		script.skipEmpty();
-		if (!script.readIdentifier(_sAttribute)) throw UtlException(script, "syntax error in #slideAST; attribute expected");
-		script.skipEmpty();
-		if (!script.isEqualTo(')')) throw UtlException(script, "syntax error in #slideAST; ')' expected");
-	}
-
-	ASTSlideCommand::~ASTSlideCommand() {
-		delete _pVariable;
-	}
-
-	void ASTSlideCommand::execute(ASTCommandEnvironment& env) {
-	}
+void
+ASTSlideCommand::execute(ASTCommandEnvironment& env)
+{}
 }

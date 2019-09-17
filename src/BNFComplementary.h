@@ -25,20 +25,22 @@ To contact the author: codeworker@free.fr
 #include "BNFStepper.h"
 
 namespace CodeWorker {
-	class BNFComplementary : public BNFStepper {
-	public:
-		BNFComplementary(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
-		virtual ~BNFComplementary();
+class BNFComplementary : public BNFStepper
+{
+public:
+  BNFComplementary(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
+  virtual ~BNFComplementary();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual std::string toString() const;
+  virtual std::string toString() const;
 
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

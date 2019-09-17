@@ -20,37 +20,47 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
+#include "GrfPushItem.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
 #include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "GrfPushItem.h"
+#include "UtlException.h"
 
 namespace CodeWorker {
-	GrfPushItem::~GrfPushItem() {
-		if (_pVariable != NULL) delete _pVariable;
-		if (_pValue != NULL) delete _pValue;
-	}
+GrfPushItem::~GrfPushItem()
+{
+  if (_pVariable != NULL)
+    delete _pVariable;
+  if (_pValue != NULL)
+    delete _pValue;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfPushItem::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pVariable = visibility.getVariable(*_pVariable);
-		std::string sValue;
-		if (_pValue != NULL) sValue = _pValue->getValue(visibility);
-		pVariable->pushItem(sValue);
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfPushItem::executeInternal(DtaScriptVariable& visibility)
+{
+  DtaScriptVariable* pVariable = visibility.getVariable(*_pVariable);
+  std::string sValue;
+  if (_pValue != NULL)
+    sValue = _pValue->getValue(visibility);
+  pVariable->pushItem(sValue);
+  return NO_INTERRUPTION;
+}
 
-	void GrfPushItem::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT;
-		_pVariable->compileCppForSet(theCompilerEnvironment);
-		CW_BODY_STREAM << ".pushItem(";
-		if (_pValue != NULL) _pValue->compileCpp(theCompilerEnvironment);
-		else CW_BODY_STREAM << "\"\"";
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfPushItem::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT;
+  _pVariable->compileCppForSet(theCompilerEnvironment);
+  CW_BODY_STREAM << ".pushItem(";
+  if (_pValue != NULL)
+    _pValue->compileCpp(theCompilerEnvironment);
+  else
+    CW_BODY_STREAM << "\"\"";
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

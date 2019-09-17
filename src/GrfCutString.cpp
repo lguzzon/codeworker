@@ -20,45 +20,54 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
-#include <list>
-#include "DtaScriptVariable.h"
-#include "ExprScriptVariable.h"
 #include "GrfCutString.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "DtaScriptVariable.h"
+#include "ExprScriptExpression.h"
+#include "ExprScriptVariable.h"
+#include "ScpStream.h"
+#include <list>
+#include <string>
 
 namespace CodeWorker {
-	GrfCutString::~GrfCutString() {
-		delete _pText;
-		delete _pSeparator;
-		delete _pList;
-	}
+GrfCutString::~GrfCutString()
+{
+  delete _pText;
+  delete _pSeparator;
+  delete _pList;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfCutString::executeInternal(DtaScriptVariable& visibility) {
-		std::string sText = _pText->getValue(visibility);
-		std::string sSeparator = _pSeparator->getValue(visibility);
-		DtaScriptVariable* pList = visibility.getExistingVariable(*_pList);
-		if (pList == NULL) throw UtlException("parameter 'list' of procedure 'cutString' takes unexisting variable '" + _pList->toString() + "' as argument");
-		std::list<std::string> slList;
-		SEQUENCE_INTERRUPTION_LIST result = CGRuntime::cutString(sText, sSeparator, slList);
-		pList->setValue(slList);
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfCutString::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sText = _pText->getValue(visibility);
+  std::string sSeparator = _pSeparator->getValue(visibility);
+  DtaScriptVariable* pList = visibility.getExistingVariable(*_pList);
+  if (pList == NULL)
+    throw UtlException(
+      "parameter 'list' of procedure 'cutString' takes unexisting variable '" +
+      _pList->toString() + "' as argument");
+  std::list<std::string> slList;
+  SEQUENCE_INTERRUPTION_LIST result =
+    CGRuntime::cutString(sText, sSeparator, slList);
+  pList->setValue(slList);
+  return result;
+}
 
-	void GrfCutString::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::cutString(";
-		_pText->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pSeparator->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pList->compileCppForSet(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfCutString::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::cutString(";
+  _pText->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pSeparator->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pList->compileCppForSet(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

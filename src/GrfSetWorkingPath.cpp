@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfSetWorkingPath.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfSetWorkingPath::~GrfSetWorkingPath() {
-		delete _pPath;
-	}
+GrfSetWorkingPath::~GrfSetWorkingPath()
+{
+  delete _pPath;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetWorkingPath::executeInternal(DtaScriptVariable& visibility) {
-		std::string sPath = _pPath->getValue(visibility);
-		return CGRuntime::setWorkingPath(sPath);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSetWorkingPath::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sPath = _pPath->getValue(visibility);
+  return CGRuntime::setWorkingPath(sPath);
+}
 
-	void GrfSetWorkingPath::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setWorkingPath(";
-		_pPath->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSetWorkingPath::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::setWorkingPath(";
+  _pPath->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

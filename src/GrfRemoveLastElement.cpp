@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
+#include "GrfRemoveLastElement.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "GrfRemoveLastElement.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfRemoveLastElement::~GrfRemoveLastElement() {
-		delete _pList;
-	}
+GrfRemoveLastElement::~GrfRemoveLastElement()
+{
+  delete _pList;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfRemoveLastElement::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pList = visibility.getExistingVariable(*_pList);
-		return CGRuntime::removeLastElement(pList);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfRemoveLastElement::executeInternal(DtaScriptVariable& visibility)
+{
+  DtaScriptVariable* pList = visibility.getExistingVariable(*_pList);
+  return CGRuntime::removeLastElement(pList);
+}
 
-	void GrfRemoveLastElement::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::removeLastElement(";
-		_pList->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfRemoveLastElement::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::removeLastElement(";
+  _pList->compileCpp(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

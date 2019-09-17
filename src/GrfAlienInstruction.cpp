@@ -20,25 +20,35 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "GrfAlienInstruction.h"
+#include "CppCompilerEnvironment.h"
+#include "ScpStream.h"
+#include "UtlException.h"
 
 namespace CodeWorker {
-	GrfAlienInstruction::~GrfAlienInstruction() {
-	}
+GrfAlienInstruction::~GrfAlienInstruction() {}
 
-	SEQUENCE_INTERRUPTION_LIST GrfAlienInstruction::executeInternal(DtaScriptVariable&) {
-		throw UtlException("Can't execute a source code written in a foreign language (" + _sTargetLanguage + ")!");
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfAlienInstruction::executeInternal(DtaScriptVariable&)
+{
+  throw UtlException(
+    "Can't execute a source code written in a foreign language (" +
+    _sTargetLanguage + ")!");
+}
 
-	void GrfAlienInstruction::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "BEGIN_TARGET_LANGUAGE_CODE(" << _sTargetLanguage << ", \"" << _sParsingFilePtr << "\", " << _iLine << ")";CW_BODY_ENDL;
-		CW_BODY_INDENT << _sCode;CW_BODY_ENDL;
-		CW_BODY_INDENT << "END_TARGET_LANGUAGE_CODE(" << _sTargetLanguage << ")";CW_BODY_ENDL;
-	}
+void
+GrfAlienInstruction::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "BEGIN_TARGET_LANGUAGE_CODE(" << _sTargetLanguage << ", \""
+                 << _sParsingFilePtr << "\", " << _iLine << ")";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << _sCode;
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "END_TARGET_LANGUAGE_CODE(" << _sTargetLanguage << ")";
+  CW_BODY_ENDL;
+}
 }

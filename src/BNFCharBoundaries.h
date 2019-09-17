@@ -25,40 +25,52 @@ To contact the author: codeworker@free.fr
 #include "GrfBlock.h"
 
 namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptVariable;
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptVariable;
 
+class BNFCharBoundaries : public GrfCommand
+{
+private:
+  DtaBNFScript* _pBNFScript;
+  int _iStartChar;
+  int _iEndChar;
+  ExprScriptVariable* _pVariableToAssign;
+  bool _bConcatVariable;
+  std::vector<std::string> _listOfConstants;
+  int _iClauseReturnType;
+  bool _bContinue;
+  bool _bNoCase;
 
-	class BNFCharBoundaries : public GrfCommand {
-	private:
-		DtaBNFScript* _pBNFScript;
-		int _iStartChar;
-		int _iEndChar;
-		ExprScriptVariable* _pVariableToAssign;
-		bool _bConcatVariable;
-		std::vector<std::string> _listOfConstants;
-		int _iClauseReturnType;
-		bool _bContinue;
-		bool _bNoCase;
+public:
+  BNFCharBoundaries(DtaBNFScript* pBNFScript,
+                    GrfBlock* pParent,
+                    int iStartChar,
+                    int iEndChar,
+                    bool bContinue,
+                    bool bNoCase);
+  virtual ~BNFCharBoundaries();
 
-	public:
-		BNFCharBoundaries(DtaBNFScript* pBNFScript, GrfBlock* pParent, int iStartChar, int iEndChar, bool bContinue, bool bNoCase);
-		virtual ~BNFCharBoundaries();
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual bool isABNFCommand() const;
 
-		virtual bool isABNFCommand() const;
+  void setVariableToAssign(ExprScriptVariable* pVariableToAssign,
+                           bool bConcat,
+                           BNFClause& theClause);
+  inline void setConstantsToMatch(
+    const std::vector<std::string>& listOfConstants)
+  {
+    _listOfConstants = listOfConstants;
+  }
 
-		void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
-		inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants) { _listOfConstants = listOfConstants; }
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual std::string toString() const;
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-		virtual std::string toString() const;
-
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

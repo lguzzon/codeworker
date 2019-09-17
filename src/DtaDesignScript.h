@@ -27,37 +27,49 @@ To contact the author: codeworker@free.fr
 #include <map>
 
 namespace CodeWorker {
-	class ScpStream;
-	class DtaProtectedAreasBag;
+class ScpStream;
+class DtaProtectedAreasBag;
 
-	class DtaDesignScript : public DtaScript {
-	private:
-		DtaProtectedAreasBag* _pProtectedAreasBag;
+class DtaDesignScript : public DtaScript
+{
+private:
+  DtaProtectedAreasBag* _pProtectedAreasBag;
 
-	public:
-		DtaDesignScript(GrfBlock* pParentBlock);
-		virtual ~DtaDesignScript();
+public:
+  DtaDesignScript(GrfBlock* pParentBlock);
+  virtual ~DtaDesignScript();
 
-		DtaProtectedAreasBag& getProtectedAreasBag();
+  DtaProtectedAreasBag& getProtectedAreasBag();
 
-		virtual DtaScriptFactory::SCRIPT_TYPE getType() const;
-		virtual bool isAParseScript() const;
+  virtual DtaScriptFactory::SCRIPT_TYPE getType() const;
+  virtual bool isAParseScript() const;
 
-		virtual void traceEngine() const;
+  virtual void traceEngine() const;
 
-		SEQUENCE_INTERRUPTION_LIST loadDesign(const char* sFile, DtaScriptVariable& thisContext);
-		virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& thisContext);
+  SEQUENCE_INTERRUPTION_LIST loadDesign(const char* sFile,
+                                        DtaScriptVariable& thisContext);
+  virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& thisContext);
 
-	protected:
-		virtual void handleUnknownCommand(const std::string& sCommand, ScpStream& script, GrfBlock& block);
-//##markup##"parsing"
-//##begin##"parsing"
-		virtual void parseAttachInputToSocket(GrfBlock& block, ScpStream& script, ExprScriptVariable* pMethodCaller);
-		virtual void parseDetachInputFromSocket(GrfBlock& block, ScpStream& script, ExprScriptVariable* pMethodCaller);
-		virtual void parseGoBack(GrfBlock& block, ScpStream& script, ExprScriptVariable* pMethodCaller);
-		virtual void parseSetInputLocation(GrfBlock& block, ScpStream& script, ExprScriptVariable* pMethodCaller);
-//##end##"parsing"
-	};
+protected:
+  virtual void handleUnknownCommand(const std::string& sCommand,
+                                    ScpStream& script,
+                                    GrfBlock& block);
+  //##markup##"parsing"
+  //##begin##"parsing"
+  virtual void parseAttachInputToSocket(GrfBlock& block,
+                                        ScpStream& script,
+                                        ExprScriptVariable* pMethodCaller);
+  virtual void parseDetachInputFromSocket(GrfBlock& block,
+                                          ScpStream& script,
+                                          ExprScriptVariable* pMethodCaller);
+  virtual void parseGoBack(GrfBlock& block,
+                           ScpStream& script,
+                           ExprScriptVariable* pMethodCaller);
+  virtual void parseSetInputLocation(GrfBlock& block,
+                                     ScpStream& script,
+                                     ExprScriptVariable* pMethodCaller);
+  //##end##"parsing"
+};
 }
 
 #endif

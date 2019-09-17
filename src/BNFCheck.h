@@ -25,33 +25,38 @@ To contact the author: codeworker@free.fr
 #include "GrfBlock.h"
 
 namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptExpression;
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptExpression;
 
-	class BNFCheck : public GrfCommand {
-	private:
-		DtaBNFScript* _pBNFScript;
-		ExprScriptExpression* _pCondition;
-		bool _bContinue;
+class BNFCheck : public GrfCommand
+{
+private:
+  DtaBNFScript* _pBNFScript;
+  ExprScriptExpression* _pCondition;
+  bool _bContinue;
 
-	public:
-		BNFCheck(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
-		virtual ~BNFCheck();
+public:
+  BNFCheck(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
+  virtual ~BNFCheck();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+  virtual bool isABNFCommand() const;
 
-		inline void setCondition(ExprScriptExpression* pCondition) { _pCondition = pCondition; }
+  inline void setCondition(ExprScriptExpression* pCondition)
+  {
+    _pCondition = pCondition;
+  }
 
-		virtual std::string toString() const;
+  virtual std::string toString() const;
 
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

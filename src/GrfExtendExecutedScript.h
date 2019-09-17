@@ -27,23 +27,30 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfExtendExecutedScript : public GrfCommand {
-		private:
-			ExprScriptExpression* _pScriptContent;
+class GrfExtendExecutedScript : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pScriptContent;
 
-		public:
-			GrfExtendExecutedScript() : _pScriptContent(NULL) {}
-			virtual ~GrfExtendExecutedScript();
+public:
+  GrfExtendExecutedScript()
+    : _pScriptContent(NULL)
+  {}
+  virtual ~GrfExtendExecutedScript();
 
-			virtual const char* getFunctionName() const { return "extendExecutedScript"; }
+  virtual const char* getFunctionName() const { return "extendExecutedScript"; }
 
-			inline void setScriptContent(ExprScriptExpression* pScriptContent) { _pScriptContent = pScriptContent; }
+  inline void setScriptContent(ExprScriptExpression* pScriptContent)
+  {
+    _pScriptContent = pScriptContent;
+  }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

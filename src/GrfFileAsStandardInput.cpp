@@ -20,41 +20,47 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
 #include "ScpStream.h"
+#include "UtlException.h"
 
-#include "ExprScriptVariable.h"
 #include "CGExternalHandling.h"
 #include "CppCompilerEnvironment.h"
+#include "ExprScriptVariable.h"
 #include "GrfFileAsStandardInput.h"
 
 namespace CodeWorker {
-	GrfFileAsStandardInput::~GrfFileAsStandardInput() {
-		delete _pFilename;
-	}
+GrfFileAsStandardInput::~GrfFileAsStandardInput()
+{
+  delete _pFilename;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfFileAsStandardInput::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		std::string sFilename = _pFilename->getValue(visibility);
-		CGFileStandardInputOutput theInput(sFilename, "");
-		result = GrfBlock::executeInternal(visibility);
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfFileAsStandardInput::executeInternal(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result;
+  std::string sFilename = _pFilename->getValue(visibility);
+  CGFileStandardInputOutput theInput(sFilename, "");
+  result = GrfBlock::executeInternal(visibility);
+  return result;
+}
 
-	void GrfFileAsStandardInput::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "{";
-		CW_BODY_ENDL;
-		theCompilerEnvironment.incrementIndentation();
-		CW_BODY_INDENT << "CGFileStandardInputOutput theInput(";
-		_pFilename->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", \"\");";
-		CW_BODY_ENDL;
-		GrfBlock::compileCpp(theCompilerEnvironment);
-		theCompilerEnvironment.decrementIndentation();
-		CW_BODY_INDENT << "}";
-		CW_BODY_ENDL;
-	}
+void
+GrfFileAsStandardInput::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "{";
+  CW_BODY_ENDL;
+  theCompilerEnvironment.incrementIndentation();
+  CW_BODY_INDENT << "CGFileStandardInputOutput theInput(";
+  _pFilename->compileCpp(theCompilerEnvironment);
+  CW_BODY_STREAM << ", \"\");";
+  CW_BODY_ENDL;
+  GrfBlock::compileCpp(theCompilerEnvironment);
+  theCompilerEnvironment.decrementIndentation();
+  CW_BODY_INDENT << "}";
+  CW_BODY_ENDL;
+}
 }

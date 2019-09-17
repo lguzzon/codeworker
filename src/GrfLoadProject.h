@@ -22,7 +22,6 @@ To contact the author: codeworker@free.fr
 #ifndef _GrfLoadProject_h_
 #define _GrfLoadProject_h_
 
-
 //##protect##"INCLUDE FILES"
 #include <istream>
 //##protect##"INCLUDE FILES"
@@ -33,41 +32,53 @@ namespace CodeWorker {
 class ExprScriptExpression;
 class ExprScriptVariable;
 
-	class GrfLoadProject : public GrfCommand {
-		private:
-			ExprScriptExpression* _pXMLorTXTFileName;
-			ExprScriptVariable* _pNodeToLoad;
+class GrfLoadProject : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pXMLorTXTFileName;
+  ExprScriptVariable* _pNodeToLoad;
 
-//##protect##"attributes"
-//##protect##"attributes"
+  //##protect##"attributes"
+  //##protect##"attributes"
 
-		public:
-			GrfLoadProject() : _pXMLorTXTFileName(NULL), _pNodeToLoad(NULL) {
-//##protect##"constructor"
-//##protect##"constructor"
-			}
-			virtual ~GrfLoadProject();
+public:
+  GrfLoadProject()
+    : _pXMLorTXTFileName(NULL)
+    , _pNodeToLoad(NULL)
+  {
+    //##protect##"constructor"
+    //##protect##"constructor"
+  }
+  virtual ~GrfLoadProject();
 
-			virtual const char* getFunctionName() const { return "loadProject"; }
+  virtual const char* getFunctionName() const { return "loadProject"; }
 
-			inline void setXMLorTXTFileName(ExprScriptExpression* pXMLorTXTFileName) { _pXMLorTXTFileName = pXMLorTXTFileName; }
-			inline void setNodeToLoad(ExprScriptVariable* pNodeToLoad) { _pNodeToLoad = pNodeToLoad; }
+  inline void setXMLorTXTFileName(ExprScriptExpression* pXMLorTXTFileName)
+  {
+    _pXMLorTXTFileName = pXMLorTXTFileName;
+  }
+  inline void setNodeToLoad(ExprScriptVariable* pNodeToLoad)
+  {
+    _pNodeToLoad = pNodeToLoad;
+  }
 
-			void populateDefaultParameters();
+  void populateDefaultParameters();
 
-//##protect##"interface"
-			static void parseTextFile(std::istream& theStream, DtaScriptVariable* pNode);
-//##protect##"interface"
+  //##protect##"interface"
+  static void parseTextFile(std::istream& theStream, DtaScriptVariable* pNode);
+  //##protect##"interface"
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
 
-//##protect##"declarations"
-			static bool populateConstantTree(std::istream& theStream, DtaScriptVariable& theNode);
-//##protect##"declarations"
-	};
+  //##protect##"declarations"
+  static bool populateConstantTree(std::istream& theStream,
+                                   DtaScriptVariable& theNode);
+  //##protect##"declarations"
+};
 }
 
 #endif

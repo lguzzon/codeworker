@@ -22,7 +22,6 @@ To contact the author: codeworker@free.fr
 #ifndef _GrfWriteTextOnce_h_
 #define _GrfWriteTextOnce_h_
 
-
 //##protect##"INCLUDE FILES"
 //##protect##"INCLUDE FILES"
 
@@ -31,39 +30,42 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfWriteTextOnce : public GrfCommand {
-		private:
-			ExprScriptExpression* _pText;
+class GrfWriteTextOnce : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pText;
 
-//##protect##"attributes"
-			DtaScriptVariable* const* _pOutputCoverage;
-//##protect##"attributes"
+  //##protect##"attributes"
+  DtaScriptVariable* const* _pOutputCoverage;
+  //##protect##"attributes"
 
-		public:
-			GrfWriteTextOnce() : _pText(NULL) {
-//##protect##"constructor"
-				_pOutputCoverage = NULL;
-//##protect##"constructor"
-			}
-			virtual ~GrfWriteTextOnce();
+public:
+  GrfWriteTextOnce()
+    : _pText(NULL)
+  {
+    //##protect##"constructor"
+    _pOutputCoverage = NULL;
+    //##protect##"constructor"
+  }
+  virtual ~GrfWriteTextOnce();
 
-			virtual const char* getFunctionName() const { return "writeTextOnce"; }
+  virtual const char* getFunctionName() const { return "writeTextOnce"; }
 
-			inline void setText(ExprScriptExpression* pText) { _pText = pText; }
+  inline void setText(ExprScriptExpression* pText) { _pText = pText; }
 
+  //##protect##"interface"
+  void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
+  //##protect##"interface"
 
-//##protect##"interface"
-			void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
-//##protect##"interface"
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-
-//##protect##"declarations"
-//##protect##"declarations"
-	};
+  //##protect##"declarations"
+  //##protect##"declarations"
+};
 }
 
 #endif

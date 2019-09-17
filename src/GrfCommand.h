@@ -23,85 +23,103 @@ To contact the author: codeworker@free.fr
 #define _GrfCommand_h_
 
 namespace CodeWorker {
-	class ScpStream;
+class ScpStream;
 
-	class UtlException;
-	class DtaScriptVariable;
-	class GrfExecutionContext;
-	class GrfCommand;
-	class GrfBlock;
-	class CppCompilerEnvironment;
-	class UtlTimer;
+class UtlException;
+class DtaScriptVariable;
+class GrfExecutionContext;
+class GrfCommand;
+class GrfBlock;
+class CppCompilerEnvironment;
+class UtlTimer;
 
-	class DtaVisitor;
-	class DtaVisitorEnvironment;
+class DtaVisitor;
+class DtaVisitorEnvironment;
 
-	#ifndef SEQUENCE_INTERRUPTION_DECLARATION
-	#define SEQUENCE_INTERRUPTION_DECLARATION
-	enum SEQUENCE_INTERRUPTION_LIST { NO_INTERRUPTION, CONTINUE_INTERRUPTION, RETURN_INTERRUPTION, BREAK_INTERRUPTION, EXIT_INTERRUPTION, THROW_INTERRUPTION };
-	#endif
+#ifndef SEQUENCE_INTERRUPTION_DECLARATION
+#define SEQUENCE_INTERRUPTION_DECLARATION
+enum SEQUENCE_INTERRUPTION_LIST
+{
+  NO_INTERRUPTION,
+  CONTINUE_INTERRUPTION,
+  RETURN_INTERRUPTION,
+  BREAK_INTERRUPTION,
+  EXIT_INTERRUPTION,
+  THROW_INTERRUPTION
+};
+#endif
 
-	typedef void (*APPLY_ON_COMMAND_FUNCTION)(GrfCommand*);
+typedef void (*APPLY_ON_COMMAND_FUNCTION)(GrfCommand*);
 
-	class GrfCommand {
-	private:
-		static GrfExecutionContext* _pExecutionContext;
+class GrfCommand
+{
+private:
+  static GrfExecutionContext* _pExecutionContext;
 
-		GrfBlock* _pParent;
+  GrfBlock* _pParent;
 
-	private:
-		// These attributes are used only by subclasses of 'GrfExecutionContext'
-		unsigned int _iCounter;
-		UtlTimer* _pTimer;
+private:
+  // These attributes are used only by subclasses of 'GrfExecutionContext'
+  unsigned int _iCounter;
+  UtlTimer* _pTimer;
 
-		friend class GrfExecutionContext;
+  friend class GrfExecutionContext;
 
-	protected:
-		const char* _sParsingFilePtr;
-		int _iFileLocation;
-		friend class GrfScriptBlock;
+protected:
+  const char* _sParsingFilePtr;
+  int _iFileLocation;
+  friend class GrfScriptBlock;
 
-	public:
-		GrfCommand(GrfBlock* pParent = NULL);
-		virtual ~GrfCommand();
+public:
+  GrfCommand(GrfBlock* pParent = NULL);
+  virtual ~GrfCommand();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual const char* getFunctionName() const;
-		virtual bool isAPredefinedFunction() const;
-		virtual bool isABNFCommand() const;
+  virtual const char* getFunctionName() const;
+  virtual bool isAPredefinedFunction() const;
+  virtual bool isABNFCommand() const;
 
-		inline void setParent(GrfBlock* pBlock) { _pParent = pBlock; }
-		inline GrfBlock* getParent() const { return _pParent; }
-		static inline GrfExecutionContext* getCurrentExecutionContext() { return _pExecutionContext; }
+  inline void setParent(GrfBlock* pBlock) { _pParent = pBlock; }
+  inline GrfBlock* getParent() const { return _pParent; }
+  static inline GrfExecutionContext* getCurrentExecutionContext()
+  {
+    return _pExecutionContext;
+  }
 
-		virtual void applyRecursively(APPLY_ON_COMMAND_FUNCTION apply);
+  virtual void applyRecursively(APPLY_ON_COMMAND_FUNCTION apply);
 
-		void setParsingInformation(const char* sName, ScpStream& stream);
+  void setParsingInformation(const char* sName, ScpStream& stream);
 
-		virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& visibility);
+  virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& visibility);
 
-		virtual std::string toString() const;
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual std::string toString() const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		static inline void setCurrentExecutionContext(GrfExecutionContext* pContext) { _pExecutionContext = pContext; }
+protected:
+  static inline void setCurrentExecutionContext(GrfExecutionContext* pContext)
+  {
+    _pExecutionContext = pContext;
+  }
 
-		virtual void callBeforeExecutionCBK(DtaScriptVariable& visibility);
-		virtual void callRecursiveBeforeExecutionCBK(GrfExecutionContext* pContext, DtaScriptVariable& visibility);
-		virtual void callAfterExecutionCBK(DtaScriptVariable& visibility);
-		virtual void callAfterExceptionCBK(DtaScriptVariable& visibility, UtlException& exception);
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility) = 0;
+  virtual void callBeforeExecutionCBK(DtaScriptVariable& visibility);
+  virtual void callRecursiveBeforeExecutionCBK(GrfExecutionContext* pContext,
+                                               DtaScriptVariable& visibility);
+  virtual void callAfterExecutionCBK(DtaScriptVariable& visibility);
+  virtual void callAfterExceptionCBK(DtaScriptVariable& visibility,
+                                     UtlException& exception);
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility) = 0;
 
-	private:
-		inline void clearCounter() { _iCounter = 0; }
-		void clearTimer();
-		void startTimer();
-		void stopTimer();
-		long getTimeInMillis() const;
+private:
+  inline void clearCounter() { _iCounter = 0; }
+  void clearTimer();
+  void startTimer();
+  void stopTimer();
+  long getTimeInMillis() const;
 
-		friend class GrfQuantifyExecution;
-	};
+  friend class GrfQuantifyExecution;
+};
 }
 
 #endif

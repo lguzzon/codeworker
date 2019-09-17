@@ -20,55 +20,63 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "DtaScriptVariable.h"
+#include "GrfDelay.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaProject.h"
+#include "DtaScriptVariable.h"
 #include "ScpStream.h"
 #include "UtlTimer.h"
-#include "CppCompilerEnvironment.h"
-#include "GrfDelay.h"
 
 namespace CodeWorker {
-	class GrfDelayTimer {
-	private:
-		UtlTimer* _pOldTimer;
-		UtlTimer _timer;
+class GrfDelayTimer
+{
+private:
+  UtlTimer* _pOldTimer;
+  UtlTimer _timer;
 
-	public:
-		GrfDelayTimer() {
-			_pOldTimer = DtaProject::getInstance().getDelayTimer();
-			DtaProject::getInstance().setDelayTimer(&_timer);
-			_timer.start();
-		}
-		~GrfDelayTimer() {
-			_timer.stop();
-			double dDuration = _timer.getTimeInSec();
-			DtaProject::getInstance().setLastDelay(dDuration);
-			DtaProject::getInstance().setDelayTimer(_pOldTimer);
-		}
-	};
+public:
+  GrfDelayTimer()
+  {
+    _pOldTimer = DtaProject::getInstance().getDelayTimer();
+    DtaProject::getInstance().setDelayTimer(&_timer);
+    _timer.start();
+  }
+  ~GrfDelayTimer()
+  {
+    _timer.stop();
+    double dDuration = _timer.getTimeInSec();
+    DtaProject::getInstance().setLastDelay(dDuration);
+    DtaProject::getInstance().setDelayTimer(_pOldTimer);
+  }
+};
 
-	GrfDelay::~GrfDelay() {}
+GrfDelay::~GrfDelay() {}
 
-	SEQUENCE_INTERRUPTION_LIST GrfDelay::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		GrfDelayTimer theTimer;
-		result = GrfBlock::executeInternal(visibility);
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfDelay::executeInternal(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result;
+  GrfDelayTimer theTimer;
+  result = GrfBlock::executeInternal(visibility);
+  return result;
+}
 
-	void GrfDelay::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "clock_t _compiler_start = clock();";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT;
-		GrfBlock::compileCpp(theCompilerEnvironment);
-		CW_BODY_INDENT << "clock_t _compiler_finish = clock();";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "double _compiler_duration = (double)(_compiler_finish - _compiler_start) / CLOCKS_PER_SEC;";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "CGRuntime::setLastDelay(_compiler_duration);";
-		CW_BODY_ENDL;
-	}
+void
+GrfDelay::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "clock_t _compiler_start = clock();";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT;
+  GrfBlock::compileCpp(theCompilerEnvironment);
+  CW_BODY_INDENT << "clock_t _compiler_finish = clock();";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "double _compiler_duration = (double)(_compiler_finish - "
+                    "_compiler_start) / CLOCKS_PER_SEC;";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "CGRuntime::setLastDelay(_compiler_duration);";
+  CW_BODY_ENDL;
+}
 }

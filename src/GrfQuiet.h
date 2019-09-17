@@ -25,21 +25,30 @@ To contact the author: codeworker@free.fr
 #include "GrfBlock.h"
 
 namespace CodeWorker {
-	class ExprScriptVariable;
+class ExprScriptVariable;
 
-	class GrfQuiet : public GrfBlock {
-	private:
-		ExprScriptVariable* _pVariable;
-	public:
-		GrfQuiet(GrfBlock* pParent) : GrfBlock(pParent), _pVariable(NULL) {}
-		virtual ~GrfQuiet();
+class GrfQuiet : public GrfBlock
+{
+private:
+  ExprScriptVariable* _pVariable;
 
-		inline void setVariable(ExprScriptVariable* pVariable) { _pVariable = pVariable; }
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+public:
+  GrfQuiet(GrfBlock* pParent)
+    : GrfBlock(pParent)
+    , _pVariable(NULL)
+  {}
+  virtual ~GrfQuiet();
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+  inline void setVariable(ExprScriptVariable* pVariable)
+  {
+    _pVariable = pVariable;
+  }
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

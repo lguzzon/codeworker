@@ -20,34 +20,39 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfAppendFile.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfAppendFile::~GrfAppendFile() {
-		delete _pFilename;
-		delete _pContent;
-	}
+GrfAppendFile::~GrfAppendFile()
+{
+  delete _pFilename;
+  delete _pContent;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfAppendFile::executeInternal(DtaScriptVariable& visibility) {
-		std::string sFilename = _pFilename->getValue(visibility);
-		std::string sContent = _pContent->getValue(visibility);
-		return CGRuntime::appendFile(sFilename, sContent);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfAppendFile::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sFilename = _pFilename->getValue(visibility);
+  std::string sContent = _pContent->getValue(visibility);
+  return CGRuntime::appendFile(sFilename, sContent);
+}
 
-	void GrfAppendFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::appendFile(";
-		_pFilename->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pContent->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfAppendFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::appendFile(";
+  _pFilename->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pContent->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

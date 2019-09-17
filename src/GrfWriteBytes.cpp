@@ -20,13 +20,13 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "ExprScriptExpression.h"
+#include "ScpStream.h"
 #include <string>
 
 //##protect##"INCLUDE FILES"
@@ -36,32 +36,40 @@ To contact the author: codeworker@free.fr
 #include "GrfWriteBytes.h"
 
 namespace CodeWorker {
-	GrfWriteBytes::~GrfWriteBytes() {
-		delete _pBytes;
-	}
+GrfWriteBytes::~GrfWriteBytes()
+{
+  delete _pBytes;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfWriteBytes::executeInternal(DtaScriptVariable& visibility) {
-		std::string sBytes = _pBytes->getValue(visibility);
-//##protect##"execute"
-		if (*_pOutputCoverage != NULL) {
-			DtaScriptVariable* pCoverage = (*_pOutputCoverage)->pushItem("W");
-			pCoverage->insertNode("script")->setValue(_iFileLocation);
-			pCoverage->insertNode("output")->setValue(CGRuntime::getOutputLocation() + (*_pOutputCoverage)->getIntValue());
-		}
-//##protect##"execute"
-		return CGRuntime::writeBytes(sBytes);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfWriteBytes::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sBytes = _pBytes->getValue(visibility);
+  //##protect##"execute"
+  if (*_pOutputCoverage != NULL) {
+    DtaScriptVariable* pCoverage = (*_pOutputCoverage)->pushItem("W");
+    pCoverage->insertNode("script")->setValue(_iFileLocation);
+    pCoverage->insertNode("output")->setValue(
+      CGRuntime::getOutputLocation() + (*_pOutputCoverage)->getIntValue());
+  }
+  //##protect##"execute"
+  return CGRuntime::writeBytes(sBytes);
+}
 
 //##protect##"implementation"
-	void GrfWriteBytes::prepareCoverage(DtaScriptVariable* const* pOutputCoverage) {
-		_pOutputCoverage = pOutputCoverage;
-	}
+void
+GrfWriteBytes::prepareCoverage(DtaScriptVariable* const* pOutputCoverage)
+{
+  _pOutputCoverage = pOutputCoverage;
+}
 //##protect##"implementation"
 
-	void GrfWriteBytes::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::writeBytes(";
-		_pBytes->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfWriteBytes::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::writeBytes(";
+  _pBytes->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

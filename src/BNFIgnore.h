@@ -27,56 +27,69 @@ To contact the author: codeworker@free.fr
 // please include this header after including "DtaBNFScript.h"
 
 namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
+class DtaBNFScript;
+class BNFClause;
 
-	enum IGNORE_MODE {
-		UNDEFINED_IGNORE,
-		NOT_IGNORE,
-		IGNORE_CPP,
-		IGNORE_JAVA,
-		IGNORE_HTML,
-		IGNORE_BLANKS,
-		IGNORE_SPACES,
-		IGNORE_ADA,
-		IGNORE_LATEX,
-		IGNORE_CPP_EXCEPT_DOXYGEN,
-		IGNORE_CLAUSE
-	};
+enum IGNORE_MODE
+{
+  UNDEFINED_IGNORE,
+  NOT_IGNORE,
+  IGNORE_CPP,
+  IGNORE_JAVA,
+  IGNORE_HTML,
+  IGNORE_BLANKS,
+  IGNORE_SPACES,
+  IGNORE_ADA,
+  IGNORE_LATEX,
+  IGNORE_CPP_EXCEPT_DOXYGEN,
+  IGNORE_CLAUSE
+};
 
-	class BNFIgnoreScope {
-	private:
-		DtaBNFScript* _pBNFScript;
-		IGNORE_MODE _eOldMode;
-		BNFClause* _pOldIgnoreClause;
+class BNFIgnoreScope
+{
+private:
+  DtaBNFScript* _pBNFScript;
+  IGNORE_MODE _eOldMode;
+  BNFClause* _pOldIgnoreClause;
 
-	public:
-		BNFIgnoreScope(DtaBNFScript* pBNFScript, IGNORE_MODE eNewMode, BNFClause* pNewIgnoreClause);
-		~BNFIgnoreScope();
-	};
+public:
+  BNFIgnoreScope(DtaBNFScript* pBNFScript,
+                 IGNORE_MODE eNewMode,
+                 BNFClause* pNewIgnoreClause);
+  ~BNFIgnoreScope();
+};
 
-	class BNFIgnore : public GrfBlock {
-	private:
-		DtaBNFScript* _pBNFScript;
-		IGNORE_MODE _eMode;
-		BNFClause* _pIgnoreClause;
+class BNFIgnore : public GrfBlock
+{
+private:
+  DtaBNFScript* _pBNFScript;
+  IGNORE_MODE _eMode;
+  BNFClause* _pIgnoreClause;
 
-	public:
-		BNFIgnore(DtaBNFScript* pBNFScript, GrfBlock* pParent, IGNORE_MODE eMode, BNFClause* pIgnoreClause);
-		virtual ~BNFIgnore();
+public:
+  BNFIgnore(DtaBNFScript* pBNFScript,
+            GrfBlock* pParent,
+            IGNORE_MODE eMode,
+            BNFClause* pIgnoreClause);
+  virtual ~BNFIgnore();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+  virtual bool isABNFCommand() const;
 
-		virtual std::string toString() const;
+  virtual std::string toString() const;
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-		static void compileCppRuntimeIgnore(CppCompilerEnvironment& theCompilerEnvironment, IGNORE_MODE eMode, BNFClause* pIgnoreClause, int iCursor);
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  static void compileCppRuntimeIgnore(
+    CppCompilerEnvironment& theCompilerEnvironment,
+    IGNORE_MODE eMode,
+    BNFClause* pIgnoreClause,
+    int iCursor);
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

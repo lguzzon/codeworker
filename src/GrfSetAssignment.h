@@ -25,27 +25,39 @@ To contact the author: codeworker@free.fr
 #include "GrfCommand.h"
 
 namespace CodeWorker {
-	class ExprScriptVariable;
-	class ExprScriptExpression;
+class ExprScriptVariable;
+class ExprScriptExpression;
 
-	class GrfSetAssignment : public GrfCommand {
-	private:
-		ExprScriptVariable* _pVariable;
-		ExprScriptExpression* _pValue;
-		bool _bContatenation;
+class GrfSetAssignment : public GrfCommand
+{
+private:
+  ExprScriptVariable* _pVariable;
+  ExprScriptExpression* _pValue;
+  bool _bContatenation;
 
-	public:
-		GrfSetAssignment() : _pVariable(NULL), _pValue(NULL) {}
-		virtual ~GrfSetAssignment();
+public:
+  GrfSetAssignment()
+    : _pVariable(NULL)
+    , _pValue(NULL)
+  {}
+  virtual ~GrfSetAssignment();
 
-		inline void setVariable(ExprScriptVariable* pVariable) { _pVariable = pVariable; }
-		inline void setValue(ExprScriptExpression* pValue, bool bContatenation) { _pValue = pValue;_bContatenation = bContatenation; }
+  inline void setVariable(ExprScriptVariable* pVariable)
+  {
+    _pVariable = pVariable;
+  }
+  inline void setValue(ExprScriptExpression* pValue, bool bContatenation)
+  {
+    _pValue = pValue;
+    _bContatenation = bContatenation;
+  }
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

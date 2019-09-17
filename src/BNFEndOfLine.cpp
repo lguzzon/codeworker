@@ -20,22 +20,40 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
+#include "BNFEndOfLine.h"
 #include "CGRuntime.h"
 #include "DtaVisitor.h"
-#include "BNFEndOfLine.h"
 
 namespace CodeWorker {
-	BNFEndOfLine::BNFEndOfLine(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue) : BNFReadToken(pBNFScript, pParent, bContinue, true) {}
-	BNFEndOfLine::~BNFEndOfLine() {}
+BNFEndOfLine::BNFEndOfLine(DtaBNFScript* pBNFScript,
+                           GrfBlock* pParent,
+                           bool bContinue)
+  : BNFReadToken(pBNFScript, pParent, bContinue, true)
+{}
+BNFEndOfLine::~BNFEndOfLine() {}
 
-	void BNFEndOfLine::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFEndOfLine(*this, env);
-	}
+void
+BNFEndOfLine::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+  visitor.visitBNFEndOfLine(*this, env);
+}
 
-	const char* BNFEndOfLine::getFunctionName() const { return "#EOL"; }
-	std::string BNFEndOfLine::executeExtraction(DtaScriptVariable&) const { return CGRuntime::readEndOfLine(); }
-	std::string BNFEndOfLine::compileCppExtraction() const { return "CGRuntime::readEndOfLine()"; }
+const char*
+BNFEndOfLine::getFunctionName() const
+{
+  return "#EOL";
+}
+std::string
+BNFEndOfLine::executeExtraction(DtaScriptVariable&) const
+{
+  return CGRuntime::readEndOfLine();
+}
+std::string
+BNFEndOfLine::compileCppExtraction() const
+{
+  return "CGRuntime::readEndOfLine()";
+}
 }

@@ -20,29 +20,35 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
 #include "GrfExit.h"
+#include "UtlException.h"
 
+#include "CppCompilerEnvironment.h"
 #include "ExprScriptVariable.h"
 #include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 
 namespace CodeWorker {
-	GrfExit::~GrfExit() {
-		delete _pCodeExpression;
-	}
+GrfExit::~GrfExit()
+{
+  delete _pCodeExpression;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfExit::executeInternal(DtaScriptVariable& visibility) {
-		int iValue = _pCodeExpression->getIntValue(visibility);
-		throw UtlExitException(iValue);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfExit::executeInternal(DtaScriptVariable& visibility)
+{
+  int iValue = _pCodeExpression->getIntValue(visibility);
+  throw UtlExitException(iValue);
+}
 
-	void GrfExit::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "throw UtlExitException(";
-		_pCodeExpression->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";CW_BODY_ENDL;
-	}
+void
+GrfExit::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "throw UtlExitException(";
+  _pCodeExpression->compileCppInt(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

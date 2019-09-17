@@ -22,59 +22,71 @@ To contact the author: codeworker@free.fr
 #ifndef _DtaProtectedAreasBag_h_
 #define _DtaProtectedAreasBag_h_
 
-#include <map>
 #include <list>
+#include <map>
 #include <string>
 
-
 namespace CodeWorker {
-	class ScpStream;
-	class DtaScriptVariable;
-	class DtaSharpTagsHandler;
+class ScpStream;
+class DtaScriptVariable;
+class DtaSharpTagsHandler;
 
-	class DtaProtectedArea {
-	private:
-		std::string _sDefine;
-		std::string _sText;
-		bool _bIsAlreadyGenerated;
+class DtaProtectedArea
+{
+private:
+  std::string _sDefine;
+  std::string _sText;
+  bool _bIsAlreadyGenerated;
 
-	public:
-		inline DtaProtectedArea(const std::string& sText, const std::string& sDefine = "") : _sText(sText), _sDefine(sDefine), _bIsAlreadyGenerated(false) {}
+public:
+  inline DtaProtectedArea(const std::string& sText,
+                          const std::string& sDefine = "")
+    : _sText(sText)
+    , _sDefine(sDefine)
+    , _bIsAlreadyGenerated(false)
+  {}
 
-		inline void setDefine(const std::string& sDefine) { _sDefine = sDefine; }
-		inline const std::string& getDefine() const { return _sDefine; }
-		inline void setText(const std::string& sText) { _sText = sText; }
-		inline const std::string& getText() const { return _sText; }
-		inline void isAlreadyGenerated(bool bIsAlreadyGenerated) { _bIsAlreadyGenerated = bIsAlreadyGenerated; }
-		inline bool isAlreadyGenerated() const { return _bIsAlreadyGenerated; }
-	};
+  inline void setDefine(const std::string& sDefine) { _sDefine = sDefine; }
+  inline const std::string& getDefine() const { return _sDefine; }
+  inline void setText(const std::string& sText) { _sText = sText; }
+  inline const std::string& getText() const { return _sText; }
+  inline void isAlreadyGenerated(bool bIsAlreadyGenerated)
+  {
+    _bIsAlreadyGenerated = bIsAlreadyGenerated;
+  }
+  inline bool isAlreadyGenerated() const { return _bIsAlreadyGenerated; }
+};
 
+class DtaProtectedAreasBag
+{
+private:
+  std::map<std::string, DtaProtectedArea*> _codes;
 
-	class DtaProtectedAreasBag {
-	private:
-		std::map<std::string, DtaProtectedArea*> _codes;
+public:
+  inline DtaProtectedAreasBag() {}
+  virtual ~DtaProtectedAreasBag();
 
-	public:
-		inline DtaProtectedAreasBag() {}
-		virtual ~DtaProtectedAreasBag();
+  inline const std::map<std::string, DtaProtectedArea*>& getProtectedAreas()
+    const
+  {
+    return _codes;
+  }
 
-		inline const std::map<std::string, DtaProtectedArea*>& getProtectedAreas() const { return _codes; }
+  void loadProtectedCodes(const char* sFile);
+  void recoverProtectedCodes(ScpStream& inputFile);
+  void recoverMarker(DtaSharpTagsHandler& tagsHandler);
+  void clearAll();
 
-		void loadProtectedCodes(const char* sFile);
-		void recoverProtectedCodes(ScpStream& inputFile);
-		void recoverMarker(DtaSharpTagsHandler& tagsHandler);
-		void clearAll();
+  std::string getProtection(const char* sProtection) const;
+  void setProtection(const char* sProtection, const char* sContent);
+  bool removeProtection(const char* sProtection);
+  std::list<std::string> getProtectionKeys() const;
+  std::list<std::string> remainingProtectionKeys() const;
+  const DtaProtectedArea& registerNewProtection(const char* sProtection);
 
-		std::string getProtection(const char* sProtection) const;
-		void setProtection(const char* sProtection, const char* sContent);
-		bool removeProtection(const char* sProtection);
-		std::list<std::string> getProtectionKeys() const;
-		std::list<std::string> remainingProtectionKeys() const;
-		const DtaProtectedArea& registerNewProtection(const char* sProtection);
-
-	private:
-		bool recoverProtectedCode(DtaSharpTagsHandler& tagsHandler, int iEnd = -1);
-	};
+private:
+  bool recoverProtectedCode(DtaSharpTagsHandler& tagsHandler, int iEnd = -1);
+};
 }
 
 #endif

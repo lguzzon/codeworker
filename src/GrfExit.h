@@ -25,23 +25,27 @@ To contact the author: codeworker@free.fr
 #include "GrfCommand.h"
 
 namespace CodeWorker {
-	class ExprScriptExpression;
+class ExprScriptExpression;
 
-	class GrfExit : public GrfCommand {
-	private:
-		ExprScriptExpression* _pCodeExpression;
+class GrfExit : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pCodeExpression;
 
-	public:
-		GrfExit() : _pCodeExpression(NULL) {}
-		virtual ~GrfExit();
+public:
+  GrfExit()
+    : _pCodeExpression(NULL)
+  {}
+  virtual ~GrfExit();
 
-		inline void setCode(ExprScriptExpression* pExpr) { _pCodeExpression = pExpr; }
+  inline void setCode(ExprScriptExpression* pExpr) { _pCodeExpression = pExpr; }
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

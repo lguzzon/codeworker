@@ -27,27 +27,42 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfCompileToCpp : public GrfCommand {
-		private:
-			ExprScriptExpression* _pScriptFileName;
-			ExprScriptExpression* _pProjectDirectory;
-			ExprScriptExpression* _pCodeWorkerDirectory;
+class GrfCompileToCpp : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pScriptFileName;
+  ExprScriptExpression* _pProjectDirectory;
+  ExprScriptExpression* _pCodeWorkerDirectory;
 
-		public:
-			GrfCompileToCpp() : _pScriptFileName(NULL), _pProjectDirectory(NULL), _pCodeWorkerDirectory(NULL) {}
-			virtual ~GrfCompileToCpp();
+public:
+  GrfCompileToCpp()
+    : _pScriptFileName(NULL)
+    , _pProjectDirectory(NULL)
+    , _pCodeWorkerDirectory(NULL)
+  {}
+  virtual ~GrfCompileToCpp();
 
-			virtual const char* getFunctionName() const { return "compileToCpp"; }
+  virtual const char* getFunctionName() const { return "compileToCpp"; }
 
-			inline void setScriptFileName(ExprScriptExpression* pScriptFileName) { _pScriptFileName = pScriptFileName; }
-			inline void setProjectDirectory(ExprScriptExpression* pProjectDirectory) { _pProjectDirectory = pProjectDirectory; }
-			inline void setCodeWorkerDirectory(ExprScriptExpression* pCodeWorkerDirectory) { _pCodeWorkerDirectory = pCodeWorkerDirectory; }
+  inline void setScriptFileName(ExprScriptExpression* pScriptFileName)
+  {
+    _pScriptFileName = pScriptFileName;
+  }
+  inline void setProjectDirectory(ExprScriptExpression* pProjectDirectory)
+  {
+    _pProjectDirectory = pProjectDirectory;
+  }
+  inline void setCodeWorkerDirectory(ExprScriptExpression* pCodeWorkerDirectory)
+  {
+    _pCodeWorkerDirectory = pCodeWorkerDirectory;
+  }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

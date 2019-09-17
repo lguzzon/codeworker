@@ -27,25 +27,36 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfSaveToFile : public GrfCommand {
-		private:
-			ExprScriptExpression* _pFilename;
-			ExprScriptExpression* _pContent;
+class GrfSaveToFile : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pFilename;
+  ExprScriptExpression* _pContent;
 
-		public:
-			GrfSaveToFile() : _pFilename(NULL), _pContent(NULL) {}
-			virtual ~GrfSaveToFile();
+public:
+  GrfSaveToFile()
+    : _pFilename(NULL)
+    , _pContent(NULL)
+  {}
+  virtual ~GrfSaveToFile();
 
-			virtual const char* getFunctionName() const { return "saveToFile"; }
+  virtual const char* getFunctionName() const { return "saveToFile"; }
 
-			inline void setFilename(ExprScriptExpression* pFilename) { _pFilename = pFilename; }
-			inline void setContent(ExprScriptExpression* pContent) { _pContent = pContent; }
+  inline void setFilename(ExprScriptExpression* pFilename)
+  {
+    _pFilename = pFilename;
+  }
+  inline void setContent(ExprScriptExpression* pContent)
+  {
+    _pContent = pContent;
+  }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

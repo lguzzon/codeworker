@@ -20,41 +20,48 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
+#include "GrfReturn.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptExpression.h"
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "GrfFunction.h"
-#include "GrfReturn.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfReturn::~GrfReturn() {
-		delete _pExpression;
-	}
+GrfReturn::~GrfReturn()
+{
+  delete _pExpression;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfReturn::executeInternal(DtaScriptVariable& visibility) {
-		if (_pExpression != NULL) {
-			std::string sValue = _pExpression->getValue(visibility);
-			visibility.setValueAtVariable(_sFunctionName.c_str(), sValue.c_str(), true, true);
-		}
-		return RETURN_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfReturn::executeInternal(DtaScriptVariable& visibility)
+{
+  if (_pExpression != NULL) {
+    std::string sValue = _pExpression->getValue(visibility);
+    visibility.setValueAtVariable(
+      _sFunctionName.c_str(), sValue.c_str(), true, true);
+  }
+  return RETURN_INTERRUPTION;
+}
 
-	void GrfReturn::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		if (_pExpression != NULL) {
-			CW_BODY_INDENT << _sFunctionName << ".setValue(";
-			_pExpression->compileCpp(theCompilerEnvironment);
-			CW_BODY_STREAM << ");";
-			CW_BODY_ENDL;
-		}
-		if (theCompilerEnvironment.getCurrentFunction()->getFinally() != NULL) {
-			theCompilerEnvironment.bracketsToNextBlock(false);
-			theCompilerEnvironment.getCurrentFunction()->getFinally()->compileCpp(theCompilerEnvironment);
-		}
-		CW_BODY_INDENT << "return " << _sFunctionName << ".getStringValue();";
-		CW_BODY_ENDL;
-	}
+void
+GrfReturn::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  if (_pExpression != NULL) {
+    CW_BODY_INDENT << _sFunctionName << ".setValue(";
+    _pExpression->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+  }
+  if (theCompilerEnvironment.getCurrentFunction()->getFinally() != NULL) {
+    theCompilerEnvironment.bracketsToNextBlock(false);
+    theCompilerEnvironment.getCurrentFunction()->getFinally()->compileCpp(
+      theCompilerEnvironment);
+  }
+  CW_BODY_INDENT << "return " << _sFunctionName << ".getStringValue();";
+  CW_BODY_ENDL;
+}
 }

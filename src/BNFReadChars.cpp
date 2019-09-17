@@ -20,33 +20,50 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ExprScriptExpression.h"
+#include "BNFReadChars.h"
 #include "CGRuntime.h"
 #include "DtaVisitor.h"
-#include "BNFReadChars.h"
+#include "ExprScriptExpression.h"
 
 namespace CodeWorker {
-	BNFReadChars::BNFReadChars(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue, bool bNoCase) : BNFReadToken(pBNFScript, pParent, bContinue, bNoCase), _pLength(NULL) {}
+BNFReadChars::BNFReadChars(DtaBNFScript* pBNFScript,
+                           GrfBlock* pParent,
+                           bool bContinue,
+                           bool bNoCase)
+  : BNFReadToken(pBNFScript, pParent, bContinue, bNoCase)
+  , _pLength(NULL)
+{}
 
-	BNFReadChars::~BNFReadChars() {
-		delete _pLength;
-	}
+BNFReadChars::~BNFReadChars()
+{
+  delete _pLength;
+}
 
-	void BNFReadChars::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFReadChars(*this, env);
-	}
+void
+BNFReadChars::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+  visitor.visitBNFReadChars(*this, env);
+}
 
-	const char* BNFReadChars::getFunctionName() const { return "#readChars"; }
+const char*
+BNFReadChars::getFunctionName() const
+{
+  return "#readChars";
+}
 
-	std::string BNFReadChars::executeExtraction(DtaScriptVariable& visibility) const {
-		int iLength = _pLength->getIntValue(visibility);
-		return CGRuntime::readChars(iLength);
-	}
+std::string
+BNFReadChars::executeExtraction(DtaScriptVariable& visibility) const
+{
+  int iLength = _pLength->getIntValue(visibility);
+  return CGRuntime::readChars(iLength);
+}
 
-	std::string BNFReadChars::compileCppExtraction() const {
-		return "CGRuntime::readChars(" + _pLength->toString() + ")";
-	}
+std::string
+BNFReadChars::compileCppExtraction() const
+{
+  return "CGRuntime::readChars(" + _pLength->toString() + ")";
+}
 }

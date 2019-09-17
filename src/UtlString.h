@@ -23,40 +23,57 @@ To contact the author: codeworker@free.fr
 #define _UtlString_h_
 
 #ifndef WIN32
-#	ifndef __GNUC_PREREQ
-#		if defined __GNUC__ && defined __GNUC_MINOR__
-#			define __GNUC_PREREQ(maj, min) ((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
-#		else
-#			define __GNUC_PREREQ(maj, min) 0
-#		endif
-#	endif
-#	if defined(__cplusplus) && __GNUC_PREREQ (4, 3)
-#		include <cstring>
-#		include <cstdlib>
-#	endif
+#ifndef __GNUC_PREREQ
+#if defined __GNUC__ && defined __GNUC_MINOR__
+#define __GNUC_PREREQ(maj, min)                                                \
+  ((__GNUC__ << 16) + __GNUC_MINOR__ >= ((maj) << 16) + (min))
+#else
+#define __GNUC_PREREQ(maj, min) 0
+#endif
+#endif
+#if defined(__cplusplus) && __GNUC_PREREQ(4, 3)
+#include <cstring>
+#include <cstdlib>
+#endif
 #endif
 
 #include <string>
 
 #ifndef WIN32
-	int strnicmp(const char* tc1, const char* tc2, size_t iLength);
-	int stricmp(const char* tc1, const char* tc2);
+int
+strnicmp(const char* tc1, const char* tc2, size_t iLength);
+int
+stricmp(const char* tc1, const char* tc2);
 #endif
 
 namespace CodeWorker {
-	int stricmp(const std::string& s1, const std::string& s2);
-	int strnicmp(const std::string& tc1, const std::string& tc2, size_t iLength);
-	std::string toUppercase(const char* sText);
-	std::string toLowercase(const char* sText);
+int
+stricmp(const std::string& s1, const std::string& s2);
+int
+strnicmp(const std::string& tc1, const std::string& tc2, size_t iLength);
+std::string
+toUppercase(const char* sText);
+std::string
+toLowercase(const char* sText);
 
-	bool trimLeft(std::string& sText);
-	bool trimRight(std::string& sText);
-	bool trim(std::string& sText);
-	bool splitString(const std::string& sCompletString, char iChar, std::string& sBegin, std::string& sEnd) ;
+bool
+trimLeft(std::string& sText);
+bool
+trimRight(std::string& sText);
+bool
+trim(std::string& sText);
+bool
+splitString(const std::string& sCompletString,
+            char iChar,
+            std::string& sBegin,
+            std::string& sEnd);
 
-	std::string toString(int iNumber);
-	std::string toString(unsigned int iNumber);
-	std::string toString(double dNumber);
+std::string
+toString(int iNumber);
+std::string
+toString(unsigned int iNumber);
+std::string
+toString(double dNumber);
 }
 
 #endif

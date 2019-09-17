@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
 #include "GrfSetOutputLocation.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfSetOutputLocation::~GrfSetOutputLocation() {
-		delete _pLocation;
-	}
+GrfSetOutputLocation::~GrfSetOutputLocation()
+{
+  delete _pLocation;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetOutputLocation::executeInternal(DtaScriptVariable& visibility) {
-		std::string sLocation = _pLocation->getValue(visibility);
-		int iLocation = atoi(sLocation.c_str());
-		return CGRuntime::setOutputLocation(iLocation);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSetOutputLocation::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sLocation = _pLocation->getValue(visibility);
+  int iLocation = atoi(sLocation.c_str());
+  return CGRuntime::setOutputLocation(iLocation);
+}
 
-	void GrfSetOutputLocation::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setOutputLocation(";
-		_pLocation->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSetOutputLocation::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::setOutputLocation(";
+  _pLocation->compileCppInt(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

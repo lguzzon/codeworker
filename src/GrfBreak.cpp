@@ -20,23 +20,26 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "GrfBreak.h"
+#include "CppCompilerEnvironment.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfBreak::~GrfBreak() {
-	}
+GrfBreak::~GrfBreak() {}
 
-	SEQUENCE_INTERRUPTION_LIST GrfBreak::executeInternal(DtaScriptVariable&) {
-		return BREAK_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfBreak::executeInternal(DtaScriptVariable&)
+{
+  return BREAK_INTERRUPTION;
+}
 
-	void GrfBreak::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "break;";
-		CW_BODY_ENDL;
-	}
+void
+GrfBreak::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "break;";
+  CW_BODY_ENDL;
+}
 }

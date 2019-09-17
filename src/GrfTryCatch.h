@@ -25,36 +25,46 @@ To contact the author: codeworker@free.fr
 #include "GrfCommand.h"
 
 namespace CodeWorker {
-	class GrfBlock;
-	class ExprScriptVariable;
+class GrfBlock;
+class ExprScriptVariable;
 
-	class GrfTryCatch : public GrfCommand {
-	private:
-		ExprScriptVariable* _pVariable;
-		GrfBlock* _pTryBlock;
-		GrfBlock* _pCatchBlock;
+class GrfTryCatch : public GrfCommand
+{
+private:
+  ExprScriptVariable* _pVariable;
+  GrfBlock* _pTryBlock;
+  GrfBlock* _pCatchBlock;
 
-	public:
-		GrfTryCatch() : _pVariable(NULL), _pTryBlock(NULL), _pCatchBlock(NULL) {}
-		virtual ~GrfTryCatch();
+public:
+  GrfTryCatch()
+    : _pVariable(NULL)
+    , _pTryBlock(NULL)
+    , _pCatchBlock(NULL)
+  {}
+  virtual ~GrfTryCatch();
 
-		inline ExprScriptVariable* getErrorVariable() const { return _pVariable; }
-		inline void setErrorVariable(ExprScriptVariable* pVariable) { _pVariable = pVariable; }
-		inline GrfBlock* getTryBlock() const { return _pTryBlock; }
-		inline void setTryBlock(GrfBlock* pBlock) { _pTryBlock = pBlock; }
-		inline GrfBlock* getCatchBlock() const { return _pCatchBlock; }
-		inline void setCatchBlock(GrfBlock* pBlock) { _pCatchBlock = pBlock; }
+  inline ExprScriptVariable* getErrorVariable() const { return _pVariable; }
+  inline void setErrorVariable(ExprScriptVariable* pVariable)
+  {
+    _pVariable = pVariable;
+  }
+  inline GrfBlock* getTryBlock() const { return _pTryBlock; }
+  inline void setTryBlock(GrfBlock* pBlock) { _pTryBlock = pBlock; }
+  inline GrfBlock* getCatchBlock() const { return _pCatchBlock; }
+  inline void setCatchBlock(GrfBlock* pBlock) { _pCatchBlock = pBlock; }
 
-		virtual void applyRecursively(APPLY_ON_COMMAND_FUNCTION apply);
+  virtual void applyRecursively(APPLY_ON_COMMAND_FUNCTION apply);
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
 
-	private:
-		SEQUENCE_INTERRUPTION_LIST  handleCatch(DtaScriptVariable& visibility, const std::string& sError);
-	};
+private:
+  SEQUENCE_INTERRUPTION_LIST handleCatch(DtaScriptVariable& visibility,
+                                         const std::string& sError);
+};
 }
 
 #endif

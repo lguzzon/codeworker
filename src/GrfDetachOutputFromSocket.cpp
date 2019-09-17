@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
 #include "GrfDetachOutputFromSocket.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfDetachOutputFromSocket::~GrfDetachOutputFromSocket() {
-		delete _pSocket;
-	}
+GrfDetachOutputFromSocket::~GrfDetachOutputFromSocket()
+{
+  delete _pSocket;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfDetachOutputFromSocket::executeInternal(DtaScriptVariable& visibility) {
-		std::string sSocket = _pSocket->getValue(visibility);
-		int iSocket = atoi(sSocket.c_str());
-		return CGRuntime::detachOutputFromSocket(iSocket);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfDetachOutputFromSocket::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sSocket = _pSocket->getValue(visibility);
+  int iSocket = atoi(sSocket.c_str());
+  return CGRuntime::detachOutputFromSocket(iSocket);
+}
 
-	void GrfDetachOutputFromSocket::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::detachOutputFromSocket(";
-		_pSocket->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfDetachOutputFromSocket::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::detachOutputFromSocket(";
+  _pSocket->compileCppInt(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

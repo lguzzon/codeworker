@@ -25,84 +25,110 @@ To contact the author: codeworker@free.fr
 #include <string>
 
 namespace CodeWorker {
-	class CGExternalHandling {
-	private:
-		CGExternalHandling* _pOldExternalHandling;
+class CGExternalHandling
+{
+private:
+  CGExternalHandling* _pOldExternalHandling;
 
-	public:
-		CGExternalHandling();
-		virtual ~CGExternalHandling();
+public:
+  CGExternalHandling();
+  virtual ~CGExternalHandling();
 
-		inline CGExternalHandling* getOldExternalHandling() const { return _pOldExternalHandling; }
+  inline CGExternalHandling* getOldExternalHandling() const
+  {
+    return _pOldExternalHandling;
+  }
 
-		virtual std::string inputLine(bool bEcho) = 0;
-		virtual std::string inputKey(bool bEcho) = 0;
-		virtual void traceLine(const std::string& sLine) = 0;
-		virtual void traceText(const std::string& sText) = 0;
-	};
+  virtual std::string inputLine(bool bEcho) = 0;
+  virtual std::string inputKey(bool bEcho) = 0;
+  virtual void traceLine(const std::string& sLine) = 0;
+  virtual void traceText(const std::string& sText) = 0;
+};
 
-	class CGQuietOutput : public CGExternalHandling {
-	private:
-		std::string _sOutput;
+class CGQuietOutput : public CGExternalHandling
+{
+private:
+  std::string _sOutput;
 
-	public:
-		CGQuietOutput() {}
-		virtual ~CGQuietOutput();
+public:
+  CGQuietOutput() {}
+  virtual ~CGQuietOutput();
 
-		inline const std::string& getOutput() const { return _sOutput; }
+  inline const std::string& getOutput() const { return _sOutput; }
 
-		virtual std::string inputLine(bool bEcho);
-		virtual std::string inputKey(bool bEcho);
-		virtual void traceLine(const std::string& sLine);
-		virtual void traceText(const std::string& sText);
-	};
+  virtual std::string inputLine(bool bEcho);
+  virtual std::string inputKey(bool bEcho);
+  virtual void traceLine(const std::string& sLine);
+  virtual void traceText(const std::string& sText);
+};
 
-	class ScpStream;
+class ScpStream;
 
-	class CGStandardInputOutput : public CGExternalHandling {
-	protected:
-		ScpStream* _pStandardInput;
-		ScpStream* _pStandardOutput;
-		bool _bInputOwner;
-		bool _bOutputOwner;
+class CGStandardInputOutput : public CGExternalHandling
+{
+protected:
+  ScpStream* _pStandardInput;
+  ScpStream* _pStandardOutput;
+  bool _bInputOwner;
+  bool _bOutputOwner;
 
-	public:
-		inline CGStandardInputOutput() : _pStandardInput(NULL), _bInputOwner(false), _pStandardOutput(NULL), _bOutputOwner(false) {}
-		inline CGStandardInputOutput(ScpStream& theStandardInput, bool bOwner = false) : _pStandardInput(&theStandardInput), _pStandardOutput(NULL), _bInputOwner(bOwner), _bOutputOwner(false) {}
-		inline CGStandardInputOutput(ScpStream& theStandardInput, ScpStream& theStandardOutput, bool bInputOwner = false, bool bOutputOwner = false) : _pStandardInput(&theStandardInput), _pStandardOutput(&theStandardOutput), _bInputOwner(bInputOwner), _bOutputOwner(bOutputOwner) {}
-		CGStandardInputOutput(const std::string& sText);
-		virtual ~CGStandardInputOutput();
+public:
+  inline CGStandardInputOutput()
+    : _pStandardInput(NULL)
+    , _bInputOwner(false)
+    , _pStandardOutput(NULL)
+    , _bOutputOwner(false)
+  {}
+  inline CGStandardInputOutput(ScpStream& theStandardInput, bool bOwner = false)
+    : _pStandardInput(&theStandardInput)
+    , _pStandardOutput(NULL)
+    , _bInputOwner(bOwner)
+    , _bOutputOwner(false)
+  {}
+  inline CGStandardInputOutput(ScpStream& theStandardInput,
+                               ScpStream& theStandardOutput,
+                               bool bInputOwner = false,
+                               bool bOutputOwner = false)
+    : _pStandardInput(&theStandardInput)
+    , _pStandardOutput(&theStandardOutput)
+    , _bInputOwner(bInputOwner)
+    , _bOutputOwner(bOutputOwner)
+  {}
+  CGStandardInputOutput(const std::string& sText);
+  virtual ~CGStandardInputOutput();
 
-		inline ScpStream& getStandardInput() const { return *_pStandardInput; }
-		inline ScpStream& getStandardOutput() const { return *_pStandardOutput; }
+  inline ScpStream& getStandardInput() const { return *_pStandardInput; }
+  inline ScpStream& getStandardOutput() const { return *_pStandardOutput; }
 
-		virtual std::string inputLine(bool bEcho);
-		virtual std::string inputKey(bool bEcho);
-		virtual void traceLine(const std::string& sLine);
-		virtual void traceText(const std::string& sText);
-	};
+  virtual std::string inputLine(bool bEcho);
+  virtual std::string inputKey(bool bEcho);
+  virtual void traceLine(const std::string& sLine);
+  virtual void traceText(const std::string& sText);
+};
 
-	class CGFileStandardInputOutput : public CGStandardInputOutput {
-	public:
-		CGFileStandardInputOutput(const std::string& sInputFilename, const std::string& sOutputFilename);
-		virtual ~CGFileStandardInputOutput();
-	};
+class CGFileStandardInputOutput : public CGStandardInputOutput
+{
+public:
+  CGFileStandardInputOutput(const std::string& sInputFilename,
+                            const std::string& sOutputFilename);
+  virtual ~CGFileStandardInputOutput();
+};
 
-	class CGRemoteDebugInputOutput : public CGExternalHandling {
-	private:
-		int hSocket_;
-		int hServerSocket_;
+class CGRemoteDebugInputOutput : public CGExternalHandling
+{
+private:
+  int hSocket_;
+  int hServerSocket_;
 
-	public:
-		CGRemoteDebugInputOutput(const std::string& sHost, int iPort);
-		virtual ~CGRemoteDebugInputOutput();
+public:
+  CGRemoteDebugInputOutput(const std::string& sHost, int iPort);
+  virtual ~CGRemoteDebugInputOutput();
 
-		virtual std::string inputLine(bool bEcho);
-		virtual std::string inputKey(bool bEcho);
-		virtual void traceLine(const std::string& sLine);
-		virtual void traceText(const std::string& sText);
-	};
+  virtual std::string inputLine(bool bEcho);
+  virtual std::string inputKey(bool bEcho);
+  virtual void traceLine(const std::string& sLine);
+  virtual void traceText(const std::string& sText);
+};
 }
 
 #endif
-

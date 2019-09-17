@@ -20,30 +20,35 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
+#include "GrfSortArray.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "GrfSortArray.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfSortArray::~GrfSortArray() {
-		delete _pArray;
-	}
+GrfSortArray::~GrfSortArray()
+{
+  delete _pArray;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSortArray::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pArray = visibility.getVariable(*_pArray);
-		return CGRuntime::sortArray(pArray);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSortArray::executeInternal(DtaScriptVariable& visibility)
+{
+  DtaScriptVariable* pArray = visibility.getVariable(*_pArray);
+  return CGRuntime::sortArray(pArray);
+}
 
-	void GrfSortArray::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::sortArray(";
-		_pArray->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSortArray::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::sortArray(";
+  _pArray->compileCpp(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

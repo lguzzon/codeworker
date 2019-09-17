@@ -20,35 +20,39 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "DtaScriptVariable.h"
-#include "DtaProject.h"
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "GrfNewProject.h"
+#include "CppCompilerEnvironment.h"
+#include "DtaProject.h"
+#include "DtaScriptVariable.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfNewProject::~GrfNewProject() {}
+GrfNewProject::~GrfNewProject() {}
 
-	SEQUENCE_INTERRUPTION_LIST GrfNewProject::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		DtaProject newProject;
-		result = GrfBlock::executeInternal(visibility);
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfNewProject::executeInternal(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result;
+  DtaProject newProject;
+  result = GrfBlock::executeInternal(visibility);
+  return result;
+}
 
-	void GrfNewProject::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "{";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "\tCGRuntimeNewProject _compiler_new_project;";
-		CW_BODY_ENDL;
-		theCompilerEnvironment.incrementIndentation();
-		CW_BODY_INDENT;
-		GrfBlock::compileCpp(theCompilerEnvironment);
-		theCompilerEnvironment.decrementIndentation();
-		CW_BODY_INDENT << "}";
-		CW_BODY_ENDL;
-	}
+void
+GrfNewProject::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "{";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "\tCGRuntimeNewProject _compiler_new_project;";
+  CW_BODY_ENDL;
+  theCompilerEnvironment.incrementIndentation();
+  CW_BODY_INDENT;
+  GrfBlock::compileCpp(theCompilerEnvironment);
+  theCompilerEnvironment.decrementIndentation();
+  CW_BODY_INDENT << "}";
+  CW_BODY_ENDL;
+}
 }

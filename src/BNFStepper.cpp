@@ -20,33 +20,55 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ExprScriptVariable.h"
+#include "BNFStepper.h"
 #include "BNFClause.h"
 #include "DtaVisitor.h"
-#include "BNFStepper.h"
+#include "ExprScriptVariable.h"
 
 namespace CodeWorker {
-	BNFStepper::BNFStepper(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue) : _pBNFScript(pBNFScript), GrfBlock(pParent), _pVariableToAssign(NULL), _bContinue(bContinue), _iClauseReturnType(BNFClause::NO_RETURN_TYPE), _iStepLocation(0), _bConcatVariable(false) {}
+BNFStepper::BNFStepper(DtaBNFScript* pBNFScript,
+                       GrfBlock* pParent,
+                       bool bContinue)
+  : _pBNFScript(pBNFScript)
+  , GrfBlock(pParent)
+  , _pVariableToAssign(NULL)
+  , _bContinue(bContinue)
+  , _iClauseReturnType(BNFClause::NO_RETURN_TYPE)
+  , _iStepLocation(0)
+  , _bConcatVariable(false)
+{}
 
-	BNFStepper::~BNFStepper() {
-		delete _pVariableToAssign;
-	}
+BNFStepper::~BNFStepper()
+{
+  delete _pVariableToAssign;
+}
 
-	void BNFStepper::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFStepper(*this, env);
-	}
+void
+BNFStepper::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+  visitor.visitBNFStepper(*this, env);
+}
 
-	bool BNFStepper::isABNFCommand() const { return true; }
+bool
+BNFStepper::isABNFCommand() const
+{
+  return true;
+}
 
-	void BNFStepper::setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause) {
-		if (pVariableToAssign != NULL) {
-			_pVariableToAssign = pVariableToAssign;
-			std::string sVariableName = _pVariableToAssign->toString();
-			if (sVariableName == theClause.getName()) _iClauseReturnType = theClause.getReturnType();
-			_bConcatVariable = bConcat;
-		}
-	}
+void
+BNFStepper::setVariableToAssign(ExprScriptVariable* pVariableToAssign,
+                                bool bConcat,
+                                BNFClause& theClause)
+{
+  if (pVariableToAssign != NULL) {
+    _pVariableToAssign = pVariableToAssign;
+    std::string sVariableName = _pVariableToAssign->toString();
+    if (sVariableName == theClause.getName())
+      _iClauseReturnType = theClause.getReturnType();
+    _bConcatVariable = bConcat;
+  }
+}
 }

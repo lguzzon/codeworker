@@ -20,41 +20,49 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
 #include "ScpStream.h"
 
-#include "ExprScriptVariable.h"
-#include "DtaScriptVariable.h"
 #include "CGRuntime.h"
 #include "CppCompilerEnvironment.h"
+#include "DtaScriptVariable.h"
+#include "ExprScriptVariable.h"
 #include "GrfAutoexpand.h"
 
 namespace CodeWorker {
-	GrfAutoexpand::~GrfAutoexpand() {
-		delete _pClass;
-		delete _pFileName;
-	}
+GrfAutoexpand::~GrfAutoexpand()
+{
+  delete _pClass;
+  delete _pFileName;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfAutoexpand::executeInternal(DtaScriptVariable& visibility) {
-		std::string sOutputFile = _pFileName->getValue(visibility);
-		DtaScriptVariable* pClass = visibility.getExistingVariable(*_pClass);
-		if (pClass == NULL) {
-			throw UtlException("runtime error: variable '" + _pClass->toString() + "' doesn't exist while calling procedure 'autoexpand()'");
-		}
-		CGRuntime::autoexpand(sOutputFile, CppParsingTree_var(pClass));
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfAutoexpand::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sOutputFile = _pFileName->getValue(visibility);
+  DtaScriptVariable* pClass = visibility.getExistingVariable(*_pClass);
+  if (pClass == NULL) {
+    throw UtlException(
+      "runtime error: variable '" + _pClass->toString() +
+      "' doesn't exist while calling procedure 'autoexpand()'");
+  }
+  CGRuntime::autoexpand(sOutputFile, CppParsingTree_var(pClass));
+  return NO_INTERRUPTION;
+}
 
-	void GrfAutoexpand::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "// warning: the behaviour of 'autoexpand' may vary of the interpreted mode";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "CGRuntime::" << getFunctionName() << "(";
-		_pFileName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pClass->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfAutoexpand::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "// warning: the behaviour of 'autoexpand' may vary of the "
+                    "interpreted mode";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "CGRuntime::" << getFunctionName() << "(";
+  _pFileName->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pClass->compileCpp(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

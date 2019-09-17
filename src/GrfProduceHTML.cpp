@@ -20,34 +20,39 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfProduceHTML.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfProduceHTML::~GrfProduceHTML() {
-		delete _pScriptFileName;
-		delete _pHTMLFileName;
-	}
+GrfProduceHTML::~GrfProduceHTML()
+{
+  delete _pScriptFileName;
+  delete _pHTMLFileName;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfProduceHTML::executeInternal(DtaScriptVariable& visibility) {
-		std::string sScriptFileName = _pScriptFileName->getValue(visibility);
-		std::string sHTMLFileName = _pHTMLFileName->getValue(visibility);
-		return CGRuntime::produceHTML(sScriptFileName, sHTMLFileName);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfProduceHTML::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sScriptFileName = _pScriptFileName->getValue(visibility);
+  std::string sHTMLFileName = _pHTMLFileName->getValue(visibility);
+  return CGRuntime::produceHTML(sScriptFileName, sHTMLFileName);
+}
 
-	void GrfProduceHTML::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::produceHTML(";
-		_pScriptFileName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pHTMLFileName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfProduceHTML::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::produceHTML(";
+  _pScriptFileName->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pHTMLFileName->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

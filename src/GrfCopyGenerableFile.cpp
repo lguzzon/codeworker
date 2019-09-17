@@ -20,34 +20,41 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfCopyGenerableFile.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfCopyGenerableFile::~GrfCopyGenerableFile() {
-		delete _pSourceFileName;
-		delete _pDestinationFileName;
-	}
+GrfCopyGenerableFile::~GrfCopyGenerableFile()
+{
+  delete _pSourceFileName;
+  delete _pDestinationFileName;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfCopyGenerableFile::executeInternal(DtaScriptVariable& visibility) {
-		std::string sSourceFileName = _pSourceFileName->getValue(visibility);
-		std::string sDestinationFileName = _pDestinationFileName->getValue(visibility);
-		return CGRuntime::copyGenerableFile(sSourceFileName, sDestinationFileName);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfCopyGenerableFile::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sSourceFileName = _pSourceFileName->getValue(visibility);
+  std::string sDestinationFileName =
+    _pDestinationFileName->getValue(visibility);
+  return CGRuntime::copyGenerableFile(sSourceFileName, sDestinationFileName);
+}
 
-	void GrfCopyGenerableFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::copyGenerableFile(";
-		_pSourceFileName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pDestinationFileName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfCopyGenerableFile::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::copyGenerableFile(";
+  _pSourceFileName->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pDestinationFileName->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

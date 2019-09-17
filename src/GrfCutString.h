@@ -28,27 +28,36 @@ namespace CodeWorker {
 class ExprScriptExpression;
 class ExprScriptVariable;
 
-	class GrfCutString : public GrfCommand {
-		private:
-			ExprScriptExpression* _pText;
-			ExprScriptExpression* _pSeparator;
-			ExprScriptVariable* _pList;
+class GrfCutString : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pText;
+  ExprScriptExpression* _pSeparator;
+  ExprScriptVariable* _pList;
 
-		public:
-			GrfCutString() : _pText(NULL), _pSeparator(NULL), _pList(NULL) {}
-			virtual ~GrfCutString();
+public:
+  GrfCutString()
+    : _pText(NULL)
+    , _pSeparator(NULL)
+    , _pList(NULL)
+  {}
+  virtual ~GrfCutString();
 
-			virtual const char* getFunctionName() const { return "cutString"; }
+  virtual const char* getFunctionName() const { return "cutString"; }
 
-			inline void setText(ExprScriptExpression* pText) { _pText = pText; }
-			inline void setSeparator(ExprScriptExpression* pSeparator) { _pSeparator = pSeparator; }
-			inline void setList(ExprScriptVariable* pList) { _pList = pList; }
+  inline void setText(ExprScriptExpression* pText) { _pText = pText; }
+  inline void setSeparator(ExprScriptExpression* pSeparator)
+  {
+    _pSeparator = pSeparator;
+  }
+  inline void setList(ExprScriptVariable* pList) { _pList = pList; }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

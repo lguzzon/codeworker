@@ -25,39 +25,51 @@ To contact the author: codeworker@free.fr
 #include "BNFIgnore.h"
 
 namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptVariable;
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptVariable;
 
-	class BNFSkipIgnore : public GrfCommand {
-	private:
-		DtaBNFScript* _pBNFScript;
-		IGNORE_MODE _eMode;
-		BNFClause* _pIgnoreClause;
-		ExprScriptVariable* _pVariableToAssign;
-		bool _bConcatVariable;
-		std::vector<std::string> _listOfConstants;
-		int _iClauseReturnType;
-		bool _bContinue;
+class BNFSkipIgnore : public GrfCommand
+{
+private:
+  DtaBNFScript* _pBNFScript;
+  IGNORE_MODE _eMode;
+  BNFClause* _pIgnoreClause;
+  ExprScriptVariable* _pVariableToAssign;
+  bool _bConcatVariable;
+  std::vector<std::string> _listOfConstants;
+  int _iClauseReturnType;
+  bool _bContinue;
 
-	public:
-		BNFSkipIgnore(DtaBNFScript* pBNFScript, GrfBlock* pParent, IGNORE_MODE eMode, BNFClause* pIgnoreClause, bool bContinue);
-		virtual ~BNFSkipIgnore();
+public:
+  BNFSkipIgnore(DtaBNFScript* pBNFScript,
+                GrfBlock* pParent,
+                IGNORE_MODE eMode,
+                BNFClause* pIgnoreClause,
+                bool bContinue);
+  virtual ~BNFSkipIgnore();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+  virtual bool isABNFCommand() const;
 
-		void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
-		inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants) { _listOfConstants = listOfConstants; }
+  void setVariableToAssign(ExprScriptVariable* pVariableToAssign,
+                           bool bConcat,
+                           BNFClause& theClause);
+  inline void setConstantsToMatch(
+    const std::vector<std::string>& listOfConstants)
+  {
+    _listOfConstants = listOfConstants;
+  }
 
-		virtual std::string toString() const;
+  virtual std::string toString() const;
 
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

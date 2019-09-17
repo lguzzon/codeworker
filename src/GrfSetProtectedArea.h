@@ -22,7 +22,6 @@ To contact the author: codeworker@free.fr
 #ifndef _GrfSetProtectedArea_h_
 #define _GrfSetProtectedArea_h_
 
-
 //##protect##"INCLUDE FILES"
 //##protect##"INCLUDE FILES"
 
@@ -31,39 +30,45 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfSetProtectedArea : public GrfCommand {
-		private:
-			ExprScriptExpression* _pProtectedAreaName;
+class GrfSetProtectedArea : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pProtectedAreaName;
 
-//##protect##"attributes"
-			DtaScriptVariable* const* _pOutputCoverage;
-//##protect##"attributes"
+  //##protect##"attributes"
+  DtaScriptVariable* const* _pOutputCoverage;
+  //##protect##"attributes"
 
-		public:
-			GrfSetProtectedArea() : _pProtectedAreaName(NULL) {
-//##protect##"constructor"
-				_pOutputCoverage = NULL;
-//##protect##"constructor"
-			}
-			virtual ~GrfSetProtectedArea();
+public:
+  GrfSetProtectedArea()
+    : _pProtectedAreaName(NULL)
+  {
+    //##protect##"constructor"
+    _pOutputCoverage = NULL;
+    //##protect##"constructor"
+  }
+  virtual ~GrfSetProtectedArea();
 
-			virtual const char* getFunctionName() const { return "setProtectedArea"; }
+  virtual const char* getFunctionName() const { return "setProtectedArea"; }
 
-			inline void setProtectedAreaName(ExprScriptExpression* pProtectedAreaName) { _pProtectedAreaName = pProtectedAreaName; }
+  inline void setProtectedAreaName(ExprScriptExpression* pProtectedAreaName)
+  {
+    _pProtectedAreaName = pProtectedAreaName;
+  }
 
+  //##protect##"interface"
+  void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
+  //##protect##"interface"
 
-//##protect##"interface"
-			void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
-//##protect##"interface"
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-
-//##protect##"declarations"
-//##protect##"declarations"
-	};
+  //##protect##"declarations"
+  //##protect##"declarations"
+};
 }
 
 #endif

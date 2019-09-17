@@ -20,75 +20,102 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
+#include "GrfLocalVariable.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
 #include "GrfBlock.h"
 #include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "GrfLocalVariable.h"
+#include "UtlException.h"
 
 namespace CodeWorker {
-	GrfLocalVariable::~GrfLocalVariable() {
-		if (_pVariable != NULL) delete _pVariable;
-		if (_pValue != NULL) delete _pValue;
-	}
+GrfLocalVariable::~GrfLocalVariable()
+{
+  if (_pVariable != NULL)
+    delete _pVariable;
+  if (_pValue != NULL)
+    delete _pValue;
+}
 
-	void GrfLocalVariable::setLocalVariable(ExprScriptVariable* pLocalVariable, EXPRESSION_TYPE variableType) {
-		_pVariable = pLocalVariable;
-		getParent()->addLocalVariable(pLocalVariable->getName(), variableType);
-	}
+void
+GrfLocalVariable::setLocalVariable(ExprScriptVariable* pLocalVariable,
+                                   EXPRESSION_TYPE variableType)
+{
+  _pVariable = pLocalVariable;
+  getParent()->addLocalVariable(pLocalVariable->getName(), variableType);
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfLocalVariable::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pLocalVariable = visibility.getNonRecursiveNonReferencedVariable(visibility, *_pVariable);
-		if (pLocalVariable->getReferencedVariable() != 0) pLocalVariable->clearValue();
-		else pLocalVariable->clearContent();
-		if (_pValue != NULL) {
-			ExprScriptConstantTree* pConstantTree = dynamic_cast<ExprScriptConstantTree*>(_pValue);
-			if (pConstantTree != NULL) {
-				pConstantTree->setTree(visibility, *pLocalVariable);
-			} else {
-				std::string sValue = _pValue->getValue(visibility);
-				pLocalVariable->setValue(sValue.c_str());
-			}
-		}
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfLocalVariable::executeInternal(DtaScriptVariable& visibility)
+{
+  DtaScriptVariable* pLocalVariable =
+    visibility.getNonRecursiveNonReferencedVariable(visibility, *_pVariable);
+  if (pLocalVariable->getReferencedVariable() != 0)
+    pLocalVariable->clearValue();
+  else
+    pLocalVariable->clearContent();
+  if (_pValue != NULL) {
+    ExprScriptConstantTree* pConstantTree =
+      dynamic_cast<ExprScriptConstantTree*>(_pValue);
+    if (pConstantTree != NULL) {
+      pConstantTree->setTree(visibility, *pLocalVariable);
+    } else {
+      std::string sValue = _pValue->getValue(visibility);
+      pLocalVariable->setValue(sValue.c_str());
+    }
+  }
+  return NO_INTERRUPTION;
+}
 
-	void GrfLocalVariable::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		if (!theCompilerEnvironment.addVariable(_pVariable->getName())) {
-			CW_BODY_INDENT << "if (" << _pVariable->getName() << ".getReference() != NULL) " << _pVariable->getName() << ".clearValue();";CW_BODY_ENDL;
-			CW_BODY_INDENT << "else " << _pVariable->getName() << ".clearNode();";CW_BODY_ENDL;
-			if (_pValue != NULL) {
-				ExprScriptConstantTree* pConstantTree = dynamic_cast<ExprScriptConstantTree*>(_pValue);
-				if (pConstantTree != NULL) {
-					pConstantTree->compileCppInit(theCompilerEnvironment, _pVariable->getName());
-				} else {
-					// a classical value type
-					CW_BODY_INDENT << _pVariable->getName() << ".setValue(";
-					_pValue->compileCpp(theCompilerEnvironment);
-					CW_BODY_STREAM << ");";CW_BODY_ENDL;
-				}
-			}
-		} else {
-			CW_BODY_INDENT << "CppParsingTree_value " << _pVariable->getName();
-			if (_pValue != NULL) {
-				ExprScriptConstantTree* pConstantTree = dynamic_cast<ExprScriptConstantTree*>(_pValue);
-				if (pConstantTree != NULL) {
-					CW_BODY_STREAM << ";";CW_BODY_ENDL;
-					pConstantTree->compileCppInit(theCompilerEnvironment, _pVariable->getName());
-				} else {
-					// a classical value type
-					CW_BODY_STREAM << "(";
-					_pValue->compileCpp(theCompilerEnvironment);
-					CW_BODY_STREAM << ");";CW_BODY_ENDL;
-				}
-			} else {
-				CW_BODY_STREAM << ";";CW_BODY_ENDL;
-			}
-		}
-	}
+void
+GrfLocalVariable::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  if (!theCompilerEnvironment.addVariable(_pVariable->getName())) {
+    CW_BODY_INDENT << "if (" << _pVariable->getName()
+                   << ".getReference() != NULL) " << _pVariable->getName()
+                   << ".clearValue();";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "else " << _pVariable->getName() << ".clearNode();";
+    CW_BODY_ENDL;
+    if (_pValue != NULL) {
+      ExprScriptConstantTree* pConstantTree =
+        dynamic_cast<ExprScriptConstantTree*>(_pValue);
+      if (pConstantTree != NULL) {
+        pConstantTree->compileCppInit(theCompilerEnvironment,
+                                      _pVariable->getName());
+      } else {
+        // a classical value type
+        CW_BODY_INDENT << _pVariable->getName() << ".setValue(";
+        _pValue->compileCpp(theCompilerEnvironment);
+        CW_BODY_STREAM << ");";
+        CW_BODY_ENDL;
+      }
+    }
+  } else {
+    CW_BODY_INDENT << "CppParsingTree_value " << _pVariable->getName();
+    if (_pValue != NULL) {
+      ExprScriptConstantTree* pConstantTree =
+        dynamic_cast<ExprScriptConstantTree*>(_pValue);
+      if (pConstantTree != NULL) {
+        CW_BODY_STREAM << ";";
+        CW_BODY_ENDL;
+        pConstantTree->compileCppInit(theCompilerEnvironment,
+                                      _pVariable->getName());
+      } else {
+        // a classical value type
+        CW_BODY_STREAM << "(";
+        _pValue->compileCpp(theCompilerEnvironment);
+        CW_BODY_STREAM << ");";
+        CW_BODY_ENDL;
+      }
+    } else {
+      CW_BODY_STREAM << ";";
+      CW_BODY_ENDL;
+    }
+  }
+}
 }

@@ -25,24 +25,27 @@ To contact the author: codeworker@free.fr
 #include "GrfFunction.h"
 
 namespace CodeWorker {
-	class CppParsingTree_value;
+class CppParsingTree_value;
 
-	#ifndef READONLYHOOK_FUNCTION_TYPE
-	#define READONLYHOOK_FUNCTION_TYPE
-	typedef std::string (*READONLYHOOK_FUNCTION)(CppParsingTree_value);
-	#endif
+#ifndef READONLYHOOK_FUNCTION_TYPE
+#define READONLYHOOK_FUNCTION_TYPE
+typedef std::string (*READONLYHOOK_FUNCTION)(CppParsingTree_value);
+#endif
 
-	class GrfReadonlyHook : public GrfFunction {
-	private:
-		READONLYHOOK_FUNCTION _readonlyHook;
-	public:
-		GrfReadonlyHook(GrfBlock* pParent);
-		GrfReadonlyHook(READONLYHOOK_FUNCTION readonlyHook);
-		virtual ~GrfReadonlyHook();
+class GrfReadonlyHook : public GrfFunction
+{
+private:
+  READONLYHOOK_FUNCTION _readonlyHook;
 
-		bool setParameterName(const char* sFilenameVariable);
-		SEQUENCE_INTERRUPTION_LIST executeHook(DtaScriptVariable& visibility, const std::string& sReadonlyFile);
-	};
+public:
+  GrfReadonlyHook(GrfBlock* pParent);
+  GrfReadonlyHook(READONLYHOOK_FUNCTION readonlyHook);
+  virtual ~GrfReadonlyHook();
+
+  bool setParameterName(const char* sFilenameVariable);
+  SEQUENCE_INTERRUPTION_LIST executeHook(DtaScriptVariable& visibility,
+                                         const std::string& sReadonlyFile);
+};
 }
 
 #endif

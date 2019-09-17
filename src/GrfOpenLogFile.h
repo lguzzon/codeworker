@@ -27,23 +27,30 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfOpenLogFile : public GrfCommand {
-		private:
-			ExprScriptExpression* _pFilename;
+class GrfOpenLogFile : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pFilename;
 
-		public:
-			GrfOpenLogFile() : _pFilename(NULL) {}
-			virtual ~GrfOpenLogFile();
+public:
+  GrfOpenLogFile()
+    : _pFilename(NULL)
+  {}
+  virtual ~GrfOpenLogFile();
 
-			virtual const char* getFunctionName() const { return "openLogFile"; }
+  virtual const char* getFunctionName() const { return "openLogFile"; }
 
-			inline void setFilename(ExprScriptExpression* pFilename) { _pFilename = pFilename; }
+  inline void setFilename(ExprScriptExpression* pFilename)
+  {
+    _pFilename = pFilename;
+  }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

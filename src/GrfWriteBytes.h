@@ -22,7 +22,6 @@ To contact the author: codeworker@free.fr
 #ifndef _GrfWriteBytes_h_
 #define _GrfWriteBytes_h_
 
-
 //##protect##"INCLUDE FILES"
 //##protect##"INCLUDE FILES"
 
@@ -31,39 +30,42 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfWriteBytes : public GrfCommand {
-		private:
-			ExprScriptExpression* _pBytes;
+class GrfWriteBytes : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pBytes;
 
-//##protect##"attributes"
-			DtaScriptVariable* const* _pOutputCoverage;
-//##protect##"attributes"
+  //##protect##"attributes"
+  DtaScriptVariable* const* _pOutputCoverage;
+  //##protect##"attributes"
 
-		public:
-			GrfWriteBytes() : _pBytes(NULL) {
-//##protect##"constructor"
-				_pOutputCoverage = NULL;
-//##protect##"constructor"
-			}
-			virtual ~GrfWriteBytes();
+public:
+  GrfWriteBytes()
+    : _pBytes(NULL)
+  {
+    //##protect##"constructor"
+    _pOutputCoverage = NULL;
+    //##protect##"constructor"
+  }
+  virtual ~GrfWriteBytes();
 
-			virtual const char* getFunctionName() const { return "writeBytes"; }
+  virtual const char* getFunctionName() const { return "writeBytes"; }
 
-			inline void setBytes(ExprScriptExpression* pBytes) { _pBytes = pBytes; }
+  inline void setBytes(ExprScriptExpression* pBytes) { _pBytes = pBytes; }
 
+  //##protect##"interface"
+  void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
+  //##protect##"interface"
 
-//##protect##"interface"
-			void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
-//##protect##"interface"
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-
-//##protect##"declarations"
-//##protect##"declarations"
-	};
+  //##protect##"declarations"
+  //##protect##"declarations"
+};
 }
 
 #endif

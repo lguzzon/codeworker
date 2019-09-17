@@ -22,13 +22,12 @@ To contact the author: codeworker@free.fr
 #ifndef _GrfSaveProjectTypes_h_
 #define _GrfSaveProjectTypes_h_
 
-
 //##protect##"INCLUDE FILES"
 #include <set>
 
 namespace CodeWorker {
-	class UtlXMLStream;
-	class DtaAttributeType;
+class UtlXMLStream;
+class DtaAttributeType;
 }
 //##protect##"INCLUDE FILES"
 
@@ -37,38 +36,46 @@ namespace CodeWorker {
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfSaveProjectTypes : public GrfCommand {
-		private:
-			ExprScriptExpression* _pXMLFileName;
+class GrfSaveProjectTypes : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pXMLFileName;
 
-//##protect##"attributes"
-//##protect##"attributes"
+  //##protect##"attributes"
+  //##protect##"attributes"
 
-		public:
-			GrfSaveProjectTypes() : _pXMLFileName(NULL) {
-//##protect##"constructor"
-//##protect##"constructor"
-			}
-			virtual ~GrfSaveProjectTypes();
-
-			virtual const char* getFunctionName() const { return "saveProjectTypes"; }
-
-			inline void setXMLFileName(ExprScriptExpression* pXMLFileName) { _pXMLFileName = pXMLFileName; }
-
-
-//##protect##"interface"
-//##protect##"interface"
-
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-
-//##protect##"declarations"
 public:
-	static void generateXMLFile(UtlXMLStream& myXMLFile, DtaAttributeType& myType, std::set<std::string>& listForAvoidingCycles);
-//##protect##"declarations"
-	};
+  GrfSaveProjectTypes()
+    : _pXMLFileName(NULL)
+  {
+    //##protect##"constructor"
+    //##protect##"constructor"
+  }
+  virtual ~GrfSaveProjectTypes();
+
+  virtual const char* getFunctionName() const { return "saveProjectTypes"; }
+
+  inline void setXMLFileName(ExprScriptExpression* pXMLFileName)
+  {
+    _pXMLFileName = pXMLFileName;
+  }
+
+  //##protect##"interface"
+  //##protect##"interface"
+
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+
+  //##protect##"declarations"
+public:
+  static void generateXMLFile(UtlXMLStream& myXMLFile,
+                              DtaAttributeType& myType,
+                              std::set<std::string>& listForAvoidingCycles);
+  //##protect##"declarations"
+};
 }
 
 #endif

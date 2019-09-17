@@ -25,16 +25,20 @@ To contact the author: codeworker@free.fr
 #include "GrfBlock.h"
 
 namespace CodeWorker {
-	class GrfNewProject : public GrfBlock {
-	public:
-		GrfNewProject(GrfBlock* pParent) : GrfBlock(pParent) {}
-		virtual ~GrfNewProject();
+class GrfNewProject : public GrfBlock
+{
+public:
+  GrfNewProject(GrfBlock* pParent)
+    : GrfBlock(pParent)
+  {}
+  virtual ~GrfNewProject();
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

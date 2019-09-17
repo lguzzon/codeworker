@@ -20,100 +20,133 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
+#include "DtaAttributeType.h"
 #include "DtaProject.h"
 #include "DtaScriptVariable.h"
-#include "DtaAttributeType.h"
 
 namespace CodeWorker {
-	std::map<std::string, DtaAttributeType*> DtaAttributeType::_mapOfTypes;
+std::map<std::string, DtaAttributeType*> DtaAttributeType::_mapOfTypes;
 
+bool
+DtaFollowingAttributeInfo::isAttribute() const
+{
+  return _pAttributeType->isAttribute();
+}
 
-	bool DtaFollowingAttributeInfo::isAttribute() const {
-		return _pAttributeType->isAttribute();
-	}
+void
+DtaFollowingAttributeInfo::insertAttribute(DtaScriptVariable& myUser)
+{
+  incrementUse();
+}
 
-	void DtaFollowingAttributeInfo::insertAttribute(DtaScriptVariable& myUser) {
-		incrementUse();
-	}
+DtaAttributeType::DtaAttributeType(const std::string& sName)
+  : _iNumberOfUse(0)
+  , _iNumberOfElements(0)
+  , _sName(sName)
+{
+  _mapOfTypes[sName] = this;
+}
 
+DtaAttributeType*
+DtaAttributeType::getAttributeType(const std::string& sName)
+{
+  std::map<std::string, DtaAttributeType*>::const_iterator i =
+    _mapOfTypes.find(sName);
+  if (i == _mapOfTypes.end())
+    return NULL;
+  return i->second;
+}
 
-	DtaAttributeType::DtaAttributeType(const std::string& sName) : _iNumberOfUse(0), _iNumberOfElements(0), _sName(sName) {
-		_mapOfTypes[sName] = this;
-	}
+bool
+DtaAttributeType::isAttribute() const
+{
+  return _mapOfAttributes.empty() && _mapOfAttributeElements.empty();
+}
 
-	DtaAttributeType* DtaAttributeType::getAttributeType(const std::string& sName) {
-		std::map<std::string, DtaAttributeType*>::const_iterator i = _mapOfTypes.find(sName);
-		if (i == _mapOfTypes.end()) return NULL;
-		return i->second;
-	}
+void
+DtaAttributeType::insertUser(DtaScriptVariable& myUser)
+{
+  _iNumberOfUse++;
+  const std::list<DtaScriptVariable*>* pArray = myUser.getArray();
+  if (pArray != NULL) {
+    for (std::list<DtaScriptVariable*>::const_iterator i = pArray->begin();
+         i != pArray->end();
+         i++) {
+      insertElement(*(*i));
+    }
+  }
+  DtaScriptVariableList* pAttributes = myUser.getAttributes();
+  while (pAttributes != NULL) {
+    insertAttribute(*(pAttributes->getNode()));
+    pAttributes = pAttributes->getNext();
+  }
+}
 
-	bool DtaAttributeType::isAttribute() const {
-		return _mapOfAttributes.empty() && _mapOfAttributeElements.empty();
-	}
+void
+DtaAttributeType::insertElement(DtaScriptVariable& myUser)
+{
+  _iNumberOfElements++;
+  DtaScriptVariableList* pAttributes = myUser.getAttributes();
+  while (pAttributes != NULL) {
+    DtaScriptVariable* pNode = pAttributes->getNode();
+    std::string sKey = pNode->getName();
+    DtaAttributeType* pType = getAttributeType(sKey);
+    if (pType == NULL)
+      pType = new DtaAttributeType(sKey);
+    std::map<std::string, DtaFollowingAttributeInfo*>::const_iterator j =
+      _mapOfAttributeElements.find(sKey);
+    DtaFollowingAttributeInfo* pInfo;
+    if (j == _mapOfAttributeElements.end()) {
+      pInfo = new DtaFollowingAttributeInfo(pType);
+      _mapOfAttributeElements[sKey] = pInfo;
+    } else
+      pInfo = j->second;
+    pInfo->insertAttribute(*pNode);
+    pType->insertUser(*pNode);
+    pAttributes = pAttributes->getNext();
+  }
+}
 
-	void DtaAttributeType::insertUser(DtaScriptVariable& myUser) {
-		_iNumberOfUse++;
-		const std::list<DtaScriptVariable*>* pArray = myUser.getArray();
-		if (pArray != NULL) {
-			for (std::list<DtaScriptVariable*>::const_iterator i = pArray->begin(); i != pArray->end(); i++) {
-				insertElement(*(*i));
-			}
-		}
-		DtaScriptVariableList* pAttributes = myUser.getAttributes();
-		while (pAttributes != NULL) {
-			insertAttribute(*(pAttributes->getNode()));
-			pAttributes = pAttributes->getNext();
-		}
-	}
+void
+DtaAttributeType::insertAttribute(DtaScriptVariable& myUser)
+{
+  std::string sKey = myUser.getName();
+  DtaAttributeType* pType = getAttributeType(sKey);
+  if (pType == NULL)
+    pType = new DtaAttributeType(sKey);
+  std::map<std::string, DtaFollowingAttributeInfo*>::const_iterator i =
+    _mapOfAttributes.find(sKey);
+  DtaFollowingAttributeInfo* pInfo;
+  if (i == _mapOfAttributes.end()) {
+    pInfo = new DtaFollowingAttributeInfo(pType);
+    _mapOfAttributes[sKey] = pInfo;
+  } else
+    pInfo = i->second;
+  pInfo->insertAttribute(myUser);
+  pType->insertUser(myUser);
+}
 
-	void DtaAttributeType::insertElement(DtaScriptVariable& myUser) {
-		_iNumberOfElements++;
-		DtaScriptVariableList* pAttributes = myUser.getAttributes();
-		while (pAttributes != NULL) {
-			DtaScriptVariable* pNode = pAttributes->getNode();
-			std::string sKey = pNode->getName();
-			DtaAttributeType* pType = getAttributeType(sKey);
-			if (pType == NULL) pType = new DtaAttributeType(sKey);
-			std::map<std::string, DtaFollowingAttributeInfo*>::const_iterator j = _mapOfAttributeElements.find(sKey);
-			DtaFollowingAttributeInfo* pInfo;
-			if (j == _mapOfAttributeElements.end()) {
-				pInfo = new DtaFollowingAttributeInfo(pType);
-				_mapOfAttributeElements[sKey] = pInfo;
-			} else pInfo = j->second;
-			pInfo->insertAttribute(*pNode);
-			pType->insertUser(*pNode);
-			pAttributes = pAttributes->getNext();
-		}
-	}
+DtaAttributeType&
+DtaAttributeType::extractProjectTypes(DtaScriptVariable& visibility)
+{
+  removeProjectTypes();
+  DtaAttributeType* pProjectType = new DtaAttributeType("project");
+  pProjectType->insertUser(DtaProject::getInstance());
+  return *pProjectType;
+}
 
-	void DtaAttributeType::insertAttribute(DtaScriptVariable& myUser) {
-		std::string sKey = myUser.getName();
-		DtaAttributeType* pType = getAttributeType(sKey);
-		if (pType == NULL) pType = new DtaAttributeType(sKey);
-		std::map<std::string, DtaFollowingAttributeInfo*>::const_iterator i = _mapOfAttributes.find(sKey);
-		DtaFollowingAttributeInfo* pInfo;
-		if (i == _mapOfAttributes.end()) {
-			pInfo = new DtaFollowingAttributeInfo(pType);
-			_mapOfAttributes[sKey] = pInfo;
-		} else pInfo = i->second;
-		pInfo->insertAttribute(myUser);
-		pType->insertUser(myUser);
-	}
-
-	DtaAttributeType& DtaAttributeType::extractProjectTypes(DtaScriptVariable& visibility) {
-		removeProjectTypes();
-		DtaAttributeType* pProjectType = new DtaAttributeType("project");
-		pProjectType->insertUser(DtaProject::getInstance());
-		return *pProjectType;
-	}
-
-	void DtaAttributeType::removeProjectTypes() {
-		for (std::map<std::string, DtaAttributeType*>::iterator i = _mapOfTypes.begin(); i != _mapOfTypes.end(); i++) {
-			delete i->second;
-		}
-		_mapOfTypes = std::map<std::string, DtaAttributeType*>();
-	}
+void
+DtaAttributeType::removeProjectTypes()
+{
+  for (std::map<std::string, DtaAttributeType*>::iterator i =
+         _mapOfTypes.begin();
+       i != _mapOfTypes.end();
+       i++) {
+    delete i->second;
+  }
+  _mapOfTypes = std::map<std::string, DtaAttributeType*>();
+}
 }

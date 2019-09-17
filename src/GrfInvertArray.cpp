@@ -20,30 +20,35 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
+#include "GrfInvertArray.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "GrfInvertArray.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfInvertArray::~GrfInvertArray() {
-		delete _pArray;
-	}
+GrfInvertArray::~GrfInvertArray()
+{
+  delete _pArray;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfInvertArray::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pArray = visibility.getExistingVariable(*_pArray);
-		return CGRuntime::invertArray(pArray);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfInvertArray::executeInternal(DtaScriptVariable& visibility)
+{
+  DtaScriptVariable* pArray = visibility.getExistingVariable(*_pArray);
+  return CGRuntime::invertArray(pArray);
+}
 
-	void GrfInvertArray::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::invertArray(";
-		_pArray->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfInvertArray::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::invertArray(";
+  _pArray->compileCpp(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

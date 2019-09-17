@@ -25,24 +25,28 @@ To contact the author: codeworker@free.fr
 #include "BNFReadToken.h"
 
 namespace CodeWorker {
-	class BNFReadBytes : public BNFReadToken {
-		ExprScriptExpression* _pLength;
+class BNFReadBytes : public BNFReadToken
+{
+  ExprScriptExpression* _pLength;
 
-	public:
-		BNFReadBytes(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue, bool bNoCase);
-		virtual ~BNFReadBytes();
+public:
+  BNFReadBytes(DtaBNFScript* pBNFScript,
+               GrfBlock* pParent,
+               bool bContinue,
+               bool bNoCase);
+  virtual ~BNFReadBytes();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual const char* getFunctionName() const;
+  virtual const char* getFunctionName() const;
 
-		inline ExprScriptExpression* getLength() const { return _pLength; }
-		inline void setLength(ExprScriptExpression* pLength) { _pLength = pLength; }
+  inline ExprScriptExpression* getLength() const { return _pLength; }
+  inline void setLength(ExprScriptExpression* pLength) { _pLength = pLength; }
 
-	protected:
-		virtual std::string executeExtraction(DtaScriptVariable& visibility) const;
-		virtual std::string compileCppExtraction() const;
-	};
+protected:
+  virtual std::string executeExtraction(DtaScriptVariable& visibility) const;
+  virtual std::string compileCppExtraction() const;
+};
 }
 
 #endif

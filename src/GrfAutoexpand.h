@@ -25,24 +25,32 @@ To contact the author: codeworker@free.fr
 #include "GrfCommand.h"
 
 namespace CodeWorker {
-	class GrfAutoexpand : public GrfCommand {
-		ExprScriptExpression* _pFileName;
-		ExprScriptVariable* _pClass;
+class GrfAutoexpand : public GrfCommand
+{
+  ExprScriptExpression* _pFileName;
+  ExprScriptVariable* _pClass;
 
-	public:
-		GrfAutoexpand() : _pClass(NULL), _pFileName(NULL) {}
-		virtual ~GrfAutoexpand();
+public:
+  GrfAutoexpand()
+    : _pClass(NULL)
+    , _pFileName(NULL)
+  {}
+  virtual ~GrfAutoexpand();
 
-		virtual const char* getFunctionName() const { return "autoexpand"; }
+  virtual const char* getFunctionName() const { return "autoexpand"; }
 
-		inline void setOutputFileName(ExprScriptExpression* pFileName) { _pFileName = pFileName; }
-		inline void setThis(ExprScriptVariable* pClass) { _pClass = pClass; }
+  inline void setOutputFileName(ExprScriptExpression* pFileName)
+  {
+    _pFileName = pFileName;
+  }
+  inline void setThis(ExprScriptVariable* pClass) { _pClass = pClass; }
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

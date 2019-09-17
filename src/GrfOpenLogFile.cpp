@@ -20,30 +20,35 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfOpenLogFile.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfOpenLogFile::~GrfOpenLogFile() {
-		delete _pFilename;
-	}
+GrfOpenLogFile::~GrfOpenLogFile()
+{
+  delete _pFilename;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfOpenLogFile::executeInternal(DtaScriptVariable& visibility) {
-		std::string sFilename = _pFilename->getValue(visibility);
-		return CGRuntime::openLogFile(sFilename);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfOpenLogFile::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sFilename = _pFilename->getValue(visibility);
+  return CGRuntime::openLogFile(sFilename);
+}
 
-	void GrfOpenLogFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::openLogFile(";
-		_pFilename->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfOpenLogFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::openLogFile(";
+  _pFilename->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

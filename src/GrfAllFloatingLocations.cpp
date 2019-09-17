@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
+#include "GrfAllFloatingLocations.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "GrfAllFloatingLocations.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfAllFloatingLocations::~GrfAllFloatingLocations() {
-		delete _pList;
-	}
+GrfAllFloatingLocations::~GrfAllFloatingLocations()
+{
+  delete _pList;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfAllFloatingLocations::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pList = visibility.getVariable(*_pList);
-		return CGRuntime::allFloatingLocations(pList);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfAllFloatingLocations::executeInternal(DtaScriptVariable& visibility)
+{
+  DtaScriptVariable* pList = visibility.getVariable(*_pList);
+  return CGRuntime::allFloatingLocations(pList);
+}
 
-	void GrfAllFloatingLocations::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::allFloatingLocations(";
-		_pList->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfAllFloatingLocations::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::allFloatingLocations(";
+  _pList->compileCpp(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

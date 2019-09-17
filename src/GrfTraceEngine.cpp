@@ -20,25 +20,28 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
 #include "GrfTraceEngine.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfTraceEngine::~GrfTraceEngine() {
-	}
+GrfTraceEngine::~GrfTraceEngine() {}
 
-	SEQUENCE_INTERRUPTION_LIST GrfTraceEngine::executeInternal(DtaScriptVariable& visibility) {
-		return CGRuntime::traceEngine();
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfTraceEngine::executeInternal(DtaScriptVariable& visibility)
+{
+  return CGRuntime::traceEngine();
+}
 
-	void GrfTraceEngine::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::traceEngine(";
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfTraceEngine::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::traceEngine(";
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

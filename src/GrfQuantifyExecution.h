@@ -22,74 +22,92 @@ To contact the author: codeworker@free.fr
 #ifndef _GrfQuantifyExecution_h_
 #define _GrfQuantifyExecution_h_
 
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 
-#include <string>
 #include <list>
 #include <map>
+#include <string>
 
 #include "GrfExecutionContext.h"
 
 namespace CodeWorker {
-	class BNFClauseCall;
+class BNFClauseCall;
 
-	class DtaQuantifyFunction {
-	public:
-		std::string _sName;
-		const char* _sFile;
-		int _iLocation;
-		unsigned int _iCounter;
-		long _iTimeInMillis;
+class DtaQuantifyFunction
+{
+public:
+  std::string _sName;
+  const char* _sFile;
+  int _iLocation;
+  unsigned int _iCounter;
+  long _iTimeInMillis;
 
-	public:
-		bool operator < (const DtaQuantifyFunction& function) const;
-		bool operator > (const DtaQuantifyFunction& function) const;
-		bool operator ==(const DtaQuantifyFunction& function) const;
-		bool operator !=(const DtaQuantifyFunction& function) const;
-	};
+public:
+  bool operator<(const DtaQuantifyFunction& function) const;
+  bool operator>(const DtaQuantifyFunction& function) const;
+  bool operator==(const DtaQuantifyFunction& function) const;
+  bool operator!=(const DtaQuantifyFunction& function) const;
+};
 
+class GrfQuantifyExecution : public GrfExecutionContext
+{
+private:
+  std::map<std::string, int> _listOfPredefinedFunctions;
+  std::map<std::string, std::map<std::string, DtaQuantifyFunction>>
+    _listOfUserFunctions;
+  std::map<std::string, std::map<int, int>> _coveredLines;
+  ExprScriptExpression* _pFilename;
+  unsigned int _iCoveredCode;
+  unsigned int _iTotalCode;
 
-	class GrfQuantifyExecution : public GrfExecutionContext {
-	private:
-		std::map<std::string, int> _listOfPredefinedFunctions;
-		std::map<std::string, std::map<std::string, DtaQuantifyFunction> > _listOfUserFunctions;
-		std::map<std::string, std::map<int, int> > _coveredLines;
-		ExprScriptExpression* _pFilename;
-		unsigned int _iCoveredCode;
-		unsigned int _iTotalCode;
+public:
+  GrfQuantifyExecution(GrfBlock* pParent)
+    : GrfExecutionContext(pParent)
+    , _pFilename(NULL)
+  {}
+  virtual ~GrfQuantifyExecution();
 
-	public:
-		GrfQuantifyExecution(GrfBlock* pParent) : GrfExecutionContext(pParent), _pFilename(NULL) {}
-		virtual ~GrfQuantifyExecution();
+  inline void setFilename(ExprScriptExpression* pFilename)
+  {
+    _pFilename = pFilename;
+  }
 
-		inline void setFilename(ExprScriptExpression* pFilename) { _pFilename = pFilename; }
+  virtual void handleBeforeExecutionCBK(GrfCommand* pCommand,
+                                        DtaScriptVariable& /*visibility*/);
+  virtual void handleAfterExecutionCBK(GrfCommand* /*pCommand*/,
+                                       DtaScriptVariable& /*visibility*/);
+  virtual void handleAfterExceptionCBK(GrfCommand* /*pCommand*/,
+                                       DtaScriptVariable& /*visibility*/,
+                                       UtlException& /*exception*/);
+  virtual void handleStartingFunction(GrfFunction* pFunction);
+  virtual void handleEndingFunction(GrfFunction* pFunction);
+  virtual void handleStartingBNFClause(BNFClauseCall* pBNFClause);
+  virtual void handleEndingBNFClause(BNFClauseCall* pBNFClause);
+  virtual void handleBeforeScriptExecutionCBK(
+    GrfCommand* /*pCommand*/,
+    DtaScriptVariable& /*visibility*/);
+  virtual void handleAfterScriptExecutionCBK(GrfCommand* pCommand,
+                                             DtaScriptVariable& /*visibility*/);
 
-		virtual void handleBeforeExecutionCBK(GrfCommand* pCommand, DtaScriptVariable& /*visibility*/);
-		virtual void handleAfterExecutionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/);
-		virtual void handleAfterExceptionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/, UtlException& /*exception*/);
-		virtual void handleStartingFunction(GrfFunction* pFunction);
-		virtual void handleEndingFunction(GrfFunction* pFunction);
-		virtual void handleStartingBNFClause(BNFClauseCall* pBNFClause);
-		virtual void handleEndingBNFClause(BNFClauseCall* pBNFClause);
-		virtual void handleBeforeScriptExecutionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/);
-		virtual void handleAfterScriptExecutionCBK(GrfCommand* pCommand, DtaScriptVariable& /*visibility*/);
-		
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST openSession(DtaScriptVariable& visibility);
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST openSession(DtaScriptVariable& visibility);
 
-	private:
-		static GrfQuantifyExecution* getCurrentQuantify() { return (GrfQuantifyExecution*) GrfCommand::getCurrentExecutionContext(); }
-		static void recoverData(GrfCommand* pCommand);
+private:
+  static GrfQuantifyExecution* getCurrentQuantify()
+  {
+    return (GrfQuantifyExecution*)GrfCommand::getCurrentExecutionContext();
+  }
+  static void recoverData(GrfCommand* pCommand);
 
-		void registerCode(GrfCommand* pCommand);
-		void registerUserFunction(GrfFunction* pFunction);
-		void registerPredefinedFunction(GrfCommand* pCommand);
-		void displayResults(DtaScriptVariable& visibility);
-		void generateHTMLFile(const char* sFilename, DtaScriptVariable& visibility);
+  void registerCode(GrfCommand* pCommand);
+  void registerUserFunction(GrfFunction* pFunction);
+  void registerPredefinedFunction(GrfCommand* pCommand);
+  void displayResults(DtaScriptVariable& visibility);
+  void generateHTMLFile(const char* sFilename, DtaScriptVariable& visibility);
 
-		inline unsigned int getCoveredCode() const { return _iCoveredCode; }
-		inline unsigned int getTotalCode() const { return _iTotalCode; }
-	};
+  inline unsigned int getCoveredCode() const { return _iCoveredCode; }
+  inline unsigned int getTotalCode() const { return _iTotalCode; }
+};
 }
 
 #endif

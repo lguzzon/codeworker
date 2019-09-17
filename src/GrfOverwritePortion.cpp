@@ -20,13 +20,13 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "ExprScriptExpression.h"
+#include "ScpStream.h"
 #include <string>
 
 //##protect##"INCLUDE FILES"
@@ -37,45 +37,54 @@ To contact the author: codeworker@free.fr
 #include "GrfOverwritePortion.h"
 
 namespace CodeWorker {
-	GrfOverwritePortion::~GrfOverwritePortion() {
-		delete _pLocation;
-		delete _pText;
-		delete _pSize;
-	}
+GrfOverwritePortion::~GrfOverwritePortion()
+{
+  delete _pLocation;
+  delete _pText;
+  delete _pSize;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfOverwritePortion::executeInternal(DtaScriptVariable& visibility) {
-		std::string sLocation = _pLocation->getValue(visibility);
-		int iLocation = atoi(sLocation.c_str());
-		std::string sText = _pText->getValue(visibility);
-		std::string sSize = _pSize->getValue(visibility);
-		int iSize = atoi(sSize.c_str());
-//##protect##"execute"
-		if (*_pOutputCoverage != NULL) {
-			CGRuntime::overwritePortion(iLocation, sText, iSize);
-			int iCoverageLocation = iLocation + (*_pOutputCoverage)->getIntValue();
-			DtaScriptVariable* pCoverage = GrfInsertText::getCoverageItem(*_pOutputCoverage, sText.size() - iSize, iCoverageLocation, "O");
-			pCoverage->insertNode("script")->setValue(_iFileLocation);
-			pCoverage->insertNode("output")->setValue(iCoverageLocation);
-			return NO_INTERRUPTION;
-		}
-//##protect##"execute"
-		return CGRuntime::overwritePortion(iLocation, sText, iSize);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfOverwritePortion::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sLocation = _pLocation->getValue(visibility);
+  int iLocation = atoi(sLocation.c_str());
+  std::string sText = _pText->getValue(visibility);
+  std::string sSize = _pSize->getValue(visibility);
+  int iSize = atoi(sSize.c_str());
+  //##protect##"execute"
+  if (*_pOutputCoverage != NULL) {
+    CGRuntime::overwritePortion(iLocation, sText, iSize);
+    int iCoverageLocation = iLocation + (*_pOutputCoverage)->getIntValue();
+    DtaScriptVariable* pCoverage = GrfInsertText::getCoverageItem(
+      *_pOutputCoverage, sText.size() - iSize, iCoverageLocation, "O");
+    pCoverage->insertNode("script")->setValue(_iFileLocation);
+    pCoverage->insertNode("output")->setValue(iCoverageLocation);
+    return NO_INTERRUPTION;
+  }
+  //##protect##"execute"
+  return CGRuntime::overwritePortion(iLocation, sText, iSize);
+}
 
 //##protect##"implementation"
-	void GrfOverwritePortion::prepareCoverage(DtaScriptVariable* const* pOutputCoverage) {
-		_pOutputCoverage = pOutputCoverage;
-	}
+void
+GrfOverwritePortion::prepareCoverage(DtaScriptVariable* const* pOutputCoverage)
+{
+  _pOutputCoverage = pOutputCoverage;
+}
 //##protect##"implementation"
 
-	void GrfOverwritePortion::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::overwritePortion(";
-		_pLocation->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pText->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pSize->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfOverwritePortion::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::overwritePortion(";
+  _pLocation->compileCppInt(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pText->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pSize->compileCppInt(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

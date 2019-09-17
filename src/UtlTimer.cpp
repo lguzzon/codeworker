@@ -26,43 +26,49 @@ This implementation is inspired of 'ABE::Chronograph', written by Eric NICOLAS
 //   gettimeofday
 
 #ifdef WIN32
-#	include <windows.h>
-#	include <winbase.h>
+#include <windows.h>
+#include <winbase.h>
 #else
-#	include <time.h>
-#	include <sys/time.h>
+#include <time.h>
+#include <sys/time.h>
 #endif
 
 #include "UtlTimer.h"
 
 namespace CodeWorker {
-	unsigned long UtlTimer::getTimeInMillis() {
-		if (active_) {
-			stop();
-			start();
-		}
-		return (unsigned long) (elapsed_ / freqInMillis_);
-	}
+unsigned long
+UtlTimer::getTimeInMillis()
+{
+  if (active_) {
+    stop();
+    start();
+  }
+  return (unsigned long)(elapsed_ / freqInMillis_);
+}
 
-	int64 UtlTimer::now() {
+int64
+UtlTimer::now()
+{
 #ifdef WIN32
-		LARGE_INTEGER value;
-		QueryPerformanceCounter(&value);
-		return (int64)value.QuadPart;
+  LARGE_INTEGER value;
+  QueryPerformanceCounter(&value);
+  return (int64)value.QuadPart;
 #else
-        struct timeval tv;
-		gettimeofday(&tv, NULL);
-		return (int64)tv.tv_sec * 1000000 + (int64)tv.tv_usec;
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  return (int64)tv.tv_sec * 1000000 + (int64)tv.tv_usec;
 #endif
-	}
+}
 
-	int64 UtlTimer::freq() {
+int64
+UtlTimer::freq()
+{
 #ifdef WIN32
-		LARGE_INTEGER freq;
-		QueryPerformanceFrequency(&freq);
-		return (int64)freq.QuadPart;
+  LARGE_INTEGER freq;
+  QueryPerformanceFrequency(&freq);
+  return (int64)freq.QuadPart;
 #else
-		return (int64)1000000;
+  return (int64)1000000;
 #endif
-	}
+}
 }

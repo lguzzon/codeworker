@@ -27,23 +27,27 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptVariable;
 
-	class GrfAllFloatingLocations : public GrfCommand {
-		private:
-			ExprScriptVariable* _pList;
+class GrfAllFloatingLocations : public GrfCommand
+{
+private:
+  ExprScriptVariable* _pList;
 
-		public:
-			GrfAllFloatingLocations() : _pList(NULL) {}
-			virtual ~GrfAllFloatingLocations();
+public:
+  GrfAllFloatingLocations()
+    : _pList(NULL)
+  {}
+  virtual ~GrfAllFloatingLocations();
 
-			virtual const char* getFunctionName() const { return "allFloatingLocations"; }
+  virtual const char* getFunctionName() const { return "allFloatingLocations"; }
 
-			inline void setList(ExprScriptVariable* pList) { _pList = pList; }
+  inline void setList(ExprScriptVariable* pList) { _pList = pList; }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

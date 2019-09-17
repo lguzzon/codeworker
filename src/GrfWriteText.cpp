@@ -20,13 +20,13 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "ExprScriptExpression.h"
+#include "ScpStream.h"
 #include <string>
 
 //##protect##"INCLUDE FILES"
@@ -36,32 +36,40 @@ To contact the author: codeworker@free.fr
 #include "GrfWriteText.h"
 
 namespace CodeWorker {
-	GrfWriteText::~GrfWriteText() {
-		delete _pText;
-	}
+GrfWriteText::~GrfWriteText()
+{
+  delete _pText;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfWriteText::executeInternal(DtaScriptVariable& visibility) {
-		std::string sText = _pText->getValue(visibility);
-//##protect##"execute"
-		if (*_pOutputCoverage != NULL) {
-			DtaScriptVariable* pCoverage = (*_pOutputCoverage)->pushItem("W");
-			pCoverage->insertNode("script")->setValue(_iFileLocation);
-			pCoverage->insertNode("output")->setValue(CGRuntime::getOutputLocation() + (*_pOutputCoverage)->getIntValue());
-		}
-//##protect##"execute"
-		return CGRuntime::writeText(sText);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfWriteText::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sText = _pText->getValue(visibility);
+  //##protect##"execute"
+  if (*_pOutputCoverage != NULL) {
+    DtaScriptVariable* pCoverage = (*_pOutputCoverage)->pushItem("W");
+    pCoverage->insertNode("script")->setValue(_iFileLocation);
+    pCoverage->insertNode("output")->setValue(
+      CGRuntime::getOutputLocation() + (*_pOutputCoverage)->getIntValue());
+  }
+  //##protect##"execute"
+  return CGRuntime::writeText(sText);
+}
 
 //##protect##"implementation"
-	void GrfWriteText::prepareCoverage(DtaScriptVariable* const* pOutputCoverage) {
-		_pOutputCoverage = pOutputCoverage;
-	}
+void
+GrfWriteText::prepareCoverage(DtaScriptVariable* const* pOutputCoverage)
+{
+  _pOutputCoverage = pOutputCoverage;
+}
 //##protect##"implementation"
 
-	void GrfWriteText::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::writeText(";
-		_pText->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfWriteText::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::writeText(";
+  _pText->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

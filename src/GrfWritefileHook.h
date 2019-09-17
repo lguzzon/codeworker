@@ -25,28 +25,34 @@ To contact the author: codeworker@free.fr
 #include "GrfFunction.h"
 
 namespace CodeWorker {
-	class CppParsingTree_value;
+class CppParsingTree_value;
 
-	#ifndef WRITEFILEHOOK_FUNCTION_TYPE
-	#define WRITEFILEHOOK_FUNCTION_TYPE
-	typedef std::string (*WRITEFILEHOOK_FUNCTION)(CppParsingTree_value, CppParsingTree_value, CppParsingTree_value);
-	#endif
+#ifndef WRITEFILEHOOK_FUNCTION_TYPE
+#define WRITEFILEHOOK_FUNCTION_TYPE
+typedef std::string (*WRITEFILEHOOK_FUNCTION)(CppParsingTree_value,
+                                              CppParsingTree_value,
+                                              CppParsingTree_value);
+#endif
 
-	class GrfWritefileHook : public GrfFunction {
-	private:
-		WRITEFILEHOOK_FUNCTION _writefileHook;
+class GrfWritefileHook : public GrfFunction
+{
+private:
+  WRITEFILEHOOK_FUNCTION _writefileHook;
 
-	public:
-		GrfWritefileHook(GrfBlock* pParent);
-		GrfWritefileHook(WRITEFILEHOOK_FUNCTION writefileHook);
-		virtual ~GrfWritefileHook();
+public:
+  GrfWritefileHook(GrfBlock* pParent);
+  GrfWritefileHook(WRITEFILEHOOK_FUNCTION writefileHook);
+  virtual ~GrfWritefileHook();
 
-		bool setFileNameArgument(const char* sArgument);
-		bool setPositionArgument(const char* sArgument);
-		bool setCreationArgument(const char* sArgument);
+  bool setFileNameArgument(const char* sArgument);
+  bool setPositionArgument(const char* sArgument);
+  bool setCreationArgument(const char* sArgument);
 
-		std::string executeHook(DtaScriptVariable& visibility, const std::string& sFile, int iPosition, bool bCreation);
-	};
+  std::string executeHook(DtaScriptVariable& visibility,
+                          const std::string& sFile,
+                          int iPosition,
+                          bool bCreation);
+};
 }
 
 #endif

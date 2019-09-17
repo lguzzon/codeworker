@@ -23,8 +23,8 @@ To contact the author: codeworker@free.fr
 #define _UtlException_h_
 
 #include <exception>
-#include <string>
 #include <iostream>
+#include <string>
 
 namespace CodeWorker {
 
@@ -44,48 +44,57 @@ namespace CodeWorker {
 #define THROW_UTLEXCEPTION_STATIC throw UtlException
 #endif
 
-	class ScpStream;
+class ScpStream;
 
-	class UtlException : public std::exception {
-	private:
-		std::string _sTraceStack;
-		std::string _sMessage;
-		bool _bFinalMessage;
+class UtlException : public std::exception
+{
+private:
+  std::string _sTraceStack;
+  std::string _sMessage;
+  bool _bFinalMessage;
 
-	public:
-		UtlException(const UtlException& exception);
-		UtlException(std::istream& stream, const std::string& sMessage);
-		UtlException(std::istream& stream, const char* sMessage);
-		UtlException(std::istream& stream, const std::string& sTraceStack, const std::string& sMessage);
-		UtlException(const ScpStream& stream, const std::string& sMessage);
-		UtlException(const ScpStream& stream, const char* sMessage);
-		UtlException(const ScpStream& stream, const std::string& sTraceStack, const std::string& sMessage);
-		UtlException(const std::string& sMessage);
-		UtlException(const char* sMessage);
-		UtlException(const std::string& sTraceStack, const std::string& sMessage, bool bFinalMessage = false);
-		virtual ~UtlException() throw();
+public:
+  UtlException(const UtlException& exception);
+  UtlException(std::istream& stream, const std::string& sMessage);
+  UtlException(std::istream& stream, const char* sMessage);
+  UtlException(std::istream& stream,
+               const std::string& sTraceStack,
+               const std::string& sMessage);
+  UtlException(const ScpStream& stream, const std::string& sMessage);
+  UtlException(const ScpStream& stream, const char* sMessage);
+  UtlException(const ScpStream& stream,
+               const std::string& sTraceStack,
+               const std::string& sMessage);
+  UtlException(const std::string& sMessage);
+  UtlException(const char* sMessage);
+  UtlException(const std::string& sTraceStack,
+               const std::string& sMessage,
+               bool bFinalMessage = false);
+  virtual ~UtlException() throw();
 
-		inline const std::string& getMessage() const { return _sMessage; }
-		inline const std::string& getTraceStack() const { return _sTraceStack; }
-		inline bool isFinalMessage() const { return _bFinalMessage; }
-		virtual const char* what() const throw();
+  inline const std::string& getMessage() const { return _sMessage; }
+  inline const std::string& getTraceStack() const { return _sTraceStack; }
+  inline bool isFinalMessage() const { return _bFinalMessage; }
+  virtual const char* what() const throw();
 
-	private:
-		UtlException();
-		UtlException& operator = (const UtlException& exception);
-	};
+private:
+  UtlException();
+  UtlException& operator=(const UtlException& exception);
+};
 
+class UtlExitException : public std::exception
+{
+private:
+  int _iCode;
 
-	class UtlExitException : public std::exception {
-	private:
-		int _iCode;
+public:
+  UtlExitException(int iCode)
+    : _iCode(iCode)
+  {}
 
-	public:
-		UtlExitException(int iCode) : _iCode(iCode) {}
-
-		inline int getCode() const { return _iCode; }
-		inline void setCode(int iCode) { _iCode = iCode; }
-	};
+  inline int getCode() const { return _iCode; }
+  inline void setCode(int iCode) { _iCode = iCode; }
+};
 }
 
 #endif

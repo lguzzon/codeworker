@@ -20,34 +20,39 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfSaveToFile.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfSaveToFile::~GrfSaveToFile() {
-		delete _pFilename;
-		delete _pContent;
-	}
+GrfSaveToFile::~GrfSaveToFile()
+{
+  delete _pFilename;
+  delete _pContent;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSaveToFile::executeInternal(DtaScriptVariable& visibility) {
-		std::string sFilename = _pFilename->getValue(visibility);
-		std::string sContent = _pContent->getValue(visibility);
-		return CGRuntime::saveToFile(sFilename, sContent);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSaveToFile::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sFilename = _pFilename->getValue(visibility);
+  std::string sContent = _pContent->getValue(visibility);
+  return CGRuntime::saveToFile(sFilename, sContent);
+}
 
-	void GrfSaveToFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::saveToFile(";
-		_pFilename->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pContent->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSaveToFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::saveToFile(";
+  _pFilename->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pContent->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

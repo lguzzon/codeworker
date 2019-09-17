@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfSetCommentBegin.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfSetCommentBegin::~GrfSetCommentBegin() {
-		delete _pCommentBegin;
-	}
+GrfSetCommentBegin::~GrfSetCommentBegin()
+{
+  delete _pCommentBegin;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetCommentBegin::executeInternal(DtaScriptVariable& visibility) {
-		std::string sCommentBegin = _pCommentBegin->getValue(visibility);
-		return CGRuntime::setCommentBegin(sCommentBegin);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSetCommentBegin::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sCommentBegin = _pCommentBegin->getValue(visibility);
+  return CGRuntime::setCommentBegin(sCommentBegin);
+}
 
-	void GrfSetCommentBegin::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setCommentBegin(";
-		_pCommentBegin->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSetCommentBegin::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::setCommentBegin(";
+  _pCommentBegin->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

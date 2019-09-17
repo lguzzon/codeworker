@@ -20,30 +20,35 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
 #include "GrfCloseSocket.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfCloseSocket::~GrfCloseSocket() {
-		delete _pSocket;
-	}
+GrfCloseSocket::~GrfCloseSocket()
+{
+  delete _pSocket;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfCloseSocket::executeInternal(DtaScriptVariable& visibility) {
-		std::string sSocket = _pSocket->getValue(visibility);
-		int iSocket = atoi(sSocket.c_str());
-		return CGRuntime::closeSocket(iSocket);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfCloseSocket::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sSocket = _pSocket->getValue(visibility);
+  int iSocket = atoi(sSocket.c_str());
+  return CGRuntime::closeSocket(iSocket);
+}
 
-	void GrfCloseSocket::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::closeSocket(";
-		_pSocket->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfCloseSocket::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::closeSocket(";
+  _pSocket->compileCppInt(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

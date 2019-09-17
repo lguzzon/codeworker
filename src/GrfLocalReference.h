@@ -25,25 +25,34 @@ To contact the author: codeworker@free.fr
 #include "GrfCommand.h"
 
 namespace CodeWorker {
-	class ExprScriptVariable;
+class ExprScriptVariable;
 
-	class GrfLocalReference : public GrfCommand {
-	private:
-		ExprScriptVariable* _pVariable;
-		ExprScriptVariable* _pReference;
+class GrfLocalReference : public GrfCommand
+{
+private:
+  ExprScriptVariable* _pVariable;
+  ExprScriptVariable* _pReference;
 
-	public:
-		GrfLocalReference() : _pVariable(NULL), _pReference(NULL) {}
-		virtual ~GrfLocalReference();
+public:
+  GrfLocalReference()
+    : _pVariable(NULL)
+    , _pReference(NULL)
+  {}
+  virtual ~GrfLocalReference();
 
-		void setLocalVariable(ExprScriptVariable* pLocalVariable, EXPRESSION_TYPE variableType);
-		inline void setReference(ExprScriptVariable* pReference) { _pReference = pReference; }
+  void setLocalVariable(ExprScriptVariable* pLocalVariable,
+                        EXPRESSION_TYPE variableType);
+  inline void setReference(ExprScriptVariable* pReference)
+  {
+    _pReference = pReference;
+  }
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

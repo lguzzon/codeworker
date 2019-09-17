@@ -20,23 +20,27 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
+#include "GrfExpand.h"
 #include "CGRuntime.h"
 #include "DtaPatternScript.h"
-#include "GrfExpand.h"
 
 namespace CodeWorker {
-	GrfExpand::~GrfExpand() {
-	}
+GrfExpand::~GrfExpand() {}
 
-	SEQUENCE_INTERRUPTION_LIST GrfExpand::executeScript(const char* sOutputFile, DtaScriptVariable* pThisContext, EXECUTE_FUNCTION* executeFunction) {
-		if (executeFunction != NULL) {
-			CGRuntime::expand(executeFunction, CppParsingTree_var(pThisContext), sOutputFile);
-			return NO_INTERRUPTION;
-		}
-//		getCachedScript()->setFilename(_sCachedPatternFile.c_str());
-		return getCachedScript()->expand(sOutputFile, *pThisContext);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfExpand::executeScript(const char* sOutputFile,
+                         DtaScriptVariable* pThisContext,
+                         EXECUTE_FUNCTION* executeFunction)
+{
+  if (executeFunction != NULL) {
+    CGRuntime::expand(
+      executeFunction, CppParsingTree_var(pThisContext), sOutputFile);
+    return NO_INTERRUPTION;
+  }
+  //		getCachedScript()->setFilename(_sCachedPatternFile.c_str());
+  return getCachedScript()->expand(sOutputFile, *pThisContext);
+}
 }

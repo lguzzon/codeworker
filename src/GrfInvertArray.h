@@ -27,23 +27,27 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptVariable;
 
-	class GrfInvertArray : public GrfCommand {
-		private:
-			ExprScriptVariable* _pArray;
+class GrfInvertArray : public GrfCommand
+{
+private:
+  ExprScriptVariable* _pArray;
 
-		public:
-			GrfInvertArray() : _pArray(NULL) {}
-			virtual ~GrfInvertArray();
+public:
+  GrfInvertArray()
+    : _pArray(NULL)
+  {}
+  virtual ~GrfInvertArray();
 
-			virtual const char* getFunctionName() const { return "invertArray"; }
+  virtual const char* getFunctionName() const { return "invertArray"; }
 
-			inline void setArray(ExprScriptVariable* pArray) { _pArray = pArray; }
+  inline void setArray(ExprScriptVariable* pArray) { _pArray = pArray; }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

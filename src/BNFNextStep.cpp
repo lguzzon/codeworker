@@ -20,53 +20,72 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ScpStream.h"
+#include "UtlException.h"
 
-#include "DtaScriptVariable.h"
-#include "ExprScriptVariable.h"
-#include "DtaBNFScript.h"
-#include "BNFStepper.h"
 #include "BNFClause.h"
-#include "DtaVisitor.h"
 #include "BNFNextStep.h"
+#include "BNFStepper.h"
+#include "DtaBNFScript.h"
+#include "DtaScriptVariable.h"
+#include "DtaVisitor.h"
+#include "ExprScriptVariable.h"
 
 namespace CodeWorker {
-	BNFNextStep::BNFNextStep(DtaBNFScript* pBNFScript, GrfBlock* pParent, BNFStepper* pStepperRE) : _pBNFScript(pBNFScript), GrfCommand(pParent), _pStepper(pStepperRE) {}
+BNFNextStep::BNFNextStep(DtaBNFScript* pBNFScript,
+                         GrfBlock* pParent,
+                         BNFStepper* pStepperRE)
+  : _pBNFScript(pBNFScript)
+  , GrfCommand(pParent)
+  , _pStepper(pStepperRE)
+{}
 
-	BNFNextStep::~BNFNextStep() {
-	}
+BNFNextStep::~BNFNextStep() {}
 
-	void BNFNextStep::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFNextStep(*this, env);
-	}
+void
+BNFNextStep::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+  visitor.visitBNFNextStep(*this, env);
+}
 
-	bool BNFNextStep::isABNFCommand() const { return true; }
+bool
+BNFNextStep::isABNFCommand() const
+{
+  return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFNextStep::executeInternal(DtaScriptVariable& visibility) {
-		_pBNFScript->skipEmptyChars(visibility);
-		int iStepLocation = CGRuntime::getInputLocation();
-		if (iStepLocation > _pStepper->getStepLocation()) {
-			_pStepper->setStepLocation(iStepLocation);
-		}
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+BNFNextStep::executeInternal(DtaScriptVariable& visibility)
+{
+  _pBNFScript->skipEmptyChars(visibility);
+  int iStepLocation = CGRuntime::getInputLocation();
+  if (iStepLocation > _pStepper->getStepLocation()) {
+    _pStepper->setStepLocation(iStepLocation);
+  }
+  return NO_INTERRUPTION;
+}
 
-	void BNFNextStep::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "// " << toString();
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "theEnvironment.skipEmptyChars();";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "_compilerClauseNextLocation_" << theCompilerEnvironment.getBNFStepperCursor() << " = CGRuntime::getInputLocation();";
-		CW_BODY_ENDL;
-	}
+void
+BNFNextStep::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "// " << toString();
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "theEnvironment.skipEmptyChars();";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "_compilerClauseNextLocation_"
+                 << theCompilerEnvironment.getBNFStepperCursor()
+                 << " = CGRuntime::getInputLocation();";
+  CW_BODY_ENDL;
+}
 
-	std::string BNFNextStep::toString() const {
-		return "#nextStep";
-	}
+std::string
+BNFNextStep::toString() const
+{
+  return "#nextStep";
+}
 }

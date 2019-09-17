@@ -25,24 +25,33 @@ To contact the author: codeworker@free.fr
 #include "GrfBlock.h"
 
 namespace CodeWorker {
-	class ExprScriptExpression;
-	class DtaPatternScript;
+class ExprScriptExpression;
+class DtaPatternScript;
 
-	class GrfAppendedFile : public GrfBlock {
-	private:
-		DtaPatternScript* _pPatternScript;
-		ExprScriptExpression* _pOutputFile;
+class GrfAppendedFile : public GrfBlock
+{
+private:
+  DtaPatternScript* _pPatternScript;
+  ExprScriptExpression* _pOutputFile;
 
-	public:
-		GrfAppendedFile(DtaPatternScript* pPatternScript, GrfBlock* pParent) : GrfBlock(pParent), _pPatternScript(pPatternScript), _pOutputFile(NULL) {}
-		virtual ~GrfAppendedFile();
+public:
+  GrfAppendedFile(DtaPatternScript* pPatternScript, GrfBlock* pParent)
+    : GrfBlock(pParent)
+    , _pPatternScript(pPatternScript)
+    , _pOutputFile(NULL)
+  {}
+  virtual ~GrfAppendedFile();
 
-		inline void setOutputFile(ExprScriptExpression* pOutputFile) { _pOutputFile = pOutputFile; }
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  inline void setOutputFile(ExprScriptExpression* pOutputFile)
+  {
+    _pOutputFile = pOutputFile;
+  }
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

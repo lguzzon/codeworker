@@ -20,40 +20,55 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ExprScriptFunction.h"
-#include "DtaProject.h"
-#include "CppParsingTree.h"
 #include "GrfReadonlyHook.h"
+#include "CppParsingTree.h"
+#include "DtaProject.h"
+#include "ExprScriptFunction.h"
 
 namespace CodeWorker {
-	GrfReadonlyHook::GrfReadonlyHook(GrfBlock* pParent) : GrfFunction(pParent, "readonlyHook", "", false), _readonlyHook(NULL) {
-		DtaProject::getInstance().setReadonlyHook(this);
-	}
+GrfReadonlyHook::GrfReadonlyHook(GrfBlock* pParent)
+  : GrfFunction(pParent, "readonlyHook", "", false)
+  , _readonlyHook(NULL)
+{
+  DtaProject::getInstance().setReadonlyHook(this);
+}
 
-	GrfReadonlyHook::GrfReadonlyHook(READONLYHOOK_FUNCTION readonlyHook) : GrfFunction(NULL, "readonlyHook", "", false), _readonlyHook(readonlyHook) {
-		DtaProject::getInstance().setReadonlyHook(this);
-	}
+GrfReadonlyHook::GrfReadonlyHook(READONLYHOOK_FUNCTION readonlyHook)
+  : GrfFunction(NULL, "readonlyHook", "", false)
+  , _readonlyHook(readonlyHook)
+{
+  DtaProject::getInstance().setReadonlyHook(this);
+}
 
-	GrfReadonlyHook::~GrfReadonlyHook() {
-		if (DtaProject::existInstance()) DtaProject::getInstance().setReadonlyHook(NULL);
-	}
+GrfReadonlyHook::~GrfReadonlyHook()
+{
+  if (DtaProject::existInstance())
+    DtaProject::getInstance().setReadonlyHook(NULL);
+}
 
-	bool GrfReadonlyHook::setParameterName(const char* sFilenameVariable) {
-		if (!getParameterTypes().empty()) return false;
-		return addParameterAndType(sFilenameVariable, VALUE_EXPRTYPE, NULL);
-	}
+bool
+GrfReadonlyHook::setParameterName(const char* sFilenameVariable)
+{
+  if (!getParameterTypes().empty())
+    return false;
+  return addParameterAndType(sFilenameVariable, VALUE_EXPRTYPE, NULL);
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfReadonlyHook::executeHook(DtaScriptVariable& visibility, const std::string& sReadonlyFile) {
-		if (_readonlyHook != NULL) {
-			_readonlyHook(sReadonlyFile);
-		} else {
-			std::auto_ptr<ExprScriptFunction> pFunctionCall(new ExprScriptFunction(this));
-			pFunctionCall->addParameter(new ExprScriptConstant(sReadonlyFile.c_str()));
-			launchExecution(visibility, *pFunctionCall);
-		}
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfReadonlyHook::executeHook(DtaScriptVariable& visibility,
+                             const std::string& sReadonlyFile)
+{
+  if (_readonlyHook != NULL) {
+    _readonlyHook(sReadonlyFile);
+  } else {
+    std::auto_ptr<ExprScriptFunction> pFunctionCall(
+      new ExprScriptFunction(this));
+    pFunctionCall->addParameter(new ExprScriptConstant(sReadonlyFile.c_str()));
+    launchExecution(visibility, *pFunctionCall);
+  }
+  return NO_INTERRUPTION;
+}
 }

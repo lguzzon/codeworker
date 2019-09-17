@@ -25,36 +25,44 @@ To contact the author: codeworker@free.fr
 #include "GrfCommand.h"
 
 namespace CodeWorker {
-	class ExprScriptVariable;
-	class ExprScriptExpression;
-	class ExprScriptScriptFile;
-	class DtaBNFScript;
+class ExprScriptVariable;
+class ExprScriptExpression;
+class ExprScriptScriptFile;
+class DtaBNFScript;
 
-	class GrfParseAsBNF : public GrfCommand {
-	private:
-		std::string _sCurrentDirectoryAtCompileTime;
-		ExprScriptExpression* _pBNFFileName;
-		ExprScriptVariable* _pClass;
-		ExprScriptExpression* _pFileName;
-		mutable DtaBNFScript* _pCachedScript;
-		mutable std::string _sCachedBNFFile;
+class GrfParseAsBNF : public GrfCommand
+{
+private:
+  std::string _sCurrentDirectoryAtCompileTime;
+  ExprScriptExpression* _pBNFFileName;
+  ExprScriptVariable* _pClass;
+  ExprScriptExpression* _pFileName;
+  mutable DtaBNFScript* _pCachedScript;
+  mutable std::string _sCachedBNFFile;
 
-	public:
-		GrfParseAsBNF();
-		virtual ~GrfParseAsBNF();
+public:
+  GrfParseAsBNF();
+  virtual ~GrfParseAsBNF();
 
-		virtual const char* getFunctionName() const { return "parseAsBNF"; }
+  virtual const char* getFunctionName() const { return "parseAsBNF"; }
 
-		inline void setBNFFileName(ExprScriptExpression* pBNFFileName) { _pBNFFileName = pBNFFileName; }
-		void setBNFFileName(ExprScriptScriptFile* pBNFFileName);
-		inline void setThis(ExprScriptVariable* pClass) { _pClass = pClass; }
-		inline void setInputFileName(ExprScriptExpression* pFileName) { _pFileName = pFileName; }
+  inline void setBNFFileName(ExprScriptExpression* pBNFFileName)
+  {
+    _pBNFFileName = pBNFFileName;
+  }
+  void setBNFFileName(ExprScriptScriptFile* pBNFFileName);
+  inline void setThis(ExprScriptVariable* pClass) { _pClass = pClass; }
+  inline void setInputFileName(ExprScriptExpression* pFileName)
+  {
+    _pFileName = pFileName;
+  }
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

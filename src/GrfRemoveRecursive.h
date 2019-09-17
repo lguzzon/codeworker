@@ -28,25 +28,36 @@ namespace CodeWorker {
 class ExprScriptVariable;
 class ExprScriptExpression;
 
-	class GrfRemoveRecursive : public GrfCommand {
-		private:
-			ExprScriptVariable* _pVariable;
-			ExprScriptExpression* _pAttribute;
+class GrfRemoveRecursive : public GrfCommand
+{
+private:
+  ExprScriptVariable* _pVariable;
+  ExprScriptExpression* _pAttribute;
 
-		public:
-			GrfRemoveRecursive() : _pVariable(NULL), _pAttribute(NULL) {}
-			virtual ~GrfRemoveRecursive();
+public:
+  GrfRemoveRecursive()
+    : _pVariable(NULL)
+    , _pAttribute(NULL)
+  {}
+  virtual ~GrfRemoveRecursive();
 
-			virtual const char* getFunctionName() const { return "removeRecursive"; }
+  virtual const char* getFunctionName() const { return "removeRecursive"; }
 
-			inline void setVariable(ExprScriptVariable* pVariable) { _pVariable = pVariable; }
-			inline void setAttribute(ExprScriptExpression* pAttribute) { _pAttribute = pAttribute; }
+  inline void setVariable(ExprScriptVariable* pVariable)
+  {
+    _pVariable = pVariable;
+  }
+  inline void setAttribute(ExprScriptExpression* pAttribute)
+  {
+    _pAttribute = pAttribute;
+  }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

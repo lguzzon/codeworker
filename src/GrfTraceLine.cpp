@@ -20,30 +20,35 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfTraceLine.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfTraceLine::~GrfTraceLine() {
-		delete _pLine;
-	}
+GrfTraceLine::~GrfTraceLine()
+{
+  delete _pLine;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfTraceLine::executeInternal(DtaScriptVariable& visibility) {
-		std::string sLine = _pLine->getValue(visibility);
-		return CGRuntime::traceLine(sLine);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfTraceLine::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sLine = _pLine->getValue(visibility);
+  return CGRuntime::traceLine(sLine);
+}
 
-	void GrfTraceLine::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::traceLine(";
-		_pLine->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfTraceLine::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::traceLine(";
+  _pLine->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

@@ -27,23 +27,30 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfSetTextMode : public GrfCommand {
-		private:
-			ExprScriptExpression* _pTextMode;
+class GrfSetTextMode : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pTextMode;
 
-		public:
-			GrfSetTextMode() : _pTextMode(NULL) {}
-			virtual ~GrfSetTextMode();
+public:
+  GrfSetTextMode()
+    : _pTextMode(NULL)
+  {}
+  virtual ~GrfSetTextMode();
 
-			virtual const char* getFunctionName() const { return "setTextMode"; }
+  virtual const char* getFunctionName() const { return "setTextMode"; }
 
-			inline void setTextMode(ExprScriptExpression* pTextMode) { _pTextMode = pTextMode; }
+  inline void setTextMode(ExprScriptExpression* pTextMode)
+  {
+    _pTextMode = pTextMode;
+  }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

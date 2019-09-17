@@ -20,93 +20,120 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "ExprScriptExpression.h"
+#include "ScpStream.h"
 #include <string>
 
 //##protect##"INCLUDE FILES"
-#include "UtlXMLStream.h"
 #include "DtaAttributeType.h"
+#include "UtlXMLStream.h"
 //##protect##"INCLUDE FILES"
 
 #include "GrfSaveProjectTypes.h"
 
 namespace CodeWorker {
-	GrfSaveProjectTypes::~GrfSaveProjectTypes() {
-		delete _pXMLFileName;
-	}
+GrfSaveProjectTypes::~GrfSaveProjectTypes()
+{
+  delete _pXMLFileName;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSaveProjectTypes::executeInternal(DtaScriptVariable& visibility) {
-		std::string sXMLFileName = _pXMLFileName->getValue(visibility);
-//##protect##"execute"
-//##protect##"execute"
-		return CGRuntime::saveProjectTypes(sXMLFileName);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSaveProjectTypes::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sXMLFileName = _pXMLFileName->getValue(visibility);
+  //##protect##"execute"
+  //##protect##"execute"
+  return CGRuntime::saveProjectTypes(sXMLFileName);
+}
 
 //##protect##"implementation"
-void GrfSaveProjectTypes::generateXMLFile(UtlXMLStream& myXMLFile, DtaAttributeType& myType, std::set<std::string>& listForAvoidingCycles) {
-	if (listForAvoidingCycles.find(myType.getName()) != listForAvoidingCycles.end()) return;
-	listForAvoidingCycles.insert(myType.getName());
-	myXMLFile.writeBeginningOfObject(myType.getName());
-	const std::map<std::string, DtaFollowingAttributeInfo*>& listOfAttributes = myType.getAttributes();
-	std::map<std::string, DtaFollowingAttributeInfo*>::const_iterator i;
-	for (i = listOfAttributes.begin(); i != listOfAttributes.end(); i++) if (i->second->isAttribute()) {
-		std::string sMode;
-		if (i->second->getNumberOfUse() == myType.getNumberOfUse()) sMode = "compulsory";
-		else {
-			char sNumber[64];
-			int iPercentOfUse = (100 * i->second->getNumberOfUse()) / myType.getNumberOfUse();
-			sprintf(sNumber, "optional[%d%%]", iPercentOfUse);
-			sMode = sNumber;
-		}
-		myXMLFile.writeAttribute(i->second->getAttributeType().getName(), sMode);
-	}
-	myXMLFile.writeEndOfAttributes();
-	for (i = listOfAttributes.begin(); i != listOfAttributes.end(); i++) if (!i->second->isAttribute()) {
-		generateXMLFile(myXMLFile, i->second->getAttributeType(), listForAvoidingCycles);
-	}
-	bool bElements = false;
-	const std::map<std::string, DtaFollowingAttributeInfo*>& listOfElements = myType.getAttributeElements();
-	for (i = listOfElements.begin(); i != listOfElements.end(); i++) if (i->second->isAttribute()) {
-		if (!bElements) {
-			myXMLFile.writeBeginningOfObject("__ARRAY_TYPE");
-			bElements = true;
-		}
-		std::string sMode;
-		if (i->second->getNumberOfUse() == myType.getNumberOfElementUse()) sMode = "compulsory";
-		else {
-			char sNumber[64];
-			int iPercentOfUse = (100 * i->second->getNumberOfUse()) / myType.getNumberOfElementUse();
-			sprintf(sNumber, "optional[%d%%]", iPercentOfUse);
-			sMode = sNumber;
-		}
-		myXMLFile.writeAttribute(i->second->getAttributeType().getName(), sMode);
-	}
-	if (bElements) myXMLFile.writeEndOfAttributes();
-	for (i = listOfElements.begin(); i != listOfElements.end(); i++) if (!i->second->isAttribute()) {
-		if (!bElements) {
-			myXMLFile.writeBeginningOfObject("__ARRAY_TYPE");
-			myXMLFile.writeEndOfAttributes();
-			bElements = true;
-		}
-		generateXMLFile(myXMLFile, i->second->getAttributeType(), listForAvoidingCycles);
-	}
-	if (bElements) myXMLFile.writeEndOfObject("__ARRAY_TYPE");
-	myXMLFile.writeEndOfObject(myType.getName());
-	listForAvoidingCycles.erase(myType.getName());
+void
+GrfSaveProjectTypes::generateXMLFile(
+  UtlXMLStream& myXMLFile,
+  DtaAttributeType& myType,
+  std::set<std::string>& listForAvoidingCycles)
+{
+  if (listForAvoidingCycles.find(myType.getName()) !=
+      listForAvoidingCycles.end())
+    return;
+  listForAvoidingCycles.insert(myType.getName());
+  myXMLFile.writeBeginningOfObject(myType.getName());
+  const std::map<std::string, DtaFollowingAttributeInfo*>& listOfAttributes =
+    myType.getAttributes();
+  std::map<std::string, DtaFollowingAttributeInfo*>::const_iterator i;
+  for (i = listOfAttributes.begin(); i != listOfAttributes.end(); i++)
+    if (i->second->isAttribute()) {
+      std::string sMode;
+      if (i->second->getNumberOfUse() == myType.getNumberOfUse())
+        sMode = "compulsory";
+      else {
+        char sNumber[64];
+        int iPercentOfUse =
+          (100 * i->second->getNumberOfUse()) / myType.getNumberOfUse();
+        sprintf(sNumber, "optional[%d%%]", iPercentOfUse);
+        sMode = sNumber;
+      }
+      myXMLFile.writeAttribute(i->second->getAttributeType().getName(), sMode);
+    }
+  myXMLFile.writeEndOfAttributes();
+  for (i = listOfAttributes.begin(); i != listOfAttributes.end(); i++)
+    if (!i->second->isAttribute()) {
+      generateXMLFile(
+        myXMLFile, i->second->getAttributeType(), listForAvoidingCycles);
+    }
+  bool bElements = false;
+  const std::map<std::string, DtaFollowingAttributeInfo*>& listOfElements =
+    myType.getAttributeElements();
+  for (i = listOfElements.begin(); i != listOfElements.end(); i++)
+    if (i->second->isAttribute()) {
+      if (!bElements) {
+        myXMLFile.writeBeginningOfObject("__ARRAY_TYPE");
+        bElements = true;
+      }
+      std::string sMode;
+      if (i->second->getNumberOfUse() == myType.getNumberOfElementUse())
+        sMode = "compulsory";
+      else {
+        char sNumber[64];
+        int iPercentOfUse =
+          (100 * i->second->getNumberOfUse()) / myType.getNumberOfElementUse();
+        sprintf(sNumber, "optional[%d%%]", iPercentOfUse);
+        sMode = sNumber;
+      }
+      myXMLFile.writeAttribute(i->second->getAttributeType().getName(), sMode);
+    }
+  if (bElements)
+    myXMLFile.writeEndOfAttributes();
+  for (i = listOfElements.begin(); i != listOfElements.end(); i++)
+    if (!i->second->isAttribute()) {
+      if (!bElements) {
+        myXMLFile.writeBeginningOfObject("__ARRAY_TYPE");
+        myXMLFile.writeEndOfAttributes();
+        bElements = true;
+      }
+      generateXMLFile(
+        myXMLFile, i->second->getAttributeType(), listForAvoidingCycles);
+    }
+  if (bElements)
+    myXMLFile.writeEndOfObject("__ARRAY_TYPE");
+  myXMLFile.writeEndOfObject(myType.getName());
+  listForAvoidingCycles.erase(myType.getName());
 }
 
 //##protect##"implementation"
 
-	void GrfSaveProjectTypes::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::saveProjectTypes(";
-		_pXMLFileName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSaveProjectTypes::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::saveProjectTypes(";
+  _pXMLFileName->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

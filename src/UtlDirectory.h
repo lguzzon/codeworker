@@ -22,71 +22,78 @@ To contact the author: codeworker@free.fr
 #ifndef _UtlDirectory_h_
 #define _UtlDirectory_h_
 
-#include <string>
 #include <list>
+#include <string>
 
 #pragma warning(disable : 4251)
 
 namespace CodeWorker {
-#	define CW_PATH_MAX	4096
+#define CW_PATH_MAX 4096
 
-	class UtlDirectory;
+class UtlDirectory;
 
-	class UtlFile {
-		private:
-			UtlDirectory* _pParent;
-			std::string _sFileName;
+class UtlFile
+{
+private:
+  UtlDirectory* _pParent;
+  std::string _sFileName;
 
-		public:
-			UtlFile(UtlDirectory& myParent, const std::string& sFileName);
-			UtlFile(const std::string& sFileName);
-			~UtlFile();
-			
-			inline const std::string& getFileName() const {return _sFileName;}
-			std::string getFileNameBody() const;
-			std::string getFileNameExtension() const;
-			inline UtlDirectory* getDirectory() const { return _pParent; }
+public:
+  UtlFile(UtlDirectory& myParent, const std::string& sFileName);
+  UtlFile(const std::string& sFileName);
+  ~UtlFile();
 
-			bool remove();
-	};
+  inline const std::string& getFileName() const { return _sFileName; }
+  std::string getFileNameBody() const;
+  std::string getFileNameExtension() const;
+  inline UtlDirectory* getDirectory() const { return _pParent; }
 
+  bool remove();
+};
 
-	class UtlDirectory {
-		private:
-			bool _bScanned;
-			UtlDirectory* _pParent;
-			std::string _sDirectoryName;
-			std::list<UtlFile*> _listOfFiles;
-			std::list<UtlDirectory*> _listOfDirectories;
+class UtlDirectory
+{
+private:
+  bool _bScanned;
+  UtlDirectory* _pParent;
+  std::string _sDirectoryName;
+  std::list<UtlFile*> _listOfFiles;
+  std::list<UtlDirectory*> _listOfDirectories;
 
-		public:
-			UtlDirectory();
-			UtlDirectory(UtlDirectory& myParent, const std::string& sDirectoryName);
-			UtlDirectory(const std::string& sDirectoryName);
-			~UtlDirectory();
+public:
+  UtlDirectory();
+  UtlDirectory(UtlDirectory& myParent, const std::string& sDirectoryName);
+  UtlDirectory(const std::string& sDirectoryName);
+  ~UtlDirectory();
 
-			inline const std::list<UtlDirectory*>& getDirectories() const {return _listOfDirectories;}
-			inline const std::list<UtlFile*>& getFiles() const {return _listOfFiles;}
-			inline const std::string& getDirectoryName() const {return _sDirectoryName;}
-			inline void setDirectoryName(const std::string& sDirectoryName) {_sDirectoryName = sDirectoryName;}
-       
-			UtlDirectory* getSubdirectory(const std::string& sDirectoryName) const;
+  inline const std::list<UtlDirectory*>& getDirectories() const
+  {
+    return _listOfDirectories;
+  }
+  inline const std::list<UtlFile*>& getFiles() const { return _listOfFiles; }
+  inline const std::string& getDirectoryName() const { return _sDirectoryName; }
+  inline void setDirectoryName(const std::string& sDirectoryName)
+  {
+    _sDirectoryName = sDirectoryName;
+  }
 
-			std::string getFullPath() const;
-			std::string getRelativePath() const;
+  UtlDirectory* getSubdirectory(const std::string& sDirectoryName) const;
 
-			bool createDirectory(const std::string& sDirectory);
-			
-			bool scan(const std::string& sExtendedPattern = "");
-			bool scanRecursively(const std::string& sPattern = "");
+  std::string getFullPath() const;
+  std::string getRelativePath() const;
 
-			bool remove();
-			
-			static std::string getTmpDirectory() ;
+  bool createDirectory(const std::string& sDirectory);
 
-		private:
-			bool matchPatternDirectory(const std::string& sPatternDirectory);
-	};
+  bool scan(const std::string& sExtendedPattern = "");
+  bool scanRecursively(const std::string& sPattern = "");
+
+  bool remove();
+
+  static std::string getTmpDirectory();
+
+private:
+  bool matchPatternDirectory(const std::string& sPatternDirectory);
+};
 }
 
 #endif

@@ -22,37 +22,58 @@ To contact the author: codeworker@free.fr
 #ifndef _GrfSwitch_h_
 #define _GrfSwitch_h_
 
-#include <string>
 #include <map>
+#include <string>
 
 #include "GrfBlock.h"
 
 namespace CodeWorker {
-	class ExprScriptVariable;
+class ExprScriptVariable;
 
-	class GrfSwitch : public GrfBlock {
-	private:
-		ExprScriptExpression* _pExpression;
-		std::map<std::string, int> _directionEqualList;
-		std::map<std::string, int> _directionStartList;
-		int _iDefault;
+class GrfSwitch : public GrfBlock
+{
+private:
+  ExprScriptExpression* _pExpression;
+  std::map<std::string, int> _directionEqualList;
+  std::map<std::string, int> _directionStartList;
+  int _iDefault;
 
-	public:
-		GrfSwitch(GrfBlock* pBlock) : GrfBlock(pBlock), _pExpression(NULL), _iDefault(-1) {}
-		virtual ~GrfSwitch();
+public:
+  GrfSwitch(GrfBlock* pBlock)
+    : GrfBlock(pBlock)
+    , _pExpression(NULL)
+    , _iDefault(-1)
+  {}
+  virtual ~GrfSwitch();
 
-		inline void setExpression(ExprScriptExpression* pExpression) { _pExpression = pExpression; }
-		inline bool equalString(const char* sText) { return (_directionEqualList.find(sText) != _directionEqualList.end()); }
-		inline void insertEqualString(const char* sText) { _directionEqualList[sText] = getNbCommands(); }
-		inline bool startString(const char* sText) { return (_directionStartList.find(sText) != _directionStartList.end()); }
-		inline void insertStartString(const char* sText) { _directionStartList[sText] = getNbCommands(); }
-		inline void insertDefault() { _iDefault = getNbCommands(); }
+  inline void setExpression(ExprScriptExpression* pExpression)
+  {
+    _pExpression = pExpression;
+  }
+  inline bool equalString(const char* sText)
+  {
+    return (_directionEqualList.find(sText) != _directionEqualList.end());
+  }
+  inline void insertEqualString(const char* sText)
+  {
+    _directionEqualList[sText] = getNbCommands();
+  }
+  inline bool startString(const char* sText)
+  {
+    return (_directionStartList.find(sText) != _directionStartList.end());
+  }
+  inline void insertStartString(const char* sText)
+  {
+    _directionStartList[sText] = getNbCommands();
+  }
+  inline void insertDefault() { _iDefault = getNbCommands(); }
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

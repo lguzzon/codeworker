@@ -27,25 +27,36 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfCopySmartDirectory : public GrfCommand {
-		private:
-			ExprScriptExpression* _pSourceDirectory;
-			ExprScriptExpression* _pDestinationPath;
+class GrfCopySmartDirectory : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pSourceDirectory;
+  ExprScriptExpression* _pDestinationPath;
 
-		public:
-			GrfCopySmartDirectory() : _pSourceDirectory(NULL), _pDestinationPath(NULL) {}
-			virtual ~GrfCopySmartDirectory();
+public:
+  GrfCopySmartDirectory()
+    : _pSourceDirectory(NULL)
+    , _pDestinationPath(NULL)
+  {}
+  virtual ~GrfCopySmartDirectory();
 
-			virtual const char* getFunctionName() const { return "copySmartDirectory"; }
+  virtual const char* getFunctionName() const { return "copySmartDirectory"; }
 
-			inline void setSourceDirectory(ExprScriptExpression* pSourceDirectory) { _pSourceDirectory = pSourceDirectory; }
-			inline void setDestinationPath(ExprScriptExpression* pDestinationPath) { _pDestinationPath = pDestinationPath; }
+  inline void setSourceDirectory(ExprScriptExpression* pSourceDirectory)
+  {
+    _pSourceDirectory = pSourceDirectory;
+  }
+  inline void setDestinationPath(ExprScriptExpression* pDestinationPath)
+  {
+    _pDestinationPath = pDestinationPath;
+  }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

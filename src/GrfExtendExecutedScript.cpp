@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfExtendExecutedScript.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfExtendExecutedScript::~GrfExtendExecutedScript() {
-		delete _pScriptContent;
-	}
+GrfExtendExecutedScript::~GrfExtendExecutedScript()
+{
+  delete _pScriptContent;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfExtendExecutedScript::executeInternal(DtaScriptVariable& visibility) {
-		std::string sScriptContent = _pScriptContent->getValue(visibility);
-		return CGRuntime::extendExecutedScript(sScriptContent);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfExtendExecutedScript::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sScriptContent = _pScriptContent->getValue(visibility);
+  return CGRuntime::extendExecutedScript(sScriptContent);
+}
 
-	void GrfExtendExecutedScript::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::extendExecutedScript(";
-		_pScriptContent->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfExtendExecutedScript::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::extendExecutedScript(";
+  _pScriptContent->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

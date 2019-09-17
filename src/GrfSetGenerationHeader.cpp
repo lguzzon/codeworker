@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfSetGenerationHeader.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfSetGenerationHeader::~GrfSetGenerationHeader() {
-		delete _pComment;
-	}
+GrfSetGenerationHeader::~GrfSetGenerationHeader()
+{
+  delete _pComment;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetGenerationHeader::executeInternal(DtaScriptVariable& visibility) {
-		std::string sComment = _pComment->getValue(visibility);
-		return CGRuntime::setGenerationHeader(sComment);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSetGenerationHeader::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sComment = _pComment->getValue(visibility);
+  return CGRuntime::setGenerationHeader(sComment);
+}
 
-	void GrfSetGenerationHeader::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setGenerationHeader(";
-		_pComment->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSetGenerationHeader::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::setGenerationHeader(";
+  _pComment->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

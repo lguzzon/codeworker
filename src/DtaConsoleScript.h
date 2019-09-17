@@ -25,28 +25,33 @@ To contact the author: codeworker@free.fr
 #include "DtaScript.h"
 
 namespace CodeWorker {
-	class DtaConsoleScript : public DtaScript {
-	private:
-		std::string _sCursor;
+class DtaConsoleScript : public DtaScript
+{
+private:
+  std::string _sCursor;
 
-	public:
-		DtaConsoleScript(GrfBlock* pParentBlock) : DtaScript(pParentBlock) {}
-		virtual ~DtaConsoleScript();
+public:
+  DtaConsoleScript(GrfBlock* pParentBlock)
+    : DtaScript(pParentBlock)
+  {}
+  virtual ~DtaConsoleScript();
 
-		virtual void traceEngine() const;
+  virtual void traceEngine() const;
 
-		virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& thisContext);
+  virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& thisContext);
 
-	protected:
-		virtual void beforeParsingABlock(ScpStream&, GrfBlock&);
-		virtual void afterParsingABlock(ScpStream&, GrfBlock&);
-		virtual bool betweenCommands(ScpStream& script, GrfBlock&);
-		virtual void handleNotAWordCommand(ScpStream& script, GrfBlock& block);
-		virtual void handleUnknownCommand(const std::string& sCommand, ScpStream& script, GrfBlock& block);
+protected:
+  virtual void beforeParsingABlock(ScpStream&, GrfBlock&);
+  virtual void afterParsingABlock(ScpStream&, GrfBlock&);
+  virtual bool betweenCommands(ScpStream& script, GrfBlock&);
+  virtual void handleNotAWordCommand(ScpStream& script, GrfBlock& block);
+  virtual void handleUnknownCommand(const std::string& sCommand,
+                                    ScpStream& script,
+                                    GrfBlock& block);
 
-	private:
-		void waitForCommand(ScpStream& stream);
-	};
+private:
+  void waitForCommand(ScpStream& stream);
+};
 }
 
 #endif

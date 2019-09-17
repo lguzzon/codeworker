@@ -26,21 +26,21 @@ To contact the author: codeworker@free.fr
 
 namespace CodeWorker {
 
-	class GrfTraceStack : public GrfCommand {
-		private:
+class GrfTraceStack : public GrfCommand
+{
+private:
+public:
+  GrfTraceStack() {}
+  virtual ~GrfTraceStack();
 
-		public:
-			GrfTraceStack() {}
-			virtual ~GrfTraceStack();
+  virtual const char* getFunctionName() const { return "traceStack"; }
 
-			virtual const char* getFunctionName() const { return "traceStack"; }
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

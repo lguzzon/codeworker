@@ -20,22 +20,41 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
+#include "BNFReadIdentifier.h"
 #include "CGRuntime.h"
 #include "DtaVisitor.h"
-#include "BNFReadIdentifier.h"
 
 namespace CodeWorker {
-	BNFReadIdentifier::BNFReadIdentifier(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue, bool bNoCase) : BNFReadToken(pBNFScript, pParent, bContinue, bNoCase) {}
-	BNFReadIdentifier::~BNFReadIdentifier() {}
+BNFReadIdentifier::BNFReadIdentifier(DtaBNFScript* pBNFScript,
+                                     GrfBlock* pParent,
+                                     bool bContinue,
+                                     bool bNoCase)
+  : BNFReadToken(pBNFScript, pParent, bContinue, bNoCase)
+{}
+BNFReadIdentifier::~BNFReadIdentifier() {}
 
-	void BNFReadIdentifier::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFReadIdentifier(*this, env);
-	}
+void
+BNFReadIdentifier::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+  visitor.visitBNFReadIdentifier(*this, env);
+}
 
-	const char* BNFReadIdentifier::getFunctionName() const { return "#readIdentifier"; }
-	std::string BNFReadIdentifier::executeExtraction(DtaScriptVariable&) const { return CGRuntime::readIdentifier(); }
-	std::string BNFReadIdentifier::compileCppExtraction() const { return "CGRuntime::readIdentifier()"; }
+const char*
+BNFReadIdentifier::getFunctionName() const
+{
+  return "#readIdentifier";
+}
+std::string
+BNFReadIdentifier::executeExtraction(DtaScriptVariable&) const
+{
+  return CGRuntime::readIdentifier();
+}
+std::string
+BNFReadIdentifier::compileCppExtraction() const
+{
+  return "CGRuntime::readIdentifier()";
+}
 }

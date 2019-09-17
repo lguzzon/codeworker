@@ -25,45 +25,86 @@ To contact the author: codeworker@free.fr
 #include "BNFStepper.h"
 
 namespace CodeWorker {
-	struct BNFMultiplicityBoundaries;
+struct BNFMultiplicityBoundaries;
 
-	class BNFFindToken : public BNFStepper {
-	private:
-			ExprScriptVariable* _pIntermediateVariableToAssign;
-			bool _bConcatIntermediateVariable;
-			std::vector<std::string> _listOfIntermediateConstants;
-			ExprScriptVariable* _pFinalVariableToAssign;
-			bool _bConcatFinalVariable;
-			std::vector<std::string> _listOfFinalConstants;
-			GrfBlock*	_pIntermediateSequence;
-			BNFMultiplicityBoundaries* _pBoundaries;
+class BNFFindToken : public BNFStepper
+{
+private:
+  ExprScriptVariable* _pIntermediateVariableToAssign;
+  bool _bConcatIntermediateVariable;
+  std::vector<std::string> _listOfIntermediateConstants;
+  ExprScriptVariable* _pFinalVariableToAssign;
+  bool _bConcatFinalVariable;
+  std::vector<std::string> _listOfFinalConstants;
+  GrfBlock* _pIntermediateSequence;
+  BNFMultiplicityBoundaries* _pBoundaries;
 
-	public:
-		BNFFindToken(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
-		virtual ~BNFFindToken();
+public:
+  BNFFindToken(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
+  virtual ~BNFFindToken();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		inline GrfBlock* getIntermediateSequence() const { return _pIntermediateSequence; }
-		GrfBlock& createIntermediateSequence();
-		void setIntermediateVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
-		inline void setIntermediateConstantsToMatch(const std::vector<std::string>& listOfConstants) { _listOfIntermediateConstants = listOfConstants; }
-		void setFinalVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
-		inline void setFinalConstantsToMatch(const std::vector<std::string>& listOfConstants) { _listOfFinalConstants = listOfConstants; }
-		inline bool hasIntermediateCode() const { return (_pIntermediateVariableToAssign != NULL) || !_listOfIntermediateConstants.empty() || (_pIntermediateSequence != NULL) || !_listOfFinalConstants.empty() || (_pFinalVariableToAssign != NULL);}
-		inline void setBoundaries(BNFMultiplicityBoundaries* pBoundaries) { _pBoundaries = pBoundaries; }
+  inline GrfBlock* getIntermediateSequence() const
+  {
+    return _pIntermediateSequence;
+  }
+  GrfBlock& createIntermediateSequence();
+  void setIntermediateVariableToAssign(ExprScriptVariable* pVariableToAssign,
+                                       bool bConcat,
+                                       BNFClause& theClause);
+  inline void setIntermediateConstantsToMatch(
+    const std::vector<std::string>& listOfConstants)
+  {
+    _listOfIntermediateConstants = listOfConstants;
+  }
+  void setFinalVariableToAssign(ExprScriptVariable* pVariableToAssign,
+                                bool bConcat,
+                                BNFClause& theClause);
+  inline void setFinalConstantsToMatch(
+    const std::vector<std::string>& listOfConstants)
+  {
+    _listOfFinalConstants = listOfConstants;
+  }
+  inline bool hasIntermediateCode() const
+  {
+    return (_pIntermediateVariableToAssign != NULL) ||
+           !_listOfIntermediateConstants.empty() ||
+           (_pIntermediateSequence != NULL) || !_listOfFinalConstants.empty() ||
+           (_pFinalVariableToAssign != NULL);
+  }
+  inline void setBoundaries(BNFMultiplicityBoundaries* pBoundaries)
+  {
+    _pBoundaries = pBoundaries;
+  }
 
-		virtual std::string toString() const;
+  virtual std::string toString() const;
 
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-		void compileCppResolveAssignment(CppCompilerEnvironment& theCompilerEnvironment, int iCursor, const std::vector<std::string>& listOfConstants, ExprScriptVariable* pVariableToAssign, bool bConcatVariable, const std::string& sBeginLocation, const std::string& sEndLocation) const;
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+  void compileCppResolveAssignment(
+    CppCompilerEnvironment& theCompilerEnvironment,
+    int iCursor,
+    const std::vector<std::string>& listOfConstants,
+    ExprScriptVariable* pVariableToAssign,
+    bool bConcatVariable,
+    const std::string& sBeginLocation,
+    const std::string& sEndLocation) const;
 
-	private:
-		SEQUENCE_INTERRUPTION_LIST resolveAssignment(DtaScriptVariable& visibility, const std::vector<std::string>& listOfConstants, ExprScriptVariable* pVariableToAssign, bool bConcatVariable, int iImplicitCopyPosition, int iLocation, int iBeginLocation, int iEndLocation);
-	};
+private:
+  SEQUENCE_INTERRUPTION_LIST resolveAssignment(
+    DtaScriptVariable& visibility,
+    const std::vector<std::string>& listOfConstants,
+    ExprScriptVariable* pVariableToAssign,
+    bool bConcatVariable,
+    int iImplicitCopyPosition,
+    int iLocation,
+    int iBeginLocation,
+    int iEndLocation);
+};
 }
 
 #endif

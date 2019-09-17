@@ -27,23 +27,27 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfCloseSocket : public GrfCommand {
-		private:
-			ExprScriptExpression* _pSocket;
+class GrfCloseSocket : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pSocket;
 
-		public:
-			GrfCloseSocket() : _pSocket(NULL) {}
-			virtual ~GrfCloseSocket();
+public:
+  GrfCloseSocket()
+    : _pSocket(NULL)
+  {}
+  virtual ~GrfCloseSocket();
 
-			virtual const char* getFunctionName() const { return "closeSocket"; }
+  virtual const char* getFunctionName() const { return "closeSocket"; }
 
-			inline void setSocket(ExprScriptExpression* pSocket) { _pSocket = pSocket; }
+  inline void setSocket(ExprScriptExpression* pSocket) { _pSocket = pSocket; }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

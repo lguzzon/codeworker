@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfSetWriteMode.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfSetWriteMode::~GrfSetWriteMode() {
-		delete _pMode;
-	}
+GrfSetWriteMode::~GrfSetWriteMode()
+{
+  delete _pMode;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetWriteMode::executeInternal(DtaScriptVariable& visibility) {
-		std::string sMode = _pMode->getValue(visibility);
-		return CGRuntime::setWriteMode(sMode);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSetWriteMode::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sMode = _pMode->getValue(visibility);
+  return CGRuntime::setWriteMode(sMode);
+}
 
-	void GrfSetWriteMode::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setWriteMode(";
-		_pMode->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSetWriteMode::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::setWriteMode(";
+  _pMode->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

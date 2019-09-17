@@ -20,67 +20,81 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
 #include "ScpStream.h"
+#include "UtlException.h"
 #include "UtlTrace.h"
 
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "DtaPatternScript.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "DtaPatternScript.h"
 #include "GrfJointPoint.h"
 
 namespace CodeWorker {
-	GrfJointPoint::~GrfJointPoint() {
-		delete _pContext;
-	}
+GrfJointPoint::~GrfJointPoint()
+{
+  delete _pContext;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfJointPoint::executeHeart(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
-		if (_bIterate) {
-			const std::list<DtaScriptVariable*>* pArray = visibility.getArray();
-			if (pArray != NULL) {
-				for (std::list<DtaScriptVariable*>::const_iterator i = pArray->begin(); i != pArray->end(); ++i) {
-					_pPatternScript->weaveBeforeIteration(*this, *(*i));
-					if (!_pPatternScript->weaveAroundIteration(*this, *(*i))) {
-						if (executeHeartIteration(*(*i)) == BREAK_INTERRUPTION) {
-							break;
-						}
-					}
-					_pPatternScript->weaveAfterIteration(*this, *(*i));
-				}
-			}
-		} else {
-			result = GrfBlock::executeInternal(visibility);
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfJointPoint::executeHeart(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
+  if (_bIterate) {
+    const std::list<DtaScriptVariable*>* pArray = visibility.getArray();
+    if (pArray != NULL) {
+      for (std::list<DtaScriptVariable*>::const_iterator i = pArray->begin();
+           i != pArray->end();
+           ++i) {
+        _pPatternScript->weaveBeforeIteration(*this, *(*i));
+        if (!_pPatternScript->weaveAroundIteration(*this, *(*i))) {
+          if (executeHeartIteration(*(*i)) == BREAK_INTERRUPTION) {
+            break;
+          }
+        }
+        _pPatternScript->weaveAfterIteration(*this, *(*i));
+      }
+    }
+  } else {
+    result = GrfBlock::executeInternal(visibility);
+  }
+  return result;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfJointPoint::executeHeartIteration(DtaScriptVariable& item) {
-		CGThisModifier stackedThis(&item);
-		return GrfBlock::executeInternal(item);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfJointPoint::executeHeartIteration(DtaScriptVariable& item)
+{
+  CGThisModifier stackedThis(&item);
+  return GrfBlock::executeInternal(item);
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfJointPoint::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
-		DtaScriptVariable* pContext = (_pContext == NULL) ? &visibility : visibility.getExistingVariable(*_pContext);
-		if (pContext != NULL) {
-			UTLTRACE_STACK_FUNCTION(_sParsingFilePtr, _sName.c_str(), _iFileLocation);
-			CGJointPointStack jpStack(this);
-			_pPatternScript->weaveBefore(*this, *pContext);
-			if (!_pPatternScript->weaveAround(*this, *pContext)) {
-				result = executeHeart(*pContext);
-			}
-			_pPatternScript->weaveAfter(*this, *pContext);
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfJointPoint::executeInternal(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
+  DtaScriptVariable* pContext = (_pContext == NULL)
+                                  ? &visibility
+                                  : visibility.getExistingVariable(*_pContext);
+  if (pContext != NULL) {
+    UTLTRACE_STACK_FUNCTION(_sParsingFilePtr, _sName.c_str(), _iFileLocation);
+    CGJointPointStack jpStack(this);
+    _pPatternScript->weaveBefore(*this, *pContext);
+    if (!_pPatternScript->weaveAround(*this, *pContext)) {
+      result = executeHeart(*pContext);
+    }
+    _pPatternScript->weaveAfter(*this, *pContext);
+  }
+  return result;
+}
 
-	void GrfJointPoint::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "<GrfJointPoint not handled yet!>";CW_BODY_ENDL;
-	}
+void
+GrfJointPoint::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "<GrfJointPoint not handled yet!>";
+  CW_BODY_ENDL;
+}
 }

@@ -20,47 +20,57 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ExprScriptExpression.h"
+#include "GrfIfThenElse.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
+#include "ExprScriptExpression.h"
 #include "GrfBlock.h"
 #include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "GrfIfThenElse.h"
 
 namespace CodeWorker {
-	GrfIfThenElse::~GrfIfThenElse() {
-		delete _pCondition;
-		delete _pThenBlock;
-		delete _pElseBlock;
-	}
+GrfIfThenElse::~GrfIfThenElse()
+{
+  delete _pCondition;
+  delete _pThenBlock;
+  delete _pElseBlock;
+}
 
-	void GrfIfThenElse::applyRecursively(APPLY_ON_COMMAND_FUNCTION apply) {
-		GrfCommand::applyRecursively(apply);
-		if (_pThenBlock != NULL) _pThenBlock->applyRecursively(apply);
-		if (_pElseBlock != NULL) _pElseBlock->applyRecursively(apply);
-	}
+void
+GrfIfThenElse::applyRecursively(APPLY_ON_COMMAND_FUNCTION apply)
+{
+  GrfCommand::applyRecursively(apply);
+  if (_pThenBlock != NULL)
+    _pThenBlock->applyRecursively(apply);
+  if (_pElseBlock != NULL)
+    _pElseBlock->applyRecursively(apply);
+}
 
+SEQUENCE_INTERRUPTION_LIST
+GrfIfThenElse::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sCondition = _pCondition->getValue(visibility);
+  SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
+  if (!sCondition.empty())
+    result = _pThenBlock->execute(visibility);
+  else if (_pElseBlock != NULL)
+    result = _pElseBlock->execute(visibility);
+  return result;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfIfThenElse::executeInternal(DtaScriptVariable& visibility) {
-		std::string sCondition = _pCondition->getValue(visibility);
-		SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
-		if (!sCondition.empty()) result = _pThenBlock->execute(visibility);
-		else if (_pElseBlock != NULL) result = _pElseBlock->execute(visibility);
-		return result;
-	}
-
-	void GrfIfThenElse::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "if (";
-		_pCondition->compileCppBoolean(theCompilerEnvironment, false);
-		CW_BODY_STREAM << ") ";
-		theCompilerEnvironment.carriageReturnAfterBlock(_pElseBlock == NULL);
-		_pThenBlock->compileCpp(theCompilerEnvironment);
-		if (_pElseBlock != NULL) {
-			CW_BODY_STREAM << " else ";
-			_pElseBlock->compileCpp(theCompilerEnvironment);
-		}
-	}
+void
+GrfIfThenElse::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "if (";
+  _pCondition->compileCppBoolean(theCompilerEnvironment, false);
+  CW_BODY_STREAM << ") ";
+  theCompilerEnvironment.carriageReturnAfterBlock(_pElseBlock == NULL);
+  _pThenBlock->compileCpp(theCompilerEnvironment);
+  if (_pElseBlock != NULL) {
+    CW_BODY_STREAM << " else ";
+    _pElseBlock->compileCpp(theCompilerEnvironment);
+  }
+}
 }

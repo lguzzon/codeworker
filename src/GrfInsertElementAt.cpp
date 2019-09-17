@@ -20,41 +20,47 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "DtaScriptVariable.h"
-#include "ExprScriptVariable.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfInsertElementAt.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "DtaScriptVariable.h"
+#include "ExprScriptExpression.h"
+#include "ExprScriptVariable.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfInsertElementAt::~GrfInsertElementAt() {
-		delete _pList;
-		delete _pKey;
-		delete _pPosition;
-	}
+GrfInsertElementAt::~GrfInsertElementAt()
+{
+  delete _pList;
+  delete _pKey;
+  delete _pPosition;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfInsertElementAt::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pList = visibility.getExistingVariable(*_pList);
-		std::string sKey = _pKey->getValue(visibility);
-		std::string sPosition = _pPosition->getValue(visibility);
-		int iPosition = atoi(sPosition.c_str());
-		return CGRuntime::insertElementAt(pList, sKey, iPosition);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfInsertElementAt::executeInternal(DtaScriptVariable& visibility)
+{
+  DtaScriptVariable* pList = visibility.getExistingVariable(*_pList);
+  std::string sKey = _pKey->getValue(visibility);
+  std::string sPosition = _pPosition->getValue(visibility);
+  int iPosition = atoi(sPosition.c_str());
+  return CGRuntime::insertElementAt(pList, sKey, iPosition);
+}
 
-	void GrfInsertElementAt::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::insertElementAt(";
-		_pList->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pKey->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pPosition->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfInsertElementAt::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::insertElementAt(";
+  _pList->compileCpp(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pKey->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pPosition->compileCppInt(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

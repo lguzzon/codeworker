@@ -22,78 +22,96 @@ To contact the author: codeworker@free.fr
 #ifndef _DynPackage_h_
 #define _DynPackage_h_
 
-#include <string>
 #include <map>
+#include <string>
 
 namespace CodeWorker {
-	class GrfBlock;
+class GrfBlock;
 
-	typedef void* LIBRARY_HANDLE;
+typedef void* LIBRARY_HANDLE;
 #ifndef _DynFunction_h_
-	typedef void* Parameter;
+typedef void* Parameter;
 #endif
 
-	class Interpreter;
-	class DynFunction;
-	class DtaScriptVariable;
+class Interpreter;
+class DynFunction;
+class DtaScriptVariable;
 
-	typedef const char* (*CALL0_FUNCTION)(Interpreter*);
-	typedef const char* (*CALL1_FUNCTION)(Interpreter*, Parameter);
-	typedef const char* (*CALL2_FUNCTION)(Interpreter*, Parameter, Parameter);
-	typedef const char* (*CALL3_FUNCTION)(Interpreter*, Parameter, Parameter, Parameter);
-	typedef const char* (*CALL4_FUNCTION)(Interpreter*, Parameter, Parameter, Parameter, Parameter);
-	typedef const char* (*CALLN_FUNCTION)(Interpreter*, Parameter*);
+typedef const char* (*CALL0_FUNCTION)(Interpreter*);
+typedef const char* (*CALL1_FUNCTION)(Interpreter*, Parameter);
+typedef const char* (*CALL2_FUNCTION)(Interpreter*, Parameter, Parameter);
+typedef const char* (*CALL3_FUNCTION)(Interpreter*,
+                                      Parameter,
+                                      Parameter,
+                                      Parameter);
+typedef const char* (
+  *CALL4_FUNCTION)(Interpreter*, Parameter, Parameter, Parameter, Parameter);
+typedef const char* (*CALLN_FUNCTION)(Interpreter*, Parameter*);
 
+class DynPackage
+{
+private:
+  static std::map<std::string, DynPackage*> _packages;
 
-	class DynPackage {
-	private:
-		static std::map<std::string, DynPackage*> _packages;
+  GrfBlock* _pBlock;
+  std::map<std::string, DynFunction*> _functions;
+  std::map<std::string, DtaScriptVariable*> _variables;
 
-		GrfBlock* _pBlock;
-		std::map<std::string, DynFunction*> _functions;
-		std::map<std::string, DtaScriptVariable*> _variables;
+protected:
+  std::string _sPackage;
+  LIBRARY_HANDLE _hHandle;
+  Interpreter* _pInterpreter;
 
-	protected:
-		std::string _sPackage;
-		LIBRARY_HANDLE _hHandle;
-		Interpreter* _pInterpreter;
+public:
+  ~DynPackage();
 
-	public:
-		~DynPackage();
+  inline const std::string& getName() const { return _sPackage; }
+  inline GrfBlock* getBlock() const { return _pBlock; }
 
-		inline const std::string& getName() const { return _sPackage; }
-		inline GrfBlock* getBlock() const { return _pBlock; }
+  static inline const std::map<std::string, DynPackage*>& allPackages()
+  {
+    return _packages;
+  }
+  inline const std::map<std::string, DynFunction*>& allFunctions() const
+  {
+    return _functions;
+  }
 
-		static inline const std::map<std::string, DynPackage*>& allPackages() { return _packages; }
-		inline const std::map<std::string, DynFunction*>& allFunctions() const { return _functions; }
+  DynFunction* getFunction(const std::string& sFunction) const;
+  bool addFunction(const char* tcName);
+  bool addFunction(const char* tcName, bool bIsP1Node);
+  bool addFunction(const char* tcName, bool bIsP1Node, bool bIsP2Node);
+  bool addFunction(const char* tcName,
+                   bool bIsP1Node,
+                   bool bIsP2Node,
+                   bool bIsP3Node);
+  bool addFunction(const char* tcName,
+                   bool bIsP1Node,
+                   bool bIsP2Node,
+                   bool bIsP3Node,
+                   bool bIsP4Node);
+  bool addFunction(const char* tcName, int iNbParams, int* tbNodeParams);
 
-		DynFunction* getFunction(const std::string& sFunction) const;
-		bool addFunction(const char* tcName);
-		bool addFunction(const char* tcName, bool bIsP1Node);
-		bool addFunction(const char* tcName, bool bIsP1Node, bool bIsP2Node);
-		bool addFunction(const char* tcName, bool bIsP1Node, bool bIsP2Node, bool bIsP3Node);
-		bool addFunction(const char* tcName, bool bIsP1Node, bool bIsP2Node, bool bIsP3Node, bool bIsP4Node);
-		bool addFunction(const char* tcName, int  iNbParams, int* tbNodeParams);
+  DtaScriptVariable* getVariable(const std::string& sVariable) const;
+  DtaScriptVariable* addVariable(const char* tcName);
 
-		DtaScriptVariable* getVariable(const std::string& sVariable) const;
-		DtaScriptVariable* addVariable(const char* tcName);
+  static DynPackage* addPackage(const std::string& sPackage, GrfBlock& block);
+  static DynPackage* getPackage(const std::string& sPackage);
 
-		static DynPackage* addPackage(const std::string& sPackage, GrfBlock& block);
-		static DynPackage* getPackage(const std::string& sPackage);
+  static LIBRARY_HANDLE loadLibrary(const std::string& sLibrary);
+  static LIBRARY_HANDLE loadPackage(const std::string& sLibrary);
+  static void freeLibrary(LIBRARY_HANDLE hHandle);
+  static void* findFunction(LIBRARY_HANDLE hHandle,
+                            const std::string& sFunction);
 
-		static LIBRARY_HANDLE loadLibrary(const std::string& sLibrary);
-		static LIBRARY_HANDLE loadPackage(const std::string& sLibrary);
-		static void freeLibrary(LIBRARY_HANDLE hHandle);
-		static void* findFunction(LIBRARY_HANDLE hHandle, const std::string& sFunction);
+protected:
+  DynPackage(const std::string& sPackage);
 
-	protected:
-		DynPackage(const std::string& sPackage);
-
-	private:
-		DynPackage(const std::string& sPackage, GrfBlock& block);
-		void initialize();
-		bool addFunction(DynFunction* pFunction);
-	};
+private:
+  DynPackage(const std::string& sPackage, GrfBlock& block);
+  void initialize();
+  bool addFunction(DynFunction* pFunction);
+};
 
 }
 

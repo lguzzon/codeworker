@@ -28,25 +28,33 @@ namespace CodeWorker {
 class ExprScriptVariable;
 class ExprScriptExpression;
 
-	class GrfRemoveElement : public GrfCommand {
-		private:
-			ExprScriptVariable* _pVariable;
-			ExprScriptExpression* _pKey;
+class GrfRemoveElement : public GrfCommand
+{
+private:
+  ExprScriptVariable* _pVariable;
+  ExprScriptExpression* _pKey;
 
-		public:
-			GrfRemoveElement() : _pVariable(NULL), _pKey(NULL) {}
-			virtual ~GrfRemoveElement();
+public:
+  GrfRemoveElement()
+    : _pVariable(NULL)
+    , _pKey(NULL)
+  {}
+  virtual ~GrfRemoveElement();
 
-			virtual const char* getFunctionName() const { return "removeElement"; }
+  virtual const char* getFunctionName() const { return "removeElement"; }
 
-			inline void setVariable(ExprScriptVariable* pVariable) { _pVariable = pVariable; }
-			inline void setKey(ExprScriptExpression* pKey) { _pKey = pKey; }
+  inline void setVariable(ExprScriptVariable* pVariable)
+  {
+    _pVariable = pVariable;
+  }
+  inline void setKey(ExprScriptExpression* pKey) { _pKey = pKey; }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

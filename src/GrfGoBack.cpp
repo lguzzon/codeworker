@@ -20,25 +20,28 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
 #include "GrfGoBack.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfGoBack::~GrfGoBack() {
-	}
+GrfGoBack::~GrfGoBack() {}
 
-	SEQUENCE_INTERRUPTION_LIST GrfGoBack::executeInternal(DtaScriptVariable& visibility) {
-		return CGRuntime::goBack();
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfGoBack::executeInternal(DtaScriptVariable& visibility)
+{
+  return CGRuntime::goBack();
+}
 
-	void GrfGoBack::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::goBack(";
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfGoBack::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::goBack(";
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

@@ -20,30 +20,35 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
 #include "GrfSleep.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfSleep::~GrfSleep() {
-		delete _pMillis;
-	}
+GrfSleep::~GrfSleep()
+{
+  delete _pMillis;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSleep::executeInternal(DtaScriptVariable& visibility) {
-		std::string sMillis = _pMillis->getValue(visibility);
-		int iMillis = atoi(sMillis.c_str());
-		return CGRuntime::sleep(iMillis);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSleep::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sMillis = _pMillis->getValue(visibility);
+  int iMillis = atoi(sMillis.c_str());
+  return CGRuntime::sleep(iMillis);
+}
 
-	void GrfSleep::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::sleep(";
-		_pMillis->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSleep::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::sleep(";
+  _pMillis->compileCppInt(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

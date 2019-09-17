@@ -25,15 +25,16 @@ To contact the author: codeworker@free.fr
 #include "DtaScript.h"
 
 namespace CodeWorker {
-	class DtaCommandScript : public DtaScript {
-	public:
-		inline DtaCommandScript() {}
-		virtual ~DtaCommandScript();
+class DtaCommandScript : public DtaScript
+{
+public:
+  inline DtaCommandScript() {}
+  virtual ~DtaCommandScript();
 
-		virtual void traceEngine() const;
+  virtual void traceEngine() const;
 
-		virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& thisContext);
-	};
+  virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& thisContext);
+};
 }
 
 #endif

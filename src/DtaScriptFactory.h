@@ -25,16 +25,24 @@ To contact the author: codeworker@free.fr
 #pragma warning(disable : 4786)
 
 namespace CodeWorker {
-	class GrfBlock;
-	class DtaScript;
+class GrfBlock;
+class DtaScript;
 
-	class DtaScriptFactory {
-	public:
-		enum SCRIPT_TYPE {BNF_SCRIPT, FREE_SCRIPT, COMMON_SCRIPT, PATTERN_SCRIPT, TRANSLATE_SCRIPT};
+class DtaScriptFactory
+{
+public:
+  enum SCRIPT_TYPE
+  {
+    BNF_SCRIPT,
+    FREE_SCRIPT,
+    COMMON_SCRIPT,
+    PATTERN_SCRIPT,
+    TRANSLATE_SCRIPT
+  };
 
-	public:
-		static DtaScript* create(SCRIPT_TYPE eScriptType, GrfBlock& block);
-	};
+public:
+  static DtaScript* create(SCRIPT_TYPE eScriptType, GrfBlock& block);
+};
 }
 
 #endif

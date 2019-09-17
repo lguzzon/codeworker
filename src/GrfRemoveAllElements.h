@@ -27,23 +27,30 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptVariable;
 
-	class GrfRemoveAllElements : public GrfCommand {
-		private:
-			ExprScriptVariable* _pVariable;
+class GrfRemoveAllElements : public GrfCommand
+{
+private:
+  ExprScriptVariable* _pVariable;
 
-		public:
-			GrfRemoveAllElements() : _pVariable(NULL) {}
-			virtual ~GrfRemoveAllElements();
+public:
+  GrfRemoveAllElements()
+    : _pVariable(NULL)
+  {}
+  virtual ~GrfRemoveAllElements();
 
-			virtual const char* getFunctionName() const { return "removeAllElements"; }
+  virtual const char* getFunctionName() const { return "removeAllElements"; }
 
-			inline void setVariable(ExprScriptVariable* pVariable) { _pVariable = pVariable; }
+  inline void setVariable(ExprScriptVariable* pVariable)
+  {
+    _pVariable = pVariable;
+  }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

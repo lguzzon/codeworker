@@ -20,48 +20,56 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
 #include "ScpStream.h"
+#include "UtlException.h"
 
-#include "DtaScriptVariable.h"
-#include "ExprScriptVariable.h"
 #include "CGExternalHandling.h"
 #include "CppCompilerEnvironment.h"
+#include "DtaScriptVariable.h"
+#include "ExprScriptVariable.h"
 #include "GrfQuiet.h"
 
 namespace CodeWorker {
-	GrfQuiet::~GrfQuiet() {
-		delete _pVariable;
-	}
+GrfQuiet::~GrfQuiet()
+{
+  delete _pVariable;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfQuiet::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		CGQuietOutput quiet;
-		result = GrfBlock::executeInternal(visibility);
-		DtaScriptVariable* pVariable = visibility.getExistingVariable(*_pVariable);
-		if (pVariable == NULL) throw UtlException("runtime error: variable '" + _pVariable->toString() + "' should have been declared before using it in the 'quiet' statement modifier");
-		pVariable->setValue(quiet.getOutput().c_str());
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfQuiet::executeInternal(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result;
+  CGQuietOutput quiet;
+  result = GrfBlock::executeInternal(visibility);
+  DtaScriptVariable* pVariable = visibility.getExistingVariable(*_pVariable);
+  if (pVariable == NULL)
+    throw UtlException("runtime error: variable '" + _pVariable->toString() +
+                       "' should have been declared before using it in the "
+                       "'quiet' statement modifier");
+  pVariable->setValue(quiet.getOutput().c_str());
+  return result;
+}
 
-	void GrfQuiet::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "{";
-		CW_BODY_ENDL;
-		theCompilerEnvironment.incrementIndentation();
-		CW_BODY_INDENT << "CGQuietOutput quiet;";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT;
-		theCompilerEnvironment.bracketsToNextBlock(true);
-		GrfBlock::compileCpp(theCompilerEnvironment);
-		CW_BODY_INDENT;
-		_pVariable->compileCppForSet(theCompilerEnvironment);
-		CW_BODY_STREAM << ".setValue(quiet.getOutput());";
-		CW_BODY_ENDL;
-		theCompilerEnvironment.decrementIndentation();
-		CW_BODY_INDENT << "}";
-		CW_BODY_ENDL;
-	}
+void
+GrfQuiet::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "{";
+  CW_BODY_ENDL;
+  theCompilerEnvironment.incrementIndentation();
+  CW_BODY_INDENT << "CGQuietOutput quiet;";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT;
+  theCompilerEnvironment.bracketsToNextBlock(true);
+  GrfBlock::compileCpp(theCompilerEnvironment);
+  CW_BODY_INDENT;
+  _pVariable->compileCppForSet(theCompilerEnvironment);
+  CW_BODY_STREAM << ".setValue(quiet.getOutput());";
+  CW_BODY_ENDL;
+  theCompilerEnvironment.decrementIndentation();
+  CW_BODY_INDENT << "}";
+  CW_BODY_ENDL;
+}
 }

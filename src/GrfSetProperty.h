@@ -27,25 +27,30 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfSetProperty : public GrfCommand {
-		private:
-			ExprScriptExpression* _pDefine;
-			ExprScriptExpression* _pValue;
+class GrfSetProperty : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pDefine;
+  ExprScriptExpression* _pValue;
 
-		public:
-			GrfSetProperty() : _pDefine(NULL), _pValue(NULL) {}
-			virtual ~GrfSetProperty();
+public:
+  GrfSetProperty()
+    : _pDefine(NULL)
+    , _pValue(NULL)
+  {}
+  virtual ~GrfSetProperty();
 
-			virtual const char* getFunctionName() const { return "setProperty"; }
+  virtual const char* getFunctionName() const { return "setProperty"; }
 
-			inline void setDefine(ExprScriptExpression* pDefine) { _pDefine = pDefine; }
-			inline void setValue(ExprScriptExpression* pValue) { _pValue = pValue; }
+  inline void setDefine(ExprScriptExpression* pDefine) { _pDefine = pDefine; }
+  inline void setValue(ExprScriptExpression* pValue) { _pValue = pValue; }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

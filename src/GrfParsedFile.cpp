@@ -20,41 +20,46 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
 #include "ScpStream.h"
+#include "UtlException.h"
 
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
 #include "GrfParsedFile.h"
 
 namespace CodeWorker {
-	GrfParsedFile::~GrfParsedFile() {
-		delete _pInputFile;
-	}
+GrfParsedFile::~GrfParsedFile()
+{
+  delete _pInputFile;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfParsedFile::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
-		std::string sFile = _pInputFile->getValue(visibility);
-		CGRuntimeInputFile inputFile(sFile);
-		try {
-			result = GrfBlock::executeInternal(visibility);
-		} catch(UtlException& e) {
-			throw UtlException(e.getTraceStack(), inputFile.onCatchedException(e));
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfParsedFile::executeInternal(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
+  std::string sFile = _pInputFile->getValue(visibility);
+  CGRuntimeInputFile inputFile(sFile);
+  try {
+    result = GrfBlock::executeInternal(visibility);
+  } catch (UtlException& e) {
+    throw UtlException(e.getTraceStack(), inputFile.onCatchedException(e));
+  }
+  return result;
+}
 
-	void GrfParsedFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "{";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "\t<parsed_file() not implemented yet>";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "}";
-		CW_BODY_ENDL;
-	}
+void
+GrfParsedFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "{";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "\t<parsed_file() not implemented yet>";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "}";
+  CW_BODY_ENDL;
+}
 }

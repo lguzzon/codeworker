@@ -27,23 +27,30 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfSetGenerationHeader : public GrfCommand {
-		private:
-			ExprScriptExpression* _pComment;
+class GrfSetGenerationHeader : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pComment;
 
-		public:
-			GrfSetGenerationHeader() : _pComment(NULL) {}
-			virtual ~GrfSetGenerationHeader();
+public:
+  GrfSetGenerationHeader()
+    : _pComment(NULL)
+  {}
+  virtual ~GrfSetGenerationHeader();
 
-			virtual const char* getFunctionName() const { return "setGenerationHeader"; }
+  virtual const char* getFunctionName() const { return "setGenerationHeader"; }
 
-			inline void setComment(ExprScriptExpression* pComment) { _pComment = pComment; }
+  inline void setComment(ExprScriptExpression* pComment)
+  {
+    _pComment = pComment;
+  }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

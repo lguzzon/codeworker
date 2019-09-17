@@ -20,54 +20,76 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ScpStream.h"
+#include "UtlException.h"
 
-#include "DtaScriptVariable.h"
-#include "ExprScriptVariable.h"
-#include "DtaBNFScript.h"
 #include "BNFClause.h"
-#include "DtaVisitor.h"
 #include "BNFEndOfFile.h"
+#include "DtaBNFScript.h"
+#include "DtaScriptVariable.h"
+#include "DtaVisitor.h"
+#include "ExprScriptVariable.h"
 
 namespace CodeWorker {
-	BNFEndOfFile::BNFEndOfFile(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue) : _pBNFScript(pBNFScript), GrfCommand(pParent), _bContinue(bContinue) {}
+BNFEndOfFile::BNFEndOfFile(DtaBNFScript* pBNFScript,
+                           GrfBlock* pParent,
+                           bool bContinue)
+  : _pBNFScript(pBNFScript)
+  , GrfCommand(pParent)
+  , _bContinue(bContinue)
+{}
 
-	BNFEndOfFile::~BNFEndOfFile() {
-	}
+BNFEndOfFile::~BNFEndOfFile() {}
 
-	void BNFEndOfFile::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFEndOfFile(*this, env);
-	}
+void
+BNFEndOfFile::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+  visitor.visitBNFEndOfFile(*this, env);
+}
 
-	bool BNFEndOfFile::isABNFCommand() const { return true; }
+bool
+BNFEndOfFile::isABNFCommand() const
+{
+  return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFEndOfFile::executeInternal(DtaScriptVariable& visibility) {
-		int iLocation = CGRuntime::getInputLocation();
-		int iImplicitCopyPosition = _pBNFScript->skipEmptyChars(visibility);
-		if (!CGRuntime::readChar().empty()) {
-			BNF_SYMBOL_HAS_FAILED
-		}
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+BNFEndOfFile::executeInternal(DtaScriptVariable& visibility)
+{
+  int iLocation = CGRuntime::getInputLocation();
+  int iImplicitCopyPosition = _pBNFScript->skipEmptyChars(visibility);
+  if (!CGRuntime::readChar().empty()) {
+    BNF_SYMBOL_HAS_FAILED
+  }
+  return NO_INTERRUPTION;
+}
 
-	void BNFEndOfFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CPP_COMPILER_BNF_SYMBOL_BEGIN;
-		CW_BODY_INDENT << "_compilerClauseSuccess = (CGRuntime::readCharAsInt() < 0);";CW_BODY_ENDL;
-		CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";CW_BODY_ENDL;
-		CPP_COMPILER_BNF_SYMBOL_HAS_FAILED;
-		CW_BODY_INDENT << "}";CW_BODY_ENDL;
-	}
+void
+BNFEndOfFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CPP_COMPILER_BNF_SYMBOL_BEGIN;
+  CW_BODY_INDENT
+    << "_compilerClauseSuccess = (CGRuntime::readCharAsInt() < 0);";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";
+  CW_BODY_ENDL;
+  CPP_COMPILER_BNF_SYMBOL_HAS_FAILED;
+  CW_BODY_INDENT << "}";
+  CW_BODY_ENDL;
+}
 
-	std::string BNFEndOfFile::toString() const {
-		std::string sText;
-		if (_bContinue) sText = "#continue ";
-		sText += "#empty";
-		return sText;
-	}
+std::string
+BNFEndOfFile::toString() const
+{
+  std::string sText;
+  if (_bContinue)
+    sText = "#continue ";
+  sText += "#empty";
+  return sText;
+}
 }

@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
+#include "GrfRemoveVariable.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "GrfRemoveVariable.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfRemoveVariable::~GrfRemoveVariable() {
-		delete _pNode;
-	}
+GrfRemoveVariable::~GrfRemoveVariable()
+{
+  delete _pNode;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfRemoveVariable::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pNode = visibility.getExistingVariable(*_pNode);
-		return CGRuntime::removeVariable(pNode);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfRemoveVariable::executeInternal(DtaScriptVariable& visibility)
+{
+  DtaScriptVariable* pNode = visibility.getExistingVariable(*_pNode);
+  return CGRuntime::removeVariable(pNode);
+}
 
-	void GrfRemoveVariable::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::removeVariable(";
-		_pNode->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfRemoveVariable::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::removeVariable(";
+  _pNode->compileCpp(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

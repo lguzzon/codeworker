@@ -20,56 +20,70 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
+#include "GrfGlobalVariable.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaProject.h"
 #include "ExprScriptVariable.h"
 #include "GrfBlock.h"
 #include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "GrfGlobalVariable.h"
+#include "UtlException.h"
 
 namespace CodeWorker {
-	GrfGlobalVariable::~GrfGlobalVariable() {
-		if (_pValue != NULL) delete _pValue;
-	}
+GrfGlobalVariable::~GrfGlobalVariable()
+{
+  if (_pValue != NULL)
+    delete _pValue;
+}
 
-	void GrfGlobalVariable::setVariable(const std::string& sVariable, EXPRESSION_TYPE varType) {
-		_sVariable = sVariable;
-		DtaProject::getInstance().setGlobalVariableType(sVariable, varType);
-	}
+void
+GrfGlobalVariable::setVariable(const std::string& sVariable,
+                               EXPRESSION_TYPE varType)
+{
+  _sVariable = sVariable;
+  DtaProject::getInstance().setGlobalVariableType(sVariable, varType);
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfGlobalVariable::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pGlobalVariable = DtaProject::getInstance().setGlobalVariable(_sVariable);
-		pGlobalVariable->clearContent();
-		if (_pValue != NULL) {
-			ExprScriptConstantTree* pConstantTree = dynamic_cast<ExprScriptConstantTree*>(_pValue);
-			if (pConstantTree != NULL) {
-				pConstantTree->setTree(visibility, *pGlobalVariable);
-			} else {
-				std::string sValue = _pValue->getValue(visibility);
-				pGlobalVariable->setValue(sValue.c_str());
-			}
-		}
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfGlobalVariable::executeInternal(DtaScriptVariable& visibility)
+{
+  DtaScriptVariable* pGlobalVariable =
+    DtaProject::getInstance().setGlobalVariable(_sVariable);
+  pGlobalVariable->clearContent();
+  if (_pValue != NULL) {
+    ExprScriptConstantTree* pConstantTree =
+      dynamic_cast<ExprScriptConstantTree*>(_pValue);
+    if (pConstantTree != NULL) {
+      pConstantTree->setTree(visibility, *pGlobalVariable);
+    } else {
+      std::string sValue = _pValue->getValue(visibility);
+      pGlobalVariable->setValue(sValue.c_str());
+    }
+  }
+  return NO_INTERRUPTION;
+}
 
-	void GrfGlobalVariable::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		theCompilerEnvironment.addGlobalVariable(_sVariable);
-		CW_BODY_INDENT << _sVariable << ".clearNode();";CW_BODY_ENDL;
-		if (_pValue != NULL) {
-			ExprScriptConstantTree* pConstantTree = dynamic_cast<ExprScriptConstantTree*>(_pValue);
-			if (pConstantTree != NULL) {
-				pConstantTree->compileCppInit(theCompilerEnvironment, _sVariable);
-			} else {
-				// a classical value type
-				CW_BODY_INDENT << _sVariable << ".setValue(";
-				_pValue->compileCpp(theCompilerEnvironment);
-				CW_BODY_STREAM << ");";
-				CW_BODY_ENDL;
-			}
-		}
-	}
+void
+GrfGlobalVariable::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  theCompilerEnvironment.addGlobalVariable(_sVariable);
+  CW_BODY_INDENT << _sVariable << ".clearNode();";
+  CW_BODY_ENDL;
+  if (_pValue != NULL) {
+    ExprScriptConstantTree* pConstantTree =
+      dynamic_cast<ExprScriptConstantTree*>(_pValue);
+    if (pConstantTree != NULL) {
+      pConstantTree->compileCppInit(theCompilerEnvironment, _sVariable);
+    } else {
+      // a classical value type
+      CW_BODY_INDENT << _sVariable << ".setValue(";
+      _pValue->compileCpp(theCompilerEnvironment);
+      CW_BODY_STREAM << ");";
+      CW_BODY_ENDL;
+    }
+  }
+}
 }

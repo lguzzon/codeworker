@@ -20,30 +20,36 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
+#include "GrfClearVariable.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "GrfClearVariable.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfClearVariable::~GrfClearVariable() {
-		delete _pNode;
-	}
+GrfClearVariable::~GrfClearVariable()
+{
+  delete _pNode;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfClearVariable::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pNode = visibility.getExistingVariable(*_pNode);
-		return CGRuntime::clearVariable(pNode);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfClearVariable::executeInternal(DtaScriptVariable& visibility)
+{
+  DtaScriptVariable* pNode = visibility.getExistingVariable(*_pNode);
+  return CGRuntime::clearVariable(pNode);
+}
 
-	void GrfClearVariable::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::clearVariable(";
-		_pNode->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfClearVariable::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::clearVariable(";
+  _pNode->compileCpp(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

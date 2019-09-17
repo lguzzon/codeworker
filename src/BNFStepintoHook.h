@@ -25,23 +25,26 @@ To contact the author: codeworker@free.fr
 #include "GrfFunction.h"
 
 namespace CodeWorker {
-	class DtaBNFScript;
+class DtaBNFScript;
 
-	class BNFStepintoHook : public GrfFunction {
-	private:
-		DtaBNFScript* _pBNFScript;
+class BNFStepintoHook : public GrfFunction
+{
+private:
+  DtaBNFScript* _pBNFScript;
 
-	public:
-		BNFStepintoHook(DtaBNFScript* pBNFScript, GrfBlock* pParent);
-		virtual ~BNFStepintoHook();
+public:
+  BNFStepintoHook(DtaBNFScript* pBNFScript, GrfBlock* pParent);
+  virtual ~BNFStepintoHook();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		bool setClauseSignature(const char* sSignature);
-		bool setParameters(const char* sParameters);
+  bool setClauseSignature(const char* sSignature);
+  bool setParameters(const char* sParameters);
 
-		SEQUENCE_INTERRUPTION_LIST executeHook(DtaScriptVariable& visibility, const std::string& sSignature, DtaScriptVariable& parameters);
-	};
+  SEQUENCE_INTERRUPTION_LIST executeHook(DtaScriptVariable& visibility,
+                                         const std::string& sSignature,
+                                         DtaScriptVariable& parameters);
+};
 }
 
 #endif

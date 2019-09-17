@@ -20,24 +20,27 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
 #include "GrfTraceStack.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfTraceStack::~GrfTraceStack() {
-	}
+GrfTraceStack::~GrfTraceStack() {}
 
-	SEQUENCE_INTERRUPTION_LIST GrfTraceStack::executeInternal(DtaScriptVariable& visibility) {
-		return CGRuntime::traceStack(visibility);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfTraceStack::executeInternal(DtaScriptVariable& visibility)
+{
+  return CGRuntime::traceStack(visibility);
+}
 
-	void GrfTraceStack::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "// procedure 'traceStack' cannot be translated to C++";
-		CW_BODY_ENDL;
+void
+GrfTraceStack::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "// procedure 'traceStack' cannot be translated to C++";
+  CW_BODY_ENDL;
 }
 }

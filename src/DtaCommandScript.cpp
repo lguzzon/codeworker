@@ -20,24 +20,27 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "DtaProject.h"
-#include "CGRuntime.h"
 #include "DtaCommandScript.h"
+#include "CGRuntime.h"
+#include "DtaProject.h"
 
 namespace CodeWorker {
-	DtaCommandScript::~DtaCommandScript() {
-	}
+DtaCommandScript::~DtaCommandScript() {}
 
-	void DtaCommandScript::traceEngine() const {
-		CGRuntime::traceLine("Command script:");
-		traceInternalEngine();
-	}
+void
+DtaCommandScript::traceEngine() const
+{
+  CGRuntime::traceLine("Command script:");
+  traceInternalEngine();
+}
 
-	SEQUENCE_INTERRUPTION_LIST DtaCommandScript::execute(DtaScriptVariable& thisContext) {
-		DtaProject::getInstance().prepareExecution();
-		return DtaScript::execute(thisContext);
-	}
+SEQUENCE_INTERRUPTION_LIST
+DtaCommandScript::execute(DtaScriptVariable& thisContext)
+{
+  DtaProject::getInstance().prepareExecution();
+  return DtaScript::execute(thisContext);
+}
 }

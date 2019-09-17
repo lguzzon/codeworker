@@ -20,51 +20,70 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ScpStream.h"
+#include "UtlException.h"
 
-#include "DtaScriptVariable.h"
-#include "ExprScriptVariable.h"
-#include "DtaBNFScript.h"
 #include "BNFClause.h"
-#include "DtaVisitor.h"
 #include "BNFForeach.h"
+#include "DtaBNFScript.h"
+#include "DtaScriptVariable.h"
+#include "DtaVisitor.h"
+#include "ExprScriptVariable.h"
 
 namespace CodeWorker {
-	BNFForeach::BNFForeach(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue) : _pBNFScript(pBNFScript), GrfForeach(pParent), _bContinue(bContinue) {}
+BNFForeach::BNFForeach(DtaBNFScript* pBNFScript,
+                       GrfBlock* pParent,
+                       bool bContinue)
+  : _pBNFScript(pBNFScript)
+  , GrfForeach(pParent)
+  , _bContinue(bContinue)
+{}
 
-	BNFForeach::~BNFForeach() {
-	}
+BNFForeach::~BNFForeach() {}
 
-	void BNFForeach::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFForeach(*this, env);
-	}
+void
+BNFForeach::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+  visitor.visitBNFForeach(*this, env);
+}
 
-	bool BNFForeach::isABNFCommand() const { return true; }
+bool
+BNFForeach::isABNFCommand() const
+{
+  return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFForeach::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = GrfForeach::executeInternal(visibility);
-		if (result != NO_INTERRUPTION) {
-			if (_bContinue) CGRuntime::throwBNFExecutionError(toString());
-			result = BREAK_INTERRUPTION;
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+BNFForeach::executeInternal(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result = GrfForeach::executeInternal(visibility);
+  if (result != NO_INTERRUPTION) {
+    if (_bContinue)
+      CGRuntime::throwBNFExecutionError(toString());
+    result = BREAK_INTERRUPTION;
+  }
+  return result;
+}
 
-	void BNFForeach::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "// " << toString();
-		CW_BODY_ENDL;
-		// TO DO!
-	}
+void
+BNFForeach::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "// " << toString();
+  CW_BODY_ENDL;
+  // TO DO!
+}
 
-	std::string BNFForeach::toString() const {
-		std::string sText = "#foreach()";
-		if (_bContinue) sText = "#continue " + sText;
-		return sText;
-	}
+std::string
+BNFForeach::toString() const
+{
+  std::string sText = "#foreach()";
+  if (_bContinue)
+    sText = "#continue " + sText;
+  return sText;
+}
 }

@@ -25,38 +25,49 @@ To contact the author: codeworker@free.fr
 #include "GrfBlock.h"
 
 namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptVariable;
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptVariable;
 
-	class BNFReadPythonString : public GrfCommand {
-	private:
-		DtaBNFScript* _pBNFScript;
-		ExprScriptVariable* _pVariableToAssign;
-		bool _bConcatVariable;
-		std::vector<std::string> _listOfConstants;
-		int _iClauseReturnType;
-		bool _bContinue;
-		bool _bNoCase;
+class BNFReadPythonString : public GrfCommand
+{
+private:
+  DtaBNFScript* _pBNFScript;
+  ExprScriptVariable* _pVariableToAssign;
+  bool _bConcatVariable;
+  std::vector<std::string> _listOfConstants;
+  int _iClauseReturnType;
+  bool _bContinue;
+  bool _bNoCase;
 
-	public:
-		BNFReadPythonString(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue, bool bNoCase);
-		virtual ~BNFReadPythonString();
+public:
+  BNFReadPythonString(DtaBNFScript* pBNFScript,
+                      GrfBlock* pParent,
+                      bool bContinue,
+                      bool bNoCase);
+  virtual ~BNFReadPythonString();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+  virtual bool isABNFCommand() const;
 
-		void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
-		inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants) { _listOfConstants = listOfConstants; }
+  void setVariableToAssign(ExprScriptVariable* pVariableToAssign,
+                           bool bConcat,
+                           BNFClause& theClause);
+  inline void setConstantsToMatch(
+    const std::vector<std::string>& listOfConstants)
+  {
+    _listOfConstants = listOfConstants;
+  }
 
-		virtual std::string toString() const;
+  virtual std::string toString() const;
 
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

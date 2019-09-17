@@ -25,29 +25,33 @@ To contact the author: codeworker@free.fr
 #include "GrfBlock.h"
 
 namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFStepper;
+class DtaBNFScript;
+class BNFStepper;
 
-	class BNFNextStep : public GrfCommand {
-	private:
-		DtaBNFScript* _pBNFScript;
-		BNFStepper* _pStepper;
+class BNFNextStep : public GrfCommand
+{
+private:
+  DtaBNFScript* _pBNFScript;
+  BNFStepper* _pStepper;
 
-	public:
-		BNFNextStep(DtaBNFScript* pBNFScript, GrfBlock* pParent, BNFStepper* pStepperRE);
-		virtual ~BNFNextStep();
+public:
+  BNFNextStep(DtaBNFScript* pBNFScript,
+              GrfBlock* pParent,
+              BNFStepper* pStepperRE);
+  virtual ~BNFNextStep();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+  virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+  virtual bool isABNFCommand() const;
 
-		virtual std::string toString() const;
+  virtual std::string toString() const;
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

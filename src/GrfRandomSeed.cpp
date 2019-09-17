@@ -20,30 +20,35 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
 #include "GrfRandomSeed.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
 
 namespace CodeWorker {
-	GrfRandomSeed::~GrfRandomSeed() {
-		delete _pSeed;
-	}
+GrfRandomSeed::~GrfRandomSeed()
+{
+  delete _pSeed;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfRandomSeed::executeInternal(DtaScriptVariable& visibility) {
-		std::string sSeed = _pSeed->getValue(visibility);
-		int iSeed = atoi(sSeed.c_str());
-		return CGRuntime::randomSeed(iSeed);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfRandomSeed::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sSeed = _pSeed->getValue(visibility);
+  int iSeed = atoi(sSeed.c_str());
+  return CGRuntime::randomSeed(iSeed);
+}
 
-	void GrfRandomSeed::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::randomSeed(";
-		_pSeed->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfRandomSeed::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::randomSeed(";
+  _pSeed->compileCppInt(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

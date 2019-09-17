@@ -24,145 +24,201 @@ To contact the author: codeworker@free.fr
 
 #include "ExprScriptExpression.h"
 
-
 namespace CodeWorker {
-	class ExprScriptBinaryExpression : public ExprScriptExpression {
-	private:
-		ExprScriptExpression* _pLeft;
-		ExprScriptExpression* _pRight;
+class ExprScriptBinaryExpression : public ExprScriptExpression
+{
+private:
+  ExprScriptExpression* _pLeft;
+  ExprScriptExpression* _pRight;
 
-	public:
-		ExprScriptBinaryExpression(ExprScriptExpression* pLeft, ExprScriptExpression* pRight) : _pLeft(pLeft), _pRight(pRight) {}
-		virtual ~ExprScriptBinaryExpression();
+public:
+  ExprScriptBinaryExpression(ExprScriptExpression* pLeft,
+                             ExprScriptExpression* pRight)
+    : _pLeft(pLeft)
+    , _pRight(pRight)
+  {}
+  virtual ~ExprScriptBinaryExpression();
 
-		inline ExprScriptExpression* getLeft() const { return _pLeft; }
-		inline ExprScriptExpression* getRight() const { return _pRight; }
+  inline ExprScriptExpression* getLeft() const { return _pLeft; }
+  inline ExprScriptExpression* getRight() const { return _pRight; }
 
-		virtual std::string getValue(DtaScriptVariable& visibility) const = 0;
-	};
+  virtual std::string getValue(DtaScriptVariable& visibility) const = 0;
+};
 
+class ExprScriptConcatenation : public ExprScriptBinaryExpression
+{
+public:
+  ExprScriptConcatenation(ExprScriptExpression* pLeft,
+                          ExprScriptExpression* pRight)
+    : ExprScriptBinaryExpression(pLeft, pRight)
+  {}
+  virtual ~ExprScriptConcatenation();
+  virtual std::string getValue(DtaScriptVariable& visibility) const;
 
-	class ExprScriptConcatenation : public ExprScriptBinaryExpression {
-	public:
-		ExprScriptConcatenation(ExprScriptExpression* pLeft, ExprScriptExpression* pRight) : ExprScriptBinaryExpression(pLeft, pRight) {}
-		virtual ~ExprScriptConcatenation();
-		virtual std::string getValue(DtaScriptVariable& visibility) const;
+  virtual std::string toString() const;
 
-		virtual std::string toString() const;
+  virtual EXPRESSION_RETURN_TYPE compileCpp(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual bool compileCppString(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
+};
 
-		virtual EXPRESSION_RETURN_TYPE compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-		virtual bool compileCppString(CppCompilerEnvironment& theCompilerEnvironment) const;
-	};
+class ExprScriptArithmetic : public ExprScriptBinaryExpression
+{
+private:
+  char _cOperator;
 
+public:
+  ExprScriptArithmetic(ExprScriptExpression* pLeft,
+                       ExprScriptExpression* pRight,
+                       char cOperator)
+    : ExprScriptBinaryExpression(pLeft, pRight)
+    , _cOperator(cOperator)
+  {}
+  virtual ~ExprScriptArithmetic();
+  virtual std::string getValue(DtaScriptVariable& visibility) const;
+  virtual int getIntValue(DtaScriptVariable& visibility) const;
+  virtual double getDoubleValue(DtaScriptVariable& visibility) const;
 
-	class ExprScriptArithmetic : public ExprScriptBinaryExpression {
-	private:
-		char _cOperator;
+  virtual std::string toString() const;
 
-	public:
-		ExprScriptArithmetic(ExprScriptExpression* pLeft, ExprScriptExpression* pRight, char cOperator) : ExprScriptBinaryExpression(pLeft, pRight), _cOperator(cOperator) {}
-		virtual ~ExprScriptArithmetic();
-		virtual std::string getValue(DtaScriptVariable& visibility) const;
-		virtual int getIntValue(DtaScriptVariable& visibility) const;
-		virtual double getDoubleValue(DtaScriptVariable& visibility) const;
+  virtual EXPRESSION_RETURN_TYPE compileCpp(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual bool compileCppDouble(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
+};
 
-		virtual std::string toString() const;
+class ExprScriptShift : public ExprScriptBinaryExpression
+{
+private:
+  char _cOperator;
 
-		virtual EXPRESSION_RETURN_TYPE compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-		virtual bool compileCppDouble(CppCompilerEnvironment& theCompilerEnvironment) const;
-	};
+public:
+  ExprScriptShift(ExprScriptExpression* pLeft,
+                  ExprScriptExpression* pRight,
+                  char cOperator)
+    : ExprScriptBinaryExpression(pLeft, pRight)
+    , _cOperator(cOperator)
+  {}
+  virtual ~ExprScriptShift();
+  virtual std::string getValue(DtaScriptVariable& visibility) const;
+  virtual int getIntValue(DtaScriptVariable& visibility) const;
 
+  virtual std::string toString() const;
 
-	class ExprScriptShift : public ExprScriptBinaryExpression {
-	private:
-		char _cOperator;
+  virtual EXPRESSION_RETURN_TYPE compileCpp(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual bool compileCppInt(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
+};
 
-	public:
-		ExprScriptShift(ExprScriptExpression* pLeft, ExprScriptExpression* pRight, char cOperator) : ExprScriptBinaryExpression(pLeft, pRight), _cOperator(cOperator) {}
-		virtual ~ExprScriptShift();
-		virtual std::string getValue(DtaScriptVariable& visibility) const;
-		virtual int getIntValue(DtaScriptVariable& visibility) const;
+class ExprScriptComparison : public ExprScriptBinaryExpression
+{
+protected:
+  char _cOperator;
 
-		virtual std::string toString() const;
+public:
+  ExprScriptComparison(ExprScriptExpression* pLeft,
+                       ExprScriptExpression* pRight,
+                       char cOperator)
+    : ExprScriptBinaryExpression(pLeft, pRight)
+    , _cOperator(cOperator)
+  {}
+  virtual ~ExprScriptComparison();
+  virtual std::string getValue(DtaScriptVariable& visibility) const;
 
-		virtual EXPRESSION_RETURN_TYPE compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-		virtual bool compileCppInt(CppCompilerEnvironment& theCompilerEnvironment) const;
-	};
+  virtual std::string toString() const;
 
+  virtual EXPRESSION_RETURN_TYPE compileCpp(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual bool compileCppBoolean(CppCompilerEnvironment& theCompilerEnvironment,
+                                 bool bNegative) const;
+};
 
-	class ExprScriptComparison : public ExprScriptBinaryExpression {
-	protected:
-		char _cOperator;
+class ExprScriptNumericComparison : public ExprScriptComparison
+{
+public:
+  ExprScriptNumericComparison(ExprScriptExpression* pLeft,
+                              ExprScriptExpression* pRight,
+                              char cOperator)
+    : ExprScriptComparison(pLeft, pRight, cOperator)
+  {}
+  virtual ~ExprScriptNumericComparison();
+  virtual std::string getValue(DtaScriptVariable& visibility) const;
 
-	public:
-		ExprScriptComparison(ExprScriptExpression* pLeft, ExprScriptExpression* pRight, char cOperator) : ExprScriptBinaryExpression(pLeft, pRight), _cOperator(cOperator) {}
-		virtual ~ExprScriptComparison();
-		virtual std::string getValue(DtaScriptVariable& visibility) const;
+  virtual std::string toString() const;
 
-		virtual std::string toString() const;
+  virtual bool compileCppBoolean(CppCompilerEnvironment& theCompilerEnvironment,
+                                 bool bNegative) const;
+};
 
-		virtual EXPRESSION_RETURN_TYPE compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-		virtual bool compileCppBoolean(CppCompilerEnvironment& theCompilerEnvironment, bool bNegative) const;
-	};
+class ExprScriptTernaryOperator : public ExprScriptBinaryExpression
+{
+protected:
+  ExprScriptExpression* _pCondition;
 
+public:
+  ExprScriptTernaryOperator(ExprScriptExpression* pCondition,
+                            ExprScriptExpression* pLeft,
+                            ExprScriptExpression* pRight)
+    : ExprScriptBinaryExpression(pLeft, pRight)
+    , _pCondition(pCondition)
+  {}
+  virtual ~ExprScriptTernaryOperator();
+  virtual std::string getValue(DtaScriptVariable& visibility) const;
 
-	class ExprScriptNumericComparison : public ExprScriptComparison {
-	public:
-		ExprScriptNumericComparison(ExprScriptExpression* pLeft, ExprScriptExpression* pRight, char cOperator) : ExprScriptComparison(pLeft, pRight, cOperator) {}
-		virtual ~ExprScriptNumericComparison();
-		virtual std::string getValue(DtaScriptVariable& visibility) const;
+  virtual std::string toString() const;
 
-		virtual std::string toString() const;
+  virtual EXPRESSION_RETURN_TYPE compileCpp(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual bool compileCppString(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
+};
 
-		virtual bool compileCppBoolean(CppCompilerEnvironment& theCompilerEnvironment, bool bNegative) const;
-	};
+class ExprScriptBoolean : public ExprScriptBinaryExpression
+{
+protected:
+  char _cOperator;
 
+public:
+  ExprScriptBoolean(ExprScriptExpression* pLeft,
+                    ExprScriptExpression* pRight,
+                    char cOperator)
+    : ExprScriptBinaryExpression(pLeft, pRight)
+    , _cOperator(cOperator)
+  {}
+  virtual ~ExprScriptBoolean();
+  virtual std::string getValue(DtaScriptVariable& visibility) const;
 
-	class ExprScriptTernaryOperator : public ExprScriptBinaryExpression {
-	protected:
-		ExprScriptExpression* _pCondition;
+  virtual std::string toString() const;
 
-	public:
-		ExprScriptTernaryOperator(ExprScriptExpression* pCondition, ExprScriptExpression* pLeft, ExprScriptExpression* pRight) : ExprScriptBinaryExpression(pLeft, pRight), _pCondition(pCondition) {}
-		virtual ~ExprScriptTernaryOperator();
-		virtual std::string getValue(DtaScriptVariable& visibility) const;
+  virtual EXPRESSION_RETURN_TYPE compileCpp(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual bool compileCppBoolean(CppCompilerEnvironment& theCompilerEnvironment,
+                                 bool bNegative) const;
+};
 
-		virtual std::string toString() const;
+class ExprScriptInSet : public ExprScriptExpression
+{
+private:
+  ExprScriptExpression* _pLeft;
+  std::set<std::string> _listOfConstants;
 
-		virtual EXPRESSION_RETURN_TYPE compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-		virtual bool compileCppString(CppCompilerEnvironment& theCompilerEnvironment) const;
-	};
+public:
+  ExprScriptInSet(ExprScriptExpression* pLeft,
+                  const std::set<std::string>& listOfConstants)
+    : _pLeft(pLeft)
+    , _listOfConstants(listOfConstants)
+  {}
+  virtual ~ExprScriptInSet();
 
-	class ExprScriptBoolean : public ExprScriptBinaryExpression {
-	protected:
-		char _cOperator;
+  virtual std::string getValue(DtaScriptVariable& visibility) const;
 
-	public:
-		ExprScriptBoolean(ExprScriptExpression* pLeft, ExprScriptExpression* pRight, char cOperator) : ExprScriptBinaryExpression(pLeft, pRight), _cOperator(cOperator) {}
-		virtual ~ExprScriptBoolean();
-		virtual std::string getValue(DtaScriptVariable& visibility) const;
+  virtual EXPRESSION_RETURN_TYPE compileCpp(
+    CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		virtual std::string toString() const;
-
-		virtual EXPRESSION_RETURN_TYPE compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-		virtual bool compileCppBoolean(CppCompilerEnvironment& theCompilerEnvironment, bool bNegative) const;
-	};
-
-	class ExprScriptInSet : public ExprScriptExpression {
-	private:
-		ExprScriptExpression* _pLeft;
-		std::set<std::string> _listOfConstants;
-
-	public:
-		ExprScriptInSet(ExprScriptExpression* pLeft, const std::set<std::string>& listOfConstants) : _pLeft(pLeft), _listOfConstants(listOfConstants) {}
-		virtual ~ExprScriptInSet();
-		
-		virtual std::string getValue(DtaScriptVariable& visibility) const;
-
-		virtual EXPRESSION_RETURN_TYPE compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-
-		virtual std::string toString() const;
-	};
+  virtual std::string toString() const;
+};
 }
 
 #endif

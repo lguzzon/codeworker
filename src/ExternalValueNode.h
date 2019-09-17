@@ -23,27 +23,28 @@ To contact the author: codeworker@free.fr
 #define _ExternalValueNode_h_
 
 namespace CodeWorker {
-	class ExternalValueNode;
+class ExternalValueNode;
 
-	#ifndef EXTERNAL_VALUE_NODE_DESTRUCTOR_TYPE
-	#define EXTERNAL_VALUE_NODE_DESTRUCTOR_TYPE
-	typedef void (*EXTERNAL_VALUE_NODE_DESTRUCTOR)(ExternalValueNode*);
-	#endif
+#ifndef EXTERNAL_VALUE_NODE_DESTRUCTOR_TYPE
+#define EXTERNAL_VALUE_NODE_DESTRUCTOR_TYPE
+typedef void (*EXTERNAL_VALUE_NODE_DESTRUCTOR)(ExternalValueNode*);
+#endif
 
-	class ExternalValueNode {
-	public:
-		inline ExternalValueNode() {}
-		virtual ~ExternalValueNode();
+class ExternalValueNode
+{
+public:
+  inline ExternalValueNode() {}
+  virtual ~ExternalValueNode();
 
-		virtual const char* getValue() const = 0;
-		virtual size_t getValueLength() const;
-		virtual double getDoubleValue() const;
-		virtual bool   getBooleanValue() const;
-		virtual int    getIntValue() const;
-		virtual void setValue(const char* sValue) = 0;
+  virtual const char* getValue() const = 0;
+  virtual size_t getValueLength() const;
+  virtual double getDoubleValue() const;
+  virtual bool getBooleanValue() const;
+  virtual int getIntValue() const;
+  virtual void setValue(const char* sValue) = 0;
 
-		virtual EXTERNAL_VALUE_NODE_DESTRUCTOR getDestructor() const = 0;
-	};
+  virtual EXTERNAL_VALUE_NODE_DESTRUCTOR getDestructor() const = 0;
+};
 }
 
 #endif

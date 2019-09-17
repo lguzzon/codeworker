@@ -25,34 +25,60 @@ To contact the author: codeworker@free.fr
 #include "GrfBlock.h"
 
 namespace CodeWorker {
-	class ExprScriptExpression;
-	class DtaPatternScript;
-	class GrfJointPoint;
+class ExprScriptExpression;
+class DtaPatternScript;
+class GrfJointPoint;
 
-	class GrfAspectAdvice : public GrfBlock {
-	public:
-		enum ADVICE_TYPE {ADVICE_BEFORE, ADVICE_AROUND, ADVICE_AFTER, ADVICE_BEFORE_ITERATION, ADVICE_AROUND_ITERATION, ADVICE_AFTER_ITERATION};
+class GrfAspectAdvice : public GrfBlock
+{
+public:
+  enum ADVICE_TYPE
+  {
+    ADVICE_BEFORE,
+    ADVICE_AROUND,
+    ADVICE_AFTER,
+    ADVICE_BEFORE_ITERATION,
+    ADVICE_AROUND_ITERATION,
+    ADVICE_AFTER_ITERATION
+  };
 
-	private:
-		ADVICE_TYPE _type;
-		DtaPatternScript* _pPatternScript;
-		std::string _sMatchingName;
-		ExprScriptExpression* _pPointcut;
+private:
+  ADVICE_TYPE _type;
+  DtaPatternScript* _pPatternScript;
+  std::string _sMatchingName;
+  ExprScriptExpression* _pPointcut;
 
-	public:
-		inline GrfAspectAdvice(DtaPatternScript* pPatternScript, GrfBlock* pParent, ADVICE_TYPE type, const std::string& sMatchingName) : GrfBlock(pParent), _pPatternScript(pPatternScript), _type(type), _pPointcut(NULL), _sMatchingName(sMatchingName) {}
-		virtual ~GrfAspectAdvice();
+public:
+  inline GrfAspectAdvice(DtaPatternScript* pPatternScript,
+                         GrfBlock* pParent,
+                         ADVICE_TYPE type,
+                         const std::string& sMatchingName)
+    : GrfBlock(pParent)
+    , _pPatternScript(pPatternScript)
+    , _type(type)
+    , _pPointcut(NULL)
+    , _sMatchingName(sMatchingName)
+  {}
+  virtual ~GrfAspectAdvice();
 
-		inline ADVICE_TYPE getType() const { return _type; }
-		inline void setMatchingName(const std::string& sMatchingName) { _sMatchingName = sMatchingName; }
-		inline void setPointcut(ExprScriptExpression* pPointcut) { _pPointcut = pPointcut; }
-		bool matchPointcut(GrfJointPoint& jointPoint, DtaScriptVariable& context) const;
+  inline ADVICE_TYPE getType() const { return _type; }
+  inline void setMatchingName(const std::string& sMatchingName)
+  {
+    _sMatchingName = sMatchingName;
+  }
+  inline void setPointcut(ExprScriptExpression* pPointcut)
+  {
+    _pPointcut = pPointcut;
+  }
+  bool matchPointcut(GrfJointPoint& jointPoint,
+                     DtaScriptVariable& context) const;
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

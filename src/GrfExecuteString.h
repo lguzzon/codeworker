@@ -28,25 +28,33 @@ namespace CodeWorker {
 class ExprScriptVariable;
 class ExprScriptExpression;
 
-	class GrfExecuteString : public GrfCommand {
-		private:
-			ExprScriptVariable* _pThis;
-			ExprScriptExpression* _pCommand;
+class GrfExecuteString : public GrfCommand
+{
+private:
+  ExprScriptVariable* _pThis;
+  ExprScriptExpression* _pCommand;
 
-		public:
-			GrfExecuteString() : _pThis(NULL), _pCommand(NULL) {}
-			virtual ~GrfExecuteString();
+public:
+  GrfExecuteString()
+    : _pThis(NULL)
+    , _pCommand(NULL)
+  {}
+  virtual ~GrfExecuteString();
 
-			virtual const char* getFunctionName() const { return "executeString"; }
+  virtual const char* getFunctionName() const { return "executeString"; }
 
-			inline void setThis(ExprScriptVariable* pThis) { _pThis = pThis; }
-			inline void setCommand(ExprScriptExpression* pCommand) { _pCommand = pCommand; }
+  inline void setThis(ExprScriptVariable* pThis) { _pThis = pThis; }
+  inline void setCommand(ExprScriptExpression* pCommand)
+  {
+    _pCommand = pCommand;
+  }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
+};
 }
 
 #endif

@@ -20,44 +20,50 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
+#include "GrfWhile.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptExpression.h"
 #include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "GrfWhile.h"
-
 
 namespace CodeWorker {
-	GrfWhile::~GrfWhile() {
-		delete _pCondition;
-	}
+GrfWhile::~GrfWhile()
+{
+  delete _pCondition;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfWhile::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
-		do {
-			std::string sCondition = _pCondition->getValue(visibility);
-			if (sCondition.empty()) break;
-			result = GrfBlock::executeInternal(visibility);
-			switch(result) {
-				case CONTINUE_INTERRUPTION:
-					result = NO_INTERRUPTION;
-				case NO_INTERRUPTION: break;
-				case BREAK_INTERRUPTION: return NO_INTERRUPTION;
-				default:
-					return result;
+SEQUENCE_INTERRUPTION_LIST
+GrfWhile::executeInternal(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
+  do {
+    std::string sCondition = _pCondition->getValue(visibility);
+    if (sCondition.empty())
+      break;
+    result = GrfBlock::executeInternal(visibility);
+    switch (result) {
+      case CONTINUE_INTERRUPTION:
+        result = NO_INTERRUPTION;
+      case NO_INTERRUPTION:
+        break;
+      case BREAK_INTERRUPTION:
+        return NO_INTERRUPTION;
+      default:
+        return result;
+    }
+  } while (true);
+  return result;
+}
 
-			}
-		} while (true);
-		return result;
-	}
-
-	void GrfWhile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "while (";
-		_pCondition->compileCppBoolean(theCompilerEnvironment, false);
-		CW_BODY_STREAM << ") ";
-		GrfBlock::compileCpp(theCompilerEnvironment);
-	}
+void
+GrfWhile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "while (";
+  _pCondition->compileCppBoolean(theCompilerEnvironment, false);
+  CW_BODY_STREAM << ") ";
+  GrfBlock::compileCpp(theCompilerEnvironment);
+}
 }

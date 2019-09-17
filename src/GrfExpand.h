@@ -25,18 +25,22 @@ To contact the author: codeworker@free.fr
 #include "GrfGenerate.h"
 
 namespace CodeWorker {
-	// the C++ header file "CGRuntime.h" should be included before in the C++ body
+// the C++ header file "CGRuntime.h" should be included before in the C++ body
 
-	class GrfExpand : public GrfGenerate {
-	public:
-		GrfExpand() {}
-		virtual ~GrfExpand();
+class GrfExpand : public GrfGenerate
+{
+public:
+  GrfExpand() {}
+  virtual ~GrfExpand();
 
-		virtual const char* getFunctionName() const { return "expand"; }
+  virtual const char* getFunctionName() const { return "expand"; }
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeScript(const char* sOutputFile, DtaScriptVariable* pThisContext, EXECUTE_FUNCTION* executeFunction);
-	};
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeScript(
+    const char* sOutputFile,
+    DtaScriptVariable* pThisContext,
+    EXECUTE_FUNCTION* executeFunction);
+};
 }
 
 #endif

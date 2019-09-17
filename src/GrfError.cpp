@@ -20,30 +20,35 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
+#include "GrfError.h"
+#include "CppCompilerEnvironment.h"
 #include "ExprScriptExpression.h"
 #include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "GrfError.h"
+#include "UtlException.h"
 
 namespace CodeWorker {
-	GrfError::~GrfError() {
-		delete _pMessage;
-	}
+GrfError::~GrfError()
+{
+  delete _pMessage;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfError::executeInternal(DtaScriptVariable& visibility) {
-		std::string sValue = _pMessage->getValue(visibility);
-		throw UtlException(sValue);
-		return THROW_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfError::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sValue = _pMessage->getValue(visibility);
+  throw UtlException(sValue);
+  return THROW_INTERRUPTION;
+}
 
-	void GrfError::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "throw UtlException(";
-		_pMessage->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfError::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "throw UtlException(";
+  _pMessage->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

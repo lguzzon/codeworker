@@ -20,53 +20,76 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ExprScriptFunction.h"
-#include "DtaProject.h"
-#include "CppParsingTree.h"
 #include "GrfWritefileHook.h"
+#include "CppParsingTree.h"
+#include "DtaProject.h"
+#include "ExprScriptFunction.h"
 
 namespace CodeWorker {
-	GrfWritefileHook::GrfWritefileHook(GrfBlock* pParent) : GrfFunction(pParent, "writefileHook", "", false), _writefileHook(NULL) {
-		DtaProject::getInstance().setWritefileHook(this);
-	}
+GrfWritefileHook::GrfWritefileHook(GrfBlock* pParent)
+  : GrfFunction(pParent, "writefileHook", "", false)
+  , _writefileHook(NULL)
+{
+  DtaProject::getInstance().setWritefileHook(this);
+}
 
-	GrfWritefileHook::GrfWritefileHook(WRITEFILEHOOK_FUNCTION writefileHook) : GrfFunction(NULL, "writefileHook", "", false), _writefileHook(writefileHook) {
-		DtaProject::getInstance().setWritefileHook(this);
-	}
+GrfWritefileHook::GrfWritefileHook(WRITEFILEHOOK_FUNCTION writefileHook)
+  : GrfFunction(NULL, "writefileHook", "", false)
+  , _writefileHook(writefileHook)
+{
+  DtaProject::getInstance().setWritefileHook(this);
+}
 
-	GrfWritefileHook::~GrfWritefileHook() {
-		if (DtaProject::existInstance()) DtaProject::getInstance().setWritefileHook(NULL);
-	}
+GrfWritefileHook::~GrfWritefileHook()
+{
+  if (DtaProject::existInstance())
+    DtaProject::getInstance().setWritefileHook(NULL);
+}
 
-	bool GrfWritefileHook::setFileNameArgument(const char* sArgument) {
-		if (!getParameterTypes().empty()) return false;
-		return addParameterAndType(sArgument, VALUE_EXPRTYPE, NULL);
-	}
+bool
+GrfWritefileHook::setFileNameArgument(const char* sArgument)
+{
+  if (!getParameterTypes().empty())
+    return false;
+  return addParameterAndType(sArgument, VALUE_EXPRTYPE, NULL);
+}
 
-	bool GrfWritefileHook::setPositionArgument(const char* sArgument) {
-		if (getParameterTypes().size() != 1) return false;
-		return addParameterAndType(sArgument, VALUE_EXPRTYPE, NULL);
-	}
+bool
+GrfWritefileHook::setPositionArgument(const char* sArgument)
+{
+  if (getParameterTypes().size() != 1)
+    return false;
+  return addParameterAndType(sArgument, VALUE_EXPRTYPE, NULL);
+}
 
-	bool GrfWritefileHook::setCreationArgument(const char* sArgument) {
-		if (getParameterTypes().size() != 2) return false;
-		return addParameterAndType(sArgument, VALUE_EXPRTYPE, NULL);
-	}
+bool
+GrfWritefileHook::setCreationArgument(const char* sArgument)
+{
+  if (getParameterTypes().size() != 2)
+    return false;
+  return addParameterAndType(sArgument, VALUE_EXPRTYPE, NULL);
+}
 
-	std::string GrfWritefileHook::executeHook(DtaScriptVariable& visibility, const std::string& sFile, int iPosition, bool bCreation) {
-		std::string sSuccess;
-		if (_writefileHook != NULL) {
-			sSuccess = _writefileHook(sFile, iPosition, bCreation);
-		} else {
-			std::auto_ptr<ExprScriptFunction> pFunctionCall(new ExprScriptFunction(this));
-			pFunctionCall->addParameter(new ExprScriptConstant(sFile.c_str()));
-			pFunctionCall->addParameter(new ExprScriptConstant(iPosition));
-			pFunctionCall->addParameter(new ExprScriptConstant(bCreation));
-			sSuccess = launchExecution(visibility, *pFunctionCall);
-		}
-		return sSuccess;
-	}
+std::string
+GrfWritefileHook::executeHook(DtaScriptVariable& visibility,
+                              const std::string& sFile,
+                              int iPosition,
+                              bool bCreation)
+{
+  std::string sSuccess;
+  if (_writefileHook != NULL) {
+    sSuccess = _writefileHook(sFile, iPosition, bCreation);
+  } else {
+    std::auto_ptr<ExprScriptFunction> pFunctionCall(
+      new ExprScriptFunction(this));
+    pFunctionCall->addParameter(new ExprScriptConstant(sFile.c_str()));
+    pFunctionCall->addParameter(new ExprScriptConstant(iPosition));
+    pFunctionCall->addParameter(new ExprScriptConstant(bCreation));
+    sSuccess = launchExecution(visibility, *pFunctionCall);
+  }
+  return sSuccess;
+}
 }

@@ -20,58 +20,69 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
 #include "ScpStream.h"
+#include "UtlException.h"
 
-#include "DtaScriptVariable.h"
-#include "ExprScriptVariable.h"
 #include "CppCompilerEnvironment.h"
 #include "DtaPatternScript.h"
+#include "DtaScriptVariable.h"
+#include "ExprScriptVariable.h"
 #include "GrfAppendedFile.h"
 
 namespace CodeWorker {
-	GrfAppendedFile::~GrfAppendedFile() {
-		delete _pOutputFile;
-	}
+GrfAppendedFile::~GrfAppendedFile()
+{
+  delete _pOutputFile;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfAppendedFile::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		DtaOutputFile AppendedFile(_pPatternScript);
-		std::string sFile = _pOutputFile->getValue(visibility);
-		ScpStream* pOldOutputStream;
-		AppendedFile.openAppend(true, sFile.c_str(), pOldOutputStream);
-		try {
-			result = GrfBlock::executeInternal(visibility);
-		} catch(UtlException& exception) {
-			AppendedFile.catchGenerateExecution(true, pOldOutputStream, &exception);
-		} catch(std::exception&) {
-			AppendedFile.catchGenerateExecution(true, pOldOutputStream, 0);
-			throw;
-		}
-		AppendedFile.closeGenerate(true, sFile.c_str(), pOldOutputStream);
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfAppendedFile::executeInternal(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result;
+  DtaOutputFile AppendedFile(_pPatternScript);
+  std::string sFile = _pOutputFile->getValue(visibility);
+  ScpStream* pOldOutputStream;
+  AppendedFile.openAppend(true, sFile.c_str(), pOldOutputStream);
+  try {
+    result = GrfBlock::executeInternal(visibility);
+  } catch (UtlException& exception) {
+    AppendedFile.catchGenerateExecution(true, pOldOutputStream, &exception);
+  } catch (std::exception&) {
+    AppendedFile.catchGenerateExecution(true, pOldOutputStream, 0);
+    throw;
+  }
+  AppendedFile.closeGenerate(true, sFile.c_str(), pOldOutputStream);
+  return result;
+}
 
-	void GrfAppendedFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "{";
-		CW_BODY_ENDL;
-		theCompilerEnvironment.incrementIndentation();
-		CW_BODY_INDENT << "CGRuntimeOutputFile outputFile(";
-		_pOutputFile->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", true);";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "try ";
-		theCompilerEnvironment.bracketsToNextBlock(true);
-		theCompilerEnvironment.carriageReturnAfterBlock(false);
-		GrfBlock::compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << " catch(UtlException& exception) {";CW_BODY_ENDL;
-		CW_BODY_INDENT << "\toutputFile.onCatchedException(exception);";CW_BODY_ENDL;
-		CW_BODY_INDENT << "}";CW_BODY_ENDL;
-		CW_BODY_INDENT << "\toutputFile.closeGenerate();";CW_BODY_ENDL;
-		theCompilerEnvironment.decrementIndentation();
-		CW_BODY_INDENT << "}";CW_BODY_ENDL;
-	}
+void
+GrfAppendedFile::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "{";
+  CW_BODY_ENDL;
+  theCompilerEnvironment.incrementIndentation();
+  CW_BODY_INDENT << "CGRuntimeOutputFile outputFile(";
+  _pOutputFile->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", true);";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "try ";
+  theCompilerEnvironment.bracketsToNextBlock(true);
+  theCompilerEnvironment.carriageReturnAfterBlock(false);
+  GrfBlock::compileCpp(theCompilerEnvironment);
+  CW_BODY_STREAM << " catch(UtlException& exception) {";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "\toutputFile.onCatchedException(exception);";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "}";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "\toutputFile.closeGenerate();";
+  CW_BODY_ENDL;
+  theCompilerEnvironment.decrementIndentation();
+  CW_BODY_INDENT << "}";
+  CW_BODY_ENDL;
+}
 }

@@ -20,13 +20,13 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
 #include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "ExprScriptExpression.h"
+#include "ScpStream.h"
 #include <string>
 
 //##protect##"INCLUDE FILES"
@@ -37,43 +37,56 @@ To contact the author: codeworker@free.fr
 #include "GrfInsertTextToFloatingLocation.h"
 
 namespace CodeWorker {
-	GrfInsertTextToFloatingLocation::~GrfInsertTextToFloatingLocation() {
-		delete _pLocation;
-		delete _pText;
-	}
+GrfInsertTextToFloatingLocation::~GrfInsertTextToFloatingLocation()
+{
+  delete _pLocation;
+  delete _pText;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfInsertTextToFloatingLocation::executeInternal(DtaScriptVariable& visibility) {
-		std::string sLocation = _pLocation->getValue(visibility);
-		std::string sText = _pText->getValue(visibility);
-//##protect##"execute"
-		if (*_pOutputCoverage != NULL) {
-			ScpStream* pOwner;
-			int iLocation = CGRuntime::getOutputStream()->getFloatingLocation(sLocation, pOwner);
-			if (pOwner == NULL) throw UtlException("the floating location '" + sLocation + "' doesn't exist");
-			if (CGRuntime::getOutputStream()->insertText(sText, iLocation)) {
-				int iCoverageLocation = iLocation + (*_pOutputCoverage)->getIntValue();
-				DtaScriptVariable* pCoverage = GrfInsertText::getCoverageItem(*_pOutputCoverage, sText.size(), iCoverageLocation, "I");
-				pCoverage->insertNode("script")->setValue(_iFileLocation);
-				pCoverage->insertNode("output")->setValue(iCoverageLocation);
-			}
-			return NO_INTERRUPTION;
-		}
-//##protect##"execute"
-		return CGRuntime::insertTextToFloatingLocation(sLocation, sText);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfInsertTextToFloatingLocation::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sLocation = _pLocation->getValue(visibility);
+  std::string sText = _pText->getValue(visibility);
+  //##protect##"execute"
+  if (*_pOutputCoverage != NULL) {
+    ScpStream* pOwner;
+    int iLocation =
+      CGRuntime::getOutputStream()->getFloatingLocation(sLocation, pOwner);
+    if (pOwner == NULL)
+      throw UtlException("the floating location '" + sLocation +
+                         "' doesn't exist");
+    if (CGRuntime::getOutputStream()->insertText(sText, iLocation)) {
+      int iCoverageLocation = iLocation + (*_pOutputCoverage)->getIntValue();
+      DtaScriptVariable* pCoverage = GrfInsertText::getCoverageItem(
+        *_pOutputCoverage, sText.size(), iCoverageLocation, "I");
+      pCoverage->insertNode("script")->setValue(_iFileLocation);
+      pCoverage->insertNode("output")->setValue(iCoverageLocation);
+    }
+    return NO_INTERRUPTION;
+  }
+  //##protect##"execute"
+  return CGRuntime::insertTextToFloatingLocation(sLocation, sText);
+}
 
 //##protect##"implementation"
-	void GrfInsertTextToFloatingLocation::prepareCoverage(DtaScriptVariable* const* pOutputCoverage) {
-		_pOutputCoverage = pOutputCoverage;
-	}
+void
+GrfInsertTextToFloatingLocation::prepareCoverage(
+  DtaScriptVariable* const* pOutputCoverage)
+{
+  _pOutputCoverage = pOutputCoverage;
+}
 //##protect##"implementation"
 
-	void GrfInsertTextToFloatingLocation::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::insertTextToFloatingLocation(";
-		_pLocation->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pText->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfInsertTextToFloatingLocation::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::insertTextToFloatingLocation(";
+  _pLocation->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pText->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

@@ -20,41 +20,47 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "UtlException.h"
 #include "ScpStream.h"
+#include "UtlException.h"
 
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
 #include "DtaScriptVariable.h"
 #include "ExprScriptVariable.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
 #include "GrfParsedString.h"
 
 namespace CodeWorker {
-	GrfParsedString::~GrfParsedString() {
-		delete _pInputString;
-	}
+GrfParsedString::~GrfParsedString()
+{
+  delete _pInputString;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfParsedString::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
-		std::string sText = _pInputString->getValue(visibility);
-		CGRuntimeInputString inputString(sText);
-		try {
-			result = GrfBlock::executeInternal(visibility);
-		} catch(UtlException& e) {
-			throw UtlException(e.getTraceStack(), inputString.onCatchedException(e));
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfParsedString::executeInternal(DtaScriptVariable& visibility)
+{
+  SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
+  std::string sText = _pInputString->getValue(visibility);
+  CGRuntimeInputString inputString(sText);
+  try {
+    result = GrfBlock::executeInternal(visibility);
+  } catch (UtlException& e) {
+    throw UtlException(e.getTraceStack(), inputString.onCatchedException(e));
+  }
+  return result;
+}
 
-	void GrfParsedString::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "{";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "\t<parsed_string() not implemented yet>";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "}";
-		CW_BODY_ENDL;
-	}
+void
+GrfParsedString::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "{";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "\t<parsed_string() not implemented yet>";
+  CW_BODY_ENDL;
+  CW_BODY_INDENT << "}";
+  CW_BODY_ENDL;
+}
 }

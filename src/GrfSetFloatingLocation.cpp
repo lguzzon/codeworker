@@ -20,35 +20,41 @@ To contact the author: codeworker@free.fr
 */
 
 #ifdef WIN32
-#pragma warning (disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
-#include "ScpStream.h"
-#include "CppCompilerEnvironment.h"
-#include "CGRuntime.h"
-#include "ExprScriptExpression.h"
-#include <string>
 #include "GrfSetFloatingLocation.h"
+#include "CGRuntime.h"
+#include "CppCompilerEnvironment.h"
+#include "ExprScriptExpression.h"
+#include "ScpStream.h"
+#include <string>
 
 namespace CodeWorker {
-	GrfSetFloatingLocation::~GrfSetFloatingLocation() {
-		delete _pKey;
-		delete _pLocation;
-	}
+GrfSetFloatingLocation::~GrfSetFloatingLocation()
+{
+  delete _pKey;
+  delete _pLocation;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetFloatingLocation::executeInternal(DtaScriptVariable& visibility) {
-		std::string sKey = _pKey->getValue(visibility);
-		std::string sLocation = _pLocation->getValue(visibility);
-		int iLocation = atoi(sLocation.c_str());
-		return CGRuntime::setFloatingLocation(sKey, iLocation);
-	}
+SEQUENCE_INTERRUPTION_LIST
+GrfSetFloatingLocation::executeInternal(DtaScriptVariable& visibility)
+{
+  std::string sKey = _pKey->getValue(visibility);
+  std::string sLocation = _pLocation->getValue(visibility);
+  int iLocation = atoi(sLocation.c_str());
+  return CGRuntime::setFloatingLocation(sKey, iLocation);
+}
 
-	void GrfSetFloatingLocation::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setFloatingLocation(";
-		_pKey->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pLocation->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void
+GrfSetFloatingLocation::compileCpp(
+  CppCompilerEnvironment& theCompilerEnvironment) const
+{
+  CW_BODY_INDENT << "CGRuntime::setFloatingLocation(";
+  _pKey->compileCppString(theCompilerEnvironment);
+  CW_BODY_STREAM << ", ";
+  _pLocation->compileCppInt(theCompilerEnvironment);
+  CW_BODY_STREAM << ");";
+  CW_BODY_ENDL;
+}
 }

@@ -22,7 +22,6 @@ To contact the author: codeworker@free.fr
 #ifndef _GrfInsertTextOnce_h_
 #define _GrfInsertTextOnce_h_
 
-
 //##protect##"INCLUDE FILES"
 //##protect##"INCLUDE FILES"
 
@@ -31,41 +30,48 @@ To contact the author: codeworker@free.fr
 namespace CodeWorker {
 class ExprScriptExpression;
 
-	class GrfInsertTextOnce : public GrfCommand {
-		private:
-			ExprScriptExpression* _pLocation;
-			ExprScriptExpression* _pText;
+class GrfInsertTextOnce : public GrfCommand
+{
+private:
+  ExprScriptExpression* _pLocation;
+  ExprScriptExpression* _pText;
 
-//##protect##"attributes"
-			DtaScriptVariable* const* _pOutputCoverage;
-//##protect##"attributes"
+  //##protect##"attributes"
+  DtaScriptVariable* const* _pOutputCoverage;
+  //##protect##"attributes"
 
-		public:
-			GrfInsertTextOnce() : _pLocation(NULL), _pText(NULL) {
-//##protect##"constructor"
-				_pOutputCoverage = NULL;
-//##protect##"constructor"
-			}
-			virtual ~GrfInsertTextOnce();
+public:
+  GrfInsertTextOnce()
+    : _pLocation(NULL)
+    , _pText(NULL)
+  {
+    //##protect##"constructor"
+    _pOutputCoverage = NULL;
+    //##protect##"constructor"
+  }
+  virtual ~GrfInsertTextOnce();
 
-			virtual const char* getFunctionName() const { return "insertTextOnce"; }
+  virtual const char* getFunctionName() const { return "insertTextOnce"; }
 
-			inline void setLocation(ExprScriptExpression* pLocation) { _pLocation = pLocation; }
-			inline void setText(ExprScriptExpression* pText) { _pText = pText; }
+  inline void setLocation(ExprScriptExpression* pLocation)
+  {
+    _pLocation = pLocation;
+  }
+  inline void setText(ExprScriptExpression* pText) { _pText = pText; }
 
+  //##protect##"interface"
+  void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
+  //##protect##"interface"
 
-//##protect##"interface"
-			void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
-//##protect##"interface"
+  virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+protected:
+  virtual SEQUENCE_INTERRUPTION_LIST executeInternal(
+    DtaScriptVariable& visibility);
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-
-//##protect##"declarations"
-//##protect##"declarations"
-	};
+  //##protect##"declarations"
+  //##protect##"declarations"
+};
 }
 
 #endif
