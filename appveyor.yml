@@ -1,0 +1,16 @@
+version: 4.5.4-{build}
+configuration: Release
+image: Visual Studio 2017
+install:
+  - curl -L -o upx.zip http://upx.sourceforge.net/download/upx391w.zip && 7z e upx.zip *.exe -r
+build:
+  project: CodeWorker.sln
+  parallel: true
+  verbosity: normal
+after_build:
+  - upx --best .\bin\Release\CodeWorkerEXE\CodeWorkerEXE.exe
+  - copy .\bin\Release\CodeWorkerEXE\CodeWorkerEXE.exe .\codeworker.exe
+test: off
+artifacts:
+  - path: .\codeworker.exe
+    name: codewoker
