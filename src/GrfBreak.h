@@ -25,19 +25,21 @@ To contact the author: codeworker@free.fr
 #include "GrfCommand.h"
 
 
-namespace CodeWorker {
-	class CppCompilerEnvironment;
+namespace CodeWorker
+{
+class CppCompilerEnvironment;
 
-	class GrfBreak : public GrfCommand {
-	public:
-		GrfBreak() {}
-		virtual ~GrfBreak();
+class GrfBreak : public GrfCommand
+{
+public:
+    GrfBreak() {}
+    virtual ~GrfBreak();
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& /*visibility*/);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& /*visibility*/);
+};
 }
 
 #endif

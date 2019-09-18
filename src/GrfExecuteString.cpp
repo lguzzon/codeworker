@@ -34,27 +34,31 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptExpression.h"
 #include "GrfExecuteString.h"
 
-namespace CodeWorker {
-	GrfExecuteString::~GrfExecuteString() {
-		delete _pThis;
-		delete _pCommand;
-	}
+namespace CodeWorker
+{
+GrfExecuteString::~GrfExecuteString()
+{
+    delete _pThis;
+    delete _pCommand;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfExecuteString::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pThis = visibility.getVariable(*_pThis);
-		std::string sCommand = _pCommand->getValue(visibility);
-		ScpStream theCommand(sCommand);
-		DtaScript script(getParent());
-		script.parseStream(theCommand);
-		return script.execute(*pThis);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfExecuteString::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pThis = visibility.getVariable(*_pThis);
+    std::string sCommand = _pCommand->getValue(visibility);
+    ScpStream theCommand(sCommand);
+    DtaScript script(getParent());
+    script.parseStream(theCommand);
+    return script.execute(*pThis);
+}
 
-	void GrfExecuteString::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::executeString(";
-		_pThis->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pCommand->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfExecuteString::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::executeString(";
+    _pThis->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pCommand->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

@@ -24,31 +24,33 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
-	class ExprScriptFunction;
+namespace CodeWorker
+{
+class DtaBNFScript;
+class ExprScriptFunction;
 
-	class BNFTransformationMode : public GrfBlock {
-	private:
-		DtaBNFScript* _pBNFScript;
-		bool _bImplicitCopy;
-		ExprScriptFunction* _pFunction;
+class BNFTransformationMode : public GrfBlock
+{
+private:
+    DtaBNFScript* _pBNFScript;
+    bool _bImplicitCopy;
+    ExprScriptFunction* _pFunction;
 
-	public:
-		BNFTransformationMode(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bImplicitCopy, ExprScriptFunction* pFunction);
-		virtual ~BNFTransformationMode();
+public:
+    BNFTransformationMode(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bImplicitCopy, ExprScriptFunction* pFunction);
+    virtual ~BNFTransformationMode();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-		virtual std::string toString() const;
+    virtual std::string toString() const;
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

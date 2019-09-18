@@ -24,29 +24,31 @@ To contact the author: codeworker@free.fr
 
 #include "GrfForeach.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
+namespace CodeWorker
+{
+class DtaBNFScript;
 
-	class BNFForeach : public GrfForeach {
-	private:
-		DtaBNFScript* _pBNFScript;
-		bool _bContinue;
+class BNFForeach : public GrfForeach
+{
+private:
+    DtaBNFScript* _pBNFScript;
+    bool _bContinue;
 
-	public:
-		BNFForeach(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
-		virtual ~BNFForeach();
+public:
+    BNFForeach(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
+    virtual ~BNFForeach();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-		virtual std::string toString() const;
+    virtual std::string toString() const;
 
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

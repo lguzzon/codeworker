@@ -36,70 +36,96 @@ To contact the author: codeworker@free.fr
 #include "DtaProject.h"
 #include "GrfParseStringAsBNF.h"
 
-namespace CodeWorker {
-	GrfParseStringAsBNF::GrfParseStringAsBNF() : _pClass(NULL), _pCachedScript(NULL), _pBNFFileName(NULL), _pContent(NULL) {
-		_sCurrentDirectoryAtCompileTime = CGRuntime::getCurrentDirectory();
-	}
+namespace CodeWorker
+{
+GrfParseStringAsBNF::GrfParseStringAsBNF() : _pClass(NULL), _pCachedScript(NULL), _pBNFFileName(NULL), _pContent(NULL)
+{
+    _sCurrentDirectoryAtCompileTime = CGRuntime::getCurrentDirectory();
+}
 
-	GrfParseStringAsBNF::~GrfParseStringAsBNF() {
-		delete _pBNFFileName;
-		delete _pClass;
-		delete _pContent;
-		if (_pCachedScript != NULL) delete _pCachedScript;
-	}
+GrfParseStringAsBNF::~GrfParseStringAsBNF()
+{
+    delete _pBNFFileName;
+    delete _pClass;
+    delete _pContent;
 
-	void GrfParseStringAsBNF::setBNFFileName(ExprScriptScriptFile* pBNFFileName) {
-		if (pBNFFileName->isFileName()) _pBNFFileName = pBNFFileName->getFileName();
-		_pCachedScript = dynamic_cast<DtaBNFScript*>(pBNFFileName->getBody());
-		pBNFFileName->release();
-	}
+    if (_pCachedScript != NULL) {
+        delete _pCachedScript;
+    }
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfParseStringAsBNF::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pClass = visibility.getExistingVariable(*_pClass);
-		if (pClass == NULL) throw UtlException("runtime error: variable '" + _pClass->toString() + "' doesn't exist while calling procedure 'ParseStringAsBNF()'");
-		std::string sContent = _pContent->getValue(visibility);
+void GrfParseStringAsBNF::setBNFFileName(ExprScriptScriptFile* pBNFFileName)
+{
+    if (pBNFFileName->isFileName()) {
+        _pBNFFileName = pBNFFileName->getFileName();
+    }
 
-		if (_pBNFFileName != NULL) {
-			std::string sBNFFileName = _pBNFFileName->getValue(visibility);
-			if ((_pCachedScript == NULL) || (_sCachedBNFFile != sBNFFileName) || ScpStream::existVirtualFile(sBNFFileName)) {
-				if (_pCachedScript != NULL) delete _pCachedScript;
-				_pCachedScript = new DtaBNFScript(getParent());
-				_sCachedBNFFile = sBNFFileName;
-				_pCachedScript->parseFile(sBNFFileName.c_str(), _sCurrentDirectoryAtCompileTime);
-			}
-		}
+    _pCachedScript = dynamic_cast<DtaBNFScript*>(pBNFFileName->getBody());
+    pBNFFileName->release();
+}
 
-		SEQUENCE_INTERRUPTION_LIST result = _pCachedScript->generateString(sContent, *pClass);
-		switch(result) {
-			case CONTINUE_INTERRUPTION:
-			case BREAK_INTERRUPTION:
-			case RETURN_INTERRUPTION:
-				result = NO_INTERRUPTION;
-				break;
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfParseStringAsBNF::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pClass = visibility.getExistingVariable(*_pClass);
 
-	void GrfParseStringAsBNF::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		ExprScriptConstant* pConstantFileName = dynamic_cast<ExprScriptConstant*>(_pBNFFileName);
-		std::string sScriptFilename;
-		if (pConstantFileName == NULL) {
-			sScriptFilename = theCompilerEnvironment.newInlineScriptFilename();
-		} else {
-			sScriptFilename = pConstantFileName->getConstant();
-		}
-		std::string sRadical = DtaScript::convertFilenameAsIdentifier(CppCompilerEnvironment::getRadical(CppCompilerEnvironment::filename2Module(sScriptFilename)));
-		CW_BODY_INDENT << "CGRuntime::parseStringAsBNF(&Execute" << sRadical << "::instance(), ";
-		_pClass->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pContent->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-		if (_pCachedScript == NULL) {
-			_pCachedScript = new DtaBNFScript(getParent());
-			_sCachedBNFFile = sScriptFilename;
-			_pCachedScript->parseFile(_sCachedBNFFile.c_str());
-		}
-		_pCachedScript->compileCpp(theCompilerEnvironment, sScriptFilename);
-	}
+    if (pClass == NULL) {
+        throw UtlException("runtime error: variable '" + _pClass->toString() + "' doesn't exist while calling procedure 'ParseStringAsBNF()'");
+    }
+
+    std::string sContent = _pContent->getValue(visibility);
+
+    if (_pBNFFileName != NULL) {
+        std::string sBNFFileName = _pBNFFileName->getValue(visibility);
+
+        if ((_pCachedScript == NULL) || (_sCachedBNFFile != sBNFFileName) || ScpStream::existVirtualFile(sBNFFileName)) {
+            if (_pCachedScript != NULL) {
+                delete _pCachedScript;
+            }
+
+            _pCachedScript = new DtaBNFScript(getParent());
+            _sCachedBNFFile = sBNFFileName;
+            _pCachedScript->parseFile(sBNFFileName.c_str(), _sCurrentDirectoryAtCompileTime);
+        }
+    }
+
+    SEQUENCE_INTERRUPTION_LIST result = _pCachedScript->generateString(sContent, *pClass);
+
+    switch (result) {
+    case CONTINUE_INTERRUPTION:
+    case BREAK_INTERRUPTION:
+    case RETURN_INTERRUPTION:
+        result = NO_INTERRUPTION;
+        break;
+    }
+
+    return result;
+}
+
+void GrfParseStringAsBNF::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    ExprScriptConstant* pConstantFileName = dynamic_cast<ExprScriptConstant*>(_pBNFFileName);
+    std::string sScriptFilename;
+
+    if (pConstantFileName == NULL) {
+        sScriptFilename = theCompilerEnvironment.newInlineScriptFilename();
+    } else {
+        sScriptFilename = pConstantFileName->getConstant();
+    }
+
+    std::string sRadical = DtaScript::convertFilenameAsIdentifier(CppCompilerEnvironment::getRadical(CppCompilerEnvironment::filename2Module(sScriptFilename)));
+    CW_BODY_INDENT << "CGRuntime::parseStringAsBNF(&Execute" << sRadical << "::instance(), ";
+    _pClass->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pContent->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+
+    if (_pCachedScript == NULL) {
+        _pCachedScript = new DtaBNFScript(getParent());
+        _sCachedBNFFile = sScriptFilename;
+        _pCachedScript->parseFile(_sCachedBNFFile.c_str());
+    }
+
+    _pCachedScript->compileCpp(theCompilerEnvironment, sScriptFilename);
+}
 }

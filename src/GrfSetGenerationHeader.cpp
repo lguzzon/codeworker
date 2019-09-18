@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfSetGenerationHeader.h"
 
-namespace CodeWorker {
-	GrfSetGenerationHeader::~GrfSetGenerationHeader() {
-		delete _pComment;
-	}
+namespace CodeWorker
+{
+GrfSetGenerationHeader::~GrfSetGenerationHeader()
+{
+    delete _pComment;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetGenerationHeader::executeInternal(DtaScriptVariable& visibility) {
-		std::string sComment = _pComment->getValue(visibility);
-		return CGRuntime::setGenerationHeader(sComment);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSetGenerationHeader::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sComment = _pComment->getValue(visibility);
+    return CGRuntime::setGenerationHeader(sComment);
+}
 
-	void GrfSetGenerationHeader::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setGenerationHeader(";
-		_pComment->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSetGenerationHeader::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::setGenerationHeader(";
+    _pComment->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

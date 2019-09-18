@@ -32,29 +32,35 @@ To contact the author: codeworker@free.fr
 #include "CGRuntime.h"
 #include "GrfParsedFile.h"
 
-namespace CodeWorker {
-	GrfParsedFile::~GrfParsedFile() {
-		delete _pInputFile;
-	}
+namespace CodeWorker
+{
+GrfParsedFile::~GrfParsedFile()
+{
+    delete _pInputFile;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfParsedFile::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
-		std::string sFile = _pInputFile->getValue(visibility);
-		CGRuntimeInputFile inputFile(sFile);
-		try {
-			result = GrfBlock::executeInternal(visibility);
-		} catch(UtlException& e) {
-			throw UtlException(e.getTraceStack(), inputFile.onCatchedException(e));
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfParsedFile::executeInternal(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
+    std::string sFile = _pInputFile->getValue(visibility);
+    CGRuntimeInputFile inputFile(sFile);
 
-	void GrfParsedFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "{";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "\t<parsed_file() not implemented yet>";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "}";
-		CW_BODY_ENDL;
-	}
+    try {
+        result = GrfBlock::executeInternal(visibility);
+    } catch (UtlException& e) {
+        throw UtlException(e.getTraceStack(), inputFile.onCatchedException(e));
+    }
+
+    return result;
+}
+
+void GrfParsedFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "{";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "\t<parsed_file() not implemented yet>";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "}";
+    CW_BODY_ENDL;
+}
 }

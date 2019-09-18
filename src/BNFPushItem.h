@@ -24,29 +24,37 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
+namespace CodeWorker
+{
+class DtaBNFScript;
 
-	class BNFPushItem : public GrfBlock {
-	private:
-		DtaBNFScript* _pBNFScript;
-		ExprScriptVariable* _pVariable;
+class BNFPushItem : public GrfBlock
+{
+private:
+    DtaBNFScript* _pBNFScript;
+    ExprScriptVariable* _pVariable;
 
-	public:
-		BNFPushItem(DtaBNFScript* pBNFScript, GrfBlock* pParent);
-		virtual ~BNFPushItem();
+public:
+    BNFPushItem(DtaBNFScript* pBNFScript, GrfBlock* pParent);
+    virtual ~BNFPushItem();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
-		inline ExprScriptVariable* getVariable() const { return _pVariable; }
-		inline void setVariable(ExprScriptVariable* pVariable) { _pVariable = pVariable; }
+    virtual bool isABNFCommand() const;
+    inline ExprScriptVariable* getVariable() const
+    {
+        return _pVariable;
+    }
+    inline void setVariable(ExprScriptVariable* pVariable)
+    {
+        _pVariable = pVariable;
+    }
 
-		virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& visibility);
+    virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& visibility);
 
-		virtual std::string toString() const;
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-	};
+    virtual std::string toString() const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+};
 }
 
 #endif

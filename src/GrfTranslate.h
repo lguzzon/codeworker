@@ -24,48 +24,68 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
-	class ExprScriptVariable;
-	class ExprScriptExpression;
-	class ExprScriptScriptFile;
-	class DtaTranslateScript;
+namespace CodeWorker
+{
+class ExprScriptVariable;
+class ExprScriptExpression;
+class ExprScriptScriptFile;
+class DtaTranslateScript;
 
-	class EXECUTE_FUNCTION;
+class EXECUTE_FUNCTION;
 
-	class GrfTranslate : public GrfCommand {
-	private:
-		ExprScriptExpression* _pPatternFileName;
-		ExprScriptVariable* _pClass;
-		ExprScriptExpression* _pInputFileName;
-		ExprScriptExpression* _pOutputFileName;
-		std::string _sCurrentDirectoryAtCompileTime;
+class GrfTranslate : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pPatternFileName;
+    ExprScriptVariable* _pClass;
+    ExprScriptExpression* _pInputFileName;
+    ExprScriptExpression* _pOutputFileName;
+    std::string _sCurrentDirectoryAtCompileTime;
 
-	protected:
-		mutable DtaTranslateScript* _pCachedScript;
-		mutable std::string _sCachedPatternFile;
+protected:
+    mutable DtaTranslateScript* _pCachedScript;
+    mutable std::string _sCachedPatternFile;
 
-	public:
-		GrfTranslate();
-		virtual ~GrfTranslate();
+public:
+    GrfTranslate();
+    virtual ~GrfTranslate();
 
-		virtual const char* getFunctionName() const { return "translate"; }
+    virtual const char* getFunctionName() const
+    {
+        return "translate";
+    }
 
-		inline void setPatternFileName(ExprScriptExpression* pPatternFileName) { _pPatternFileName = pPatternFileName; }
-		void setPatternFileName(ExprScriptScriptFile* pPatternFileName);
-		inline void setThis(ExprScriptVariable* pClass) { _pClass = pClass; }
-		inline void setInputFileName(ExprScriptExpression* pFileName) { _pInputFileName = pFileName; }
-		inline void setOutputFileName(ExprScriptExpression* pFileName) { _pOutputFileName = pFileName; }
+    inline void setPatternFileName(ExprScriptExpression* pPatternFileName)
+    {
+        _pPatternFileName = pPatternFileName;
+    }
+    void setPatternFileName(ExprScriptScriptFile* pPatternFileName);
+    inline void setThis(ExprScriptVariable* pClass)
+    {
+        _pClass = pClass;
+    }
+    inline void setInputFileName(ExprScriptExpression* pFileName)
+    {
+        _pInputFileName = pFileName;
+    }
+    inline void setOutputFileName(ExprScriptExpression* pFileName)
+    {
+        _pOutputFileName = pFileName;
+    }
 
-		std::string translateString(DtaScriptVariable& visibility);
+    std::string translateString(DtaScriptVariable& visibility);
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		inline DtaTranslateScript* getCachedScript() const { return _pCachedScript; }
+protected:
+    inline DtaTranslateScript* getCachedScript() const
+    {
+        return _pCachedScript;
+    }
 
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-		virtual SEQUENCE_INTERRUPTION_LIST executeScript(const std::string& sInputFile, const std::string& sOutputFile, DtaScriptVariable* pThisContext, EXECUTE_FUNCTION* executeFunction);
-	};
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+    virtual SEQUENCE_INTERRUPTION_LIST executeScript(const std::string& sInputFile, const std::string& sOutputFile, DtaScriptVariable* pThisContext, EXECUTE_FUNCTION* executeFunction);
+};
 }
 
 #endif

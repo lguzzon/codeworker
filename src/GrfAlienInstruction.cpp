@@ -28,17 +28,24 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfAlienInstruction.h"
 
-namespace CodeWorker {
-	GrfAlienInstruction::~GrfAlienInstruction() {
-	}
+namespace CodeWorker
+{
+GrfAlienInstruction::~GrfAlienInstruction()
+{
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfAlienInstruction::executeInternal(DtaScriptVariable&) {
-		throw UtlException("Can't execute a source code written in a foreign language (" + _sTargetLanguage + ")!");
-	}
+SEQUENCE_INTERRUPTION_LIST GrfAlienInstruction::executeInternal(DtaScriptVariable&)
+{
+    throw UtlException("Can't execute a source code written in a foreign language (" + _sTargetLanguage + ")!");
+}
 
-	void GrfAlienInstruction::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "BEGIN_TARGET_LANGUAGE_CODE(" << _sTargetLanguage << ", \"" << _sParsingFilePtr << "\", " << _iLine << ")";CW_BODY_ENDL;
-		CW_BODY_INDENT << _sCode;CW_BODY_ENDL;
-		CW_BODY_INDENT << "END_TARGET_LANGUAGE_CODE(" << _sTargetLanguage << ")";CW_BODY_ENDL;
-	}
+void GrfAlienInstruction::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "BEGIN_TARGET_LANGUAGE_CODE(" << _sTargetLanguage << ", \"" << _sParsingFilePtr << "\", " << _iLine << ")";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << _sCode;
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "END_TARGET_LANGUAGE_CODE(" << _sTargetLanguage << ")";
+    CW_BODY_ENDL;
+}
 }

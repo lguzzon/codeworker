@@ -24,29 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class ExprScriptExpression;
+namespace CodeWorker
+{
+class ExprScriptExpression;
 
-	class BNFBreak : public GrfCommand {
-	private:
-		ExprScriptExpression* _pCondition;
-	public:
-		BNFBreak(GrfBlock* pParent);
-		virtual ~BNFBreak();
+class BNFBreak : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pCondition;
+public:
+    BNFBreak(GrfBlock* pParent);
+    virtual ~BNFBreak();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-		inline void setCondition(ExprScriptExpression* pCondition) { _pCondition = pCondition; }
+    inline void setCondition(ExprScriptExpression* pCondition)
+    {
+        _pCondition = pCondition;
+    }
 
-		virtual std::string toString() const;
+    virtual std::string toString() const;
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

@@ -31,41 +31,57 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfLocalReference.h"
 
-namespace CodeWorker {
-	GrfLocalReference::~GrfLocalReference() {
-		if (_pVariable != NULL) delete _pVariable;
-		if (_pReference != NULL) delete _pReference;
-	}
+namespace CodeWorker
+{
+GrfLocalReference::~GrfLocalReference()
+{
+    if (_pVariable != NULL) {
+        delete _pVariable;
+    }
 
-	void GrfLocalReference::setLocalVariable(ExprScriptVariable* pLocalVariable, EXPRESSION_TYPE variableType) {
-		_pVariable = pLocalVariable;
-		getParent()->addLocalVariable(pLocalVariable->getName(), variableType);
-	}
+    if (_pReference != NULL) {
+        delete _pReference;
+    }
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfLocalReference::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pVariable = visibility.getNonRecursiveVariable(visibility, *_pVariable);
-		pVariable->clearContent();
-		DtaScriptVariable* pReference = visibility.getExistingVariable(*_pReference);
-		if (pReference == NULL) {
-			std::string sCompleteName = pVariable->getCompleteName();
-			std::string sExpression = _pReference->toString();
-			throw UtlException("runtime error: can't refer to a variable that doesn't exist, see 'localref " + sCompleteName + " = " + sExpression + ";'");
-		}
-		if (pVariable != pReference) pVariable->setValue(pReference);
-		return NO_INTERRUPTION;
-	}
+void GrfLocalReference::setLocalVariable(ExprScriptVariable* pLocalVariable, EXPRESSION_TYPE variableType)
+{
+    _pVariable = pLocalVariable;
+    getParent()->addLocalVariable(pLocalVariable->getName(), variableType);
+}
 
-	void GrfLocalReference::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		if (!theCompilerEnvironment.addVariable(_pVariable->getName())) {
-			CW_BODY_INDENT << _pVariable->getName() << ".clearNode();";
-			CW_BODY_ENDL;
-		} else {
-			CW_BODY_INDENT << "CppParsingTree_value " << _pVariable->getName() << ";";
-			CW_BODY_ENDL;
-		}
-		CW_BODY_INDENT << _pVariable->getName() << ".setReference(";
-		_pReference->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfLocalReference::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pVariable = visibility.getNonRecursiveVariable(visibility, *_pVariable);
+    pVariable->clearContent();
+    DtaScriptVariable* pReference = visibility.getExistingVariable(*_pReference);
+
+    if (pReference == NULL) {
+        std::string sCompleteName = pVariable->getCompleteName();
+        std::string sExpression = _pReference->toString();
+        throw UtlException("runtime error: can't refer to a variable that doesn't exist, see 'localref " + sCompleteName + " = " + sExpression + ";'");
+    }
+
+    if (pVariable != pReference) {
+        pVariable->setValue(pReference);
+    }
+
+    return NO_INTERRUPTION;
+}
+
+void GrfLocalReference::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    if (!theCompilerEnvironment.addVariable(_pVariable->getName())) {
+        CW_BODY_INDENT << _pVariable->getName() << ".clearNode();";
+        CW_BODY_ENDL;
+    } else {
+        CW_BODY_INDENT << "CppParsingTree_value " << _pVariable->getName() << ";";
+        CW_BODY_ENDL;
+    }
+
+    CW_BODY_INDENT << _pVariable->getName() << ".setReference(";
+    _pReference->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

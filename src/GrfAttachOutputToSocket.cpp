@@ -29,21 +29,25 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptExpression.h"
 #include "GrfAttachOutputToSocket.h"
 
-namespace CodeWorker {
-	GrfAttachOutputToSocket::~GrfAttachOutputToSocket() {
-		delete _pSocket;
-	}
+namespace CodeWorker
+{
+GrfAttachOutputToSocket::~GrfAttachOutputToSocket()
+{
+    delete _pSocket;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfAttachOutputToSocket::executeInternal(DtaScriptVariable& visibility) {
-		std::string sSocket = _pSocket->getValue(visibility);
-		int iSocket = atoi(sSocket.c_str());
-		return CGRuntime::attachOutputToSocket(iSocket);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfAttachOutputToSocket::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sSocket = _pSocket->getValue(visibility);
+    int iSocket = atoi(sSocket.c_str());
+    return CGRuntime::attachOutputToSocket(iSocket);
+}
 
-	void GrfAttachOutputToSocket::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::attachOutputToSocket(";
-		_pSocket->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfAttachOutputToSocket::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::attachOutputToSocket(";
+    _pSocket->compileCppInt(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

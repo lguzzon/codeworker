@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptVariable;
 
-	class GrfEnvironTable : public GrfCommand {
-		private:
-			ExprScriptVariable* _pTable;
+class GrfEnvironTable : public GrfCommand
+{
+private:
+    ExprScriptVariable* _pTable;
 
-		public:
-			GrfEnvironTable() : _pTable(NULL) {}
-			virtual ~GrfEnvironTable();
+public:
+    GrfEnvironTable() : _pTable(NULL) {}
+    virtual ~GrfEnvironTable();
 
-			virtual const char* getFunctionName() const { return "environTable"; }
+    virtual const char* getFunctionName() const
+    {
+        return "environTable";
+    }
 
-			inline void setTable(ExprScriptVariable* pTable) { _pTable = pTable; }
+    inline void setTable(ExprScriptVariable* pTable)
+    {
+        _pTable = pTable;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

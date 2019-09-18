@@ -33,69 +33,100 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFConjunction.h"
 
-namespace CodeWorker {
-	BNFConjunction::BNFConjunction(DtaBNFScript* pBNFScript, GrfBlock* pParent) : _pBNFScript(pBNFScript), GrfBlock(pParent) {}
+namespace CodeWorker
+{
+BNFConjunction::BNFConjunction(DtaBNFScript* pBNFScript, GrfBlock* pParent) : _pBNFScript(pBNFScript), GrfBlock(pParent) {}
 
-	BNFConjunction::~BNFConjunction() {
-	}
+BNFConjunction::~BNFConjunction()
+{
+}
 
-	void BNFConjunction::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFConjunction(*this, env);
-	}
+void BNFConjunction::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFConjunction(*this, env);
+}
 
-	bool BNFConjunction::isABNFCommand() const { return true; }
+bool BNFConjunction::isABNFCommand() const
+{
+    return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFConjunction::execute(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		int iLocation = CGRuntime::getInputLocation();
-		int iImplicitCopyPosition = ((_pBNFScript->implicitCopy()) ? CGRuntime::getOutputLocation() : -1);
-		result = GrfBlock::executeInternal(visibility);
-		if (result == BREAK_INTERRUPTION) {
-			if (_pBNFScript->getParentClauseMatching() != NULL) {
-				// if the coverage recording in ON, purge it from here
-				_pBNFScript->getParentClauseMatching()->purgeChildsAfterPosition(iLocation);
-			}
-			if (_pBNFScript->getRatchetPosition() > iLocation) {
-				CGRuntime::throwBNFExecutionError(toString(), "#ratchet position reached");
-			}
-			CGRuntime::setInputLocation(iLocation);
-			if (iImplicitCopyPosition >= 0) CGRuntime::resizeOutputStream(iImplicitCopyPosition);
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST BNFConjunction::execute(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result;
+    int iLocation = CGRuntime::getInputLocation();
+    int iImplicitCopyPosition = ((_pBNFScript->implicitCopy()) ? CGRuntime::getOutputLocation() : -1);
+    result = GrfBlock::executeInternal(visibility);
 
-	void BNFConjunction::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		std::vector<GrfCommand*>::const_iterator i = getCommands().begin();
-		if (i != getCommands().end()) {
-			CW_BODY_INDENT << "// " << toString();
-			CW_BODY_ENDL;
-			int iCursor = theCompilerEnvironment.newCursor();
-			char tcLocation[64];
-			sprintf(tcLocation, "_compilerClauseLocation_%d", iCursor);
-			char tcImplicitCopy[64];
-			sprintf(tcImplicitCopy, "_compilerClauseImplicitCopy_%d", iCursor);
-			CW_BODY_INDENT << "int " << tcLocation << " = CGRuntime::getInputLocation();";CW_BODY_ENDL;
-			CW_BODY_INDENT << "int " << tcImplicitCopy << " = ((theEnvironment.implicitCopy()) ? CGRuntime::getOutputLocation() : -1);";CW_BODY_ENDL;
-			GrfBlock::compileCppBNFSequence(theCompilerEnvironment);
-			CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";CW_BODY_ENDL;
-			if (_pBNFScript->hasCoverageRecording()) {
-				// coverage recording required
-				CW_BODY_INDENT << "\t_compilerClauseMatching.purgeChildsAfterPosition(" << tcLocation << ");";CW_BODY_ENDL;
-			}
-			CW_BODY_INDENT << "\tCGRuntime::setInputLocation(" << tcLocation << ");";CW_BODY_ENDL;
-			CW_BODY_INDENT << "\tif (" << tcImplicitCopy << " >= 0) CGRuntime::resizeOutputStream(" << tcImplicitCopy << ");";CW_BODY_ENDL;
-			CW_BODY_INDENT << "}";CW_BODY_ENDL;
-		}
-	}
+    if (result == BREAK_INTERRUPTION) {
+        if (_pBNFScript->getParentClauseMatching() != NULL) {
+            // if the coverage recording in ON, purge it from here
+            _pBNFScript->getParentClauseMatching()->purgeChildsAfterPosition(iLocation);
+        }
 
-	std::string BNFConjunction::toString() const {
-		std::string sText;
-		for (std::vector<GrfCommand*>::const_iterator i = getCommands().begin(); i != getCommands().end(); i++) {
-			if ((*i)->isABNFCommand()) {
-				if (i != getCommands().begin()) sText += " ";
-				sText += (*i)->toString();
-			}
-		}
-		return sText;
-	}
+        if (_pBNFScript->getRatchetPosition() > iLocation) {
+            CGRuntime::throwBNFExecutionError(toString(), "#ratchet position reached");
+        }
+
+        CGRuntime::setInputLocation(iLocation);
+
+        if (iImplicitCopyPosition >= 0) {
+            CGRuntime::resizeOutputStream(iImplicitCopyPosition);
+        }
+    }
+
+    return result;
+}
+
+void BNFConjunction::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    std::vector<GrfCommand*>::const_iterator i = getCommands().begin();
+
+    if (i != getCommands().end()) {
+        CW_BODY_INDENT << "// " << toString();
+        CW_BODY_ENDL;
+        int iCursor = theCompilerEnvironment.newCursor();
+        char tcLocation[64];
+        sprintf(tcLocation, "_compilerClauseLocation_%d", iCursor);
+        char tcImplicitCopy[64];
+        sprintf(tcImplicitCopy, "_compilerClauseImplicitCopy_%d", iCursor);
+        CW_BODY_INDENT << "int " << tcLocation << " = CGRuntime::getInputLocation();";
+        CW_BODY_ENDL;
+        CW_BODY_INDENT << "int " << tcImplicitCopy << " = ((theEnvironment.implicitCopy()) ? CGRuntime::getOutputLocation() : -1);";
+        CW_BODY_ENDL;
+        GrfBlock::compileCppBNFSequence(theCompilerEnvironment);
+        CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";
+        CW_BODY_ENDL;
+
+        if (_pBNFScript->hasCoverageRecording()) {
+            // coverage recording required
+            CW_BODY_INDENT << "\t_compilerClauseMatching.purgeChildsAfterPosition(" << tcLocation << ");";
+            CW_BODY_ENDL;
+        }
+
+        CW_BODY_INDENT << "\tCGRuntime::setInputLocation(" << tcLocation << ");";
+        CW_BODY_ENDL;
+        CW_BODY_INDENT << "\tif (" << tcImplicitCopy << " >= 0) CGRuntime::resizeOutputStream(" << tcImplicitCopy << ");";
+        CW_BODY_ENDL;
+        CW_BODY_INDENT << "}";
+        CW_BODY_ENDL;
+    }
+}
+
+std::string BNFConjunction::toString() const
+{
+    std::string sText;
+
+    for (std::vector<GrfCommand*>::const_iterator i = getCommands().begin(); i != getCommands().end(); i++) {
+        if ((*i)->isABNFCommand()) {
+            if (i != getCommands().begin()) {
+                sText += " ";
+            }
+
+            sText += (*i)->toString();
+        }
+    }
+
+    return sText;
+}
 }

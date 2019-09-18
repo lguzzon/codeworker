@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfSetTextMode.h"
 
-namespace CodeWorker {
-	GrfSetTextMode::~GrfSetTextMode() {
-		delete _pTextMode;
-	}
+namespace CodeWorker
+{
+GrfSetTextMode::~GrfSetTextMode()
+{
+    delete _pTextMode;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetTextMode::executeInternal(DtaScriptVariable& visibility) {
-		std::string sTextMode = _pTextMode->getValue(visibility);
-		return CGRuntime::setTextMode(sTextMode);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSetTextMode::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sTextMode = _pTextMode->getValue(visibility);
+    return CGRuntime::setTextMode(sTextMode);
+}
 
-	void GrfSetTextMode::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setTextMode(";
-		_pTextMode->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSetTextMode::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::setTextMode(";
+    _pTextMode->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

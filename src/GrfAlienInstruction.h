@@ -24,24 +24,26 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
-	class CppCompilerEnvironment;
+namespace CodeWorker
+{
+class CppCompilerEnvironment;
 
-	class GrfAlienInstruction : public GrfCommand {
-	private:
-		std::string _sTargetLanguage;
-		int _iLine;
-		std::string _sCode;
+class GrfAlienInstruction : public GrfCommand
+{
+private:
+    std::string _sTargetLanguage;
+    int _iLine;
+    std::string _sCode;
 
-	public:
-		GrfAlienInstruction(const std::string& sTargetLanguage, int iLine, const std::string& sCode) : _sTargetLanguage(sTargetLanguage), _iLine(iLine), _sCode(sCode) {}
-		virtual ~GrfAlienInstruction();
+public:
+    GrfAlienInstruction(const std::string& sTargetLanguage, int iLine, const std::string& sCode) : _sTargetLanguage(sTargetLanguage), _iLine(iLine), _sCode(sCode) {}
+    virtual ~GrfAlienInstruction();
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& /*visibility*/);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& /*visibility*/);
+};
 }
 
 #endif

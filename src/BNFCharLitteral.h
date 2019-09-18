@@ -24,38 +24,40 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptVariable;
+namespace CodeWorker
+{
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptVariable;
 
-	class BNFCharLitteral : public GrfCommand {
-	private:
-		DtaBNFScript* _pBNFScript;
-		int _iChar;
-		ExprScriptVariable* _pVariableToAssign;
-		bool _bConcatVariable;
-		int _iClauseReturnType;
-		bool _bContinue;
-		bool _bNoCase;
+class BNFCharLitteral : public GrfCommand
+{
+private:
+    DtaBNFScript* _pBNFScript;
+    int _iChar;
+    ExprScriptVariable* _pVariableToAssign;
+    bool _bConcatVariable;
+    int _iClauseReturnType;
+    bool _bContinue;
+    bool _bNoCase;
 
-	public:
-		BNFCharLitteral(DtaBNFScript* pBNFScript, GrfBlock* pParent, int iChar, bool bContinue, bool bNoCase);
-		virtual ~BNFCharLitteral();
+public:
+    BNFCharLitteral(DtaBNFScript* pBNFScript, GrfBlock* pParent, int iChar, bool bContinue, bool bNoCase);
+    virtual ~BNFCharLitteral();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-		void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
+    void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
 
-		virtual std::string toString() const;
+    virtual std::string toString() const;
 
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

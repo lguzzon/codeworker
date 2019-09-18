@@ -24,66 +24,74 @@ To contact the author: codeworker@free.fr
 
 #include "BNFStepper.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptVariable;
+namespace CodeWorker
+{
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptVariable;
 
-	struct BNFMultiplicityBoundaries {
-		bool bConstantBoundaries;
-		union BOUNDARY_TYPE {
-			struct CONSTANT_BOUNDARIES {
-				int _iBegin;
-				int _iEnd;
-			};
-			CONSTANT_BOUNDARIES constant;
-			struct EXPRESSION_BOUNDARIES {
-				ExprScriptExpression* _pBegin;
-				ExprScriptExpression* _pEnd;
-			};
-			EXPRESSION_BOUNDARIES variable;
-		};
-		BOUNDARY_TYPE choice;
+struct BNFMultiplicityBoundaries {
+    bool bConstantBoundaries;
+    union BOUNDARY_TYPE {
+        struct CONSTANT_BOUNDARIES {
+            int _iBegin;
+            int _iEnd;
+        };
+        CONSTANT_BOUNDARIES constant;
+        struct EXPRESSION_BOUNDARIES {
+            ExprScriptExpression* _pBegin;
+            ExprScriptExpression* _pEnd;
+        };
+        EXPRESSION_BOUNDARIES variable;
+    };
+    BOUNDARY_TYPE choice;
 
-		inline BNFMultiplicityBoundaries() {}
-		~BNFMultiplicityBoundaries();
+    inline BNFMultiplicityBoundaries() {}
+    ~BNFMultiplicityBoundaries();
 
-		void setMultiplicity(int iBegin, int iEnd);
-		void setMultiplicity(ExprScriptExpression* pBegin, ExprScriptExpression* pEnd);
+    void setMultiplicity(int iBegin, int iEnd);
+    void setMultiplicity(ExprScriptExpression* pBegin, ExprScriptExpression* pEnd);
 
-		void computeBoundaries(DtaScriptVariable& visibility, int& iBegin, int& iEnd) const;
+    void computeBoundaries(DtaScriptVariable& visibility, int& iBegin, int& iEnd) const;
 
-		std::string toString() const;
-	};
+    std::string toString() const;
+};
 
-	class BNFMultiplicity : public GrfBlock {
-	private:
-		DtaBNFScript* _pBNFScript;
-		ExprScriptVariable* _pVariableToAssign;
-		bool _bConcatVariable;
-		std::vector<std::string> _listOfConstants;
-		int _iClauseReturnType;
-		bool _bContinue;
-		BNFMultiplicityBoundaries _boundaries;
+class BNFMultiplicity : public GrfBlock
+{
+private:
+    DtaBNFScript* _pBNFScript;
+    ExprScriptVariable* _pVariableToAssign;
+    bool _bConcatVariable;
+    std::vector<std::string> _listOfConstants;
+    int _iClauseReturnType;
+    bool _bContinue;
+    BNFMultiplicityBoundaries _boundaries;
 
-	public:
-		BNFMultiplicity(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
-		virtual ~BNFMultiplicity();
+public:
+    BNFMultiplicity(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
+    virtual ~BNFMultiplicity();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-		void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
-		inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants) { _listOfConstants = listOfConstants; }
+    void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
+    inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants)
+    {
+        _listOfConstants = listOfConstants;
+    }
 
-		inline BNFMultiplicityBoundaries& getBoundaries() { return _boundaries; }
+    inline BNFMultiplicityBoundaries& getBoundaries()
+    {
+        return _boundaries;
+    }
 
-		virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& visibility);
+    virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& visibility);
 
-		virtual std::string toString() const;
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-	};
+    virtual std::string toString() const;
+    void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+};
 }
 
 #endif

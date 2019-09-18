@@ -32,51 +32,57 @@ To contact the author: codeworker@free.fr
 #include "DtaPatternScript.h"
 #include "GrfGeneratedFile.h"
 
-namespace CodeWorker {
-	GrfGeneratedFile::~GrfGeneratedFile() {
-		delete _pOutputFile;
-	}
+namespace CodeWorker
+{
+GrfGeneratedFile::~GrfGeneratedFile()
+{
+    delete _pOutputFile;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfGeneratedFile::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		DtaOutputFile generatedFile(_pPatternScript);
-		std::string sFile = _pOutputFile->getValue(visibility);
-		ScpStream* pOldOutputStream;
-		generatedFile.openGenerate(true, sFile.c_str(), pOldOutputStream);
-		try {
-			result = GrfBlock::executeInternal(visibility);
-		} catch(UtlException& exception) {
-			generatedFile.catchGenerateExecution(true, pOldOutputStream, &exception);
-		} catch(std::exception&) {
-			generatedFile.catchGenerateExecution(true, pOldOutputStream, 0);
-			throw;
-		}
-		generatedFile.closeGenerate(true, sFile.c_str(), pOldOutputStream);
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfGeneratedFile::executeInternal(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result;
+    DtaOutputFile generatedFile(_pPatternScript);
+    std::string sFile = _pOutputFile->getValue(visibility);
+    ScpStream* pOldOutputStream;
+    generatedFile.openGenerate(true, sFile.c_str(), pOldOutputStream);
 
-	void GrfGeneratedFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "{";
-		CW_BODY_ENDL;
-		theCompilerEnvironment.incrementIndentation();
-		CW_BODY_INDENT << "CGRuntimeOutputFile outputFile(";
-		_pOutputFile->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "try ";
-		theCompilerEnvironment.bracketsToNextBlock(true);
-		theCompilerEnvironment.carriageReturnAfterBlock(false);
-		GrfBlock::compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << " catch(UtlException& exception) {";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "\toutputFile.onCatchedException(exception);";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "}";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "\toutputFile.closeGenerate();";
-		CW_BODY_ENDL;
-		theCompilerEnvironment.decrementIndentation();
-		CW_BODY_INDENT << "}";
-		CW_BODY_ENDL;
-	}
+    try {
+        result = GrfBlock::executeInternal(visibility);
+    } catch (UtlException& exception) {
+        generatedFile.catchGenerateExecution(true, pOldOutputStream, &exception);
+    } catch (std::exception&) {
+        generatedFile.catchGenerateExecution(true, pOldOutputStream, 0);
+        throw;
+    }
+
+    generatedFile.closeGenerate(true, sFile.c_str(), pOldOutputStream);
+    return result;
+}
+
+void GrfGeneratedFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "{";
+    CW_BODY_ENDL;
+    theCompilerEnvironment.incrementIndentation();
+    CW_BODY_INDENT << "CGRuntimeOutputFile outputFile(";
+    _pOutputFile->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "try ";
+    theCompilerEnvironment.bracketsToNextBlock(true);
+    theCompilerEnvironment.carriageReturnAfterBlock(false);
+    GrfBlock::compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << " catch(UtlException& exception) {";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "\toutputFile.onCatchedException(exception);";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "}";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "\toutputFile.closeGenerate();";
+    CW_BODY_ENDL;
+    theCompilerEnvironment.decrementIndentation();
+    CW_BODY_INDENT << "}";
+    CW_BODY_ENDL;
+}
 }

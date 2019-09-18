@@ -27,6 +27,7 @@ To contact the author: codeworker@free.fr
 
 //-I C:\Projects\generator\Generation -I C:\Projects\generator -I C:\Projects\generator\Scripts\Tutorial -path C:\Projects\generator -c++ Generation\CodeGenerator -time -script GeneratorDriver.gen
 //-I E:\Projects\generator\Generation -I E:\Projects\generator -I E:\Projects\generator\Scripts\Tutorial -path E:\Projects\generator -time -script GeneratorDriver.cws
-int main(int iNargs, char** tsArgs) {
-	return CodeWorker::CGRuntime::entryPoint(iNargs, tsArgs, NULL);
+int main(int iNargs, char** tsArgs)
+{
+    return CodeWorker::CGRuntime::entryPoint(iNargs, tsArgs, NULL);
 }

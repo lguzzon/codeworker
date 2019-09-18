@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfOpenLogFile.h"
 
-namespace CodeWorker {
-	GrfOpenLogFile::~GrfOpenLogFile() {
-		delete _pFilename;
-	}
+namespace CodeWorker
+{
+GrfOpenLogFile::~GrfOpenLogFile()
+{
+    delete _pFilename;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfOpenLogFile::executeInternal(DtaScriptVariable& visibility) {
-		std::string sFilename = _pFilename->getValue(visibility);
-		return CGRuntime::openLogFile(sFilename);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfOpenLogFile::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sFilename = _pFilename->getValue(visibility);
+    return CGRuntime::openLogFile(sFilename);
+}
 
-	void GrfOpenLogFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::openLogFile(";
-		_pFilename->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfOpenLogFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::openLogFile(";
+    _pFilename->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

@@ -30,24 +30,28 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfPutEnv.h"
 
-namespace CodeWorker {
-	GrfPutEnv::~GrfPutEnv() {
-		delete _pName;
-		delete _pValue;
-	}
+namespace CodeWorker
+{
+GrfPutEnv::~GrfPutEnv()
+{
+    delete _pName;
+    delete _pValue;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfPutEnv::executeInternal(DtaScriptVariable& visibility) {
-		std::string sName = _pName->getValue(visibility);
-		std::string sValue = _pValue->getValue(visibility);
-		return CGRuntime::putEnv(sName, sValue);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfPutEnv::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sName = _pName->getValue(visibility);
+    std::string sValue = _pValue->getValue(visibility);
+    return CGRuntime::putEnv(sName, sValue);
+}
 
-	void GrfPutEnv::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::putEnv(";
-		_pName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pValue->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfPutEnv::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::putEnv(";
+    _pName->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pValue->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

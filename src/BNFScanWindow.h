@@ -24,37 +24,45 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptExpression;
-	class ExprScriptVariable;
+namespace CodeWorker
+{
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptExpression;
+class ExprScriptVariable;
 
-	class BNFScanWindow : public GrfBlock {
-	private:
-		DtaBNFScript* _pBNFScript;
-		GrfCommand*   _pWindowSequence;
-		bool _bContinue;
+class BNFScanWindow : public GrfBlock
+{
+private:
+    DtaBNFScript* _pBNFScript;
+    GrfCommand*   _pWindowSequence;
+    bool _bContinue;
 
-	public:
-		BNFScanWindow(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
-		virtual ~BNFScanWindow();
+public:
+    BNFScanWindow(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
+    virtual ~BNFScanWindow();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
 
-		inline GrfCommand* getWindow() const { return _pWindowSequence; }
-		inline void setWindow(GrfCommand* pCommand) { _pWindowSequence = pCommand; }
+    inline GrfCommand* getWindow() const
+    {
+        return _pWindowSequence;
+    }
+    inline void setWindow(GrfCommand* pCommand)
+    {
+        _pWindowSequence = pCommand;
+    }
 
-		virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-		virtual std::string toString() const;
+    virtual std::string toString() const;
 
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

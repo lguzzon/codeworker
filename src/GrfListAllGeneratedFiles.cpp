@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptVariable.h"
 #include "GrfListAllGeneratedFiles.h"
 
-namespace CodeWorker {
-	GrfListAllGeneratedFiles::~GrfListAllGeneratedFiles() {
-		delete _pFiles;
-	}
+namespace CodeWorker
+{
+GrfListAllGeneratedFiles::~GrfListAllGeneratedFiles()
+{
+    delete _pFiles;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfListAllGeneratedFiles::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pFiles = visibility.getExistingVariable(*_pFiles);
-		return CGRuntime::listAllGeneratedFiles(pFiles);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfListAllGeneratedFiles::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pFiles = visibility.getExistingVariable(*_pFiles);
+    return CGRuntime::listAllGeneratedFiles(pFiles);
+}
 
-	void GrfListAllGeneratedFiles::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::listAllGeneratedFiles(";
-		_pFiles->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfListAllGeneratedFiles::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::listAllGeneratedFiles(";
+    _pFiles->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

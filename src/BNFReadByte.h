@@ -24,26 +24,28 @@ To contact the author: codeworker@free.fr
 
 #include "BNFReadChar.h"
 
-namespace CodeWorker {
-	class BNFReadByte : public BNFReadChar {
-	public:
-		BNFReadByte(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
-		virtual ~BNFReadByte();
+namespace CodeWorker
+{
+class BNFReadByte : public BNFReadChar
+{
+public:
+    BNFReadByte(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
+    virtual ~BNFReadByte();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual void setConstantsToMatch(const std::vector<std::string>& listOfConstants);
+    virtual void setConstantsToMatch(const std::vector<std::string>& listOfConstants);
 
-		virtual std::string toString() const;
+    virtual std::string toString() const;
 
-	protected:
-		virtual void postExecutionAssignment(DtaScriptVariable& variable, unsigned char cChar);
+protected:
+    virtual void postExecutionAssignment(DtaScriptVariable& variable, unsigned char cChar);
 
-		virtual void compileCppAssignment(CppCompilerEnvironment& theCompilerEnvironment, int iCursor) const;
+    virtual void compileCppAssignment(CppCompilerEnvironment& theCompilerEnvironment, int iCursor) const;
 
-	private:
-		static std::string constantsToString(const std::vector<std::string>& listOfConstants);
-	};
+private:
+    static std::string constantsToString(const std::vector<std::string>& listOfConstants);
+};
 }
 
 #endif

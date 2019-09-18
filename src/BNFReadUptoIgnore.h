@@ -24,43 +24,51 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptVariable;
-	class ExprScriptExpression;
+namespace CodeWorker
+{
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptVariable;
+class ExprScriptExpression;
 
-	class BNFReadUptoIgnore : public GrfCommand {
-	private:
-		DtaBNFScript* _pBNFScript;
-		IGNORE_MODE _eMode;
-		BNFClause* _pIgnoreClause;
-		ExprScriptVariable* _pVariableToAssign;
-		bool _bConcatVariable;
-		std::vector<std::string> _listOfConstants;
-		ExprScriptExpression* _pText;
-		int _iClauseReturnType;
-		bool _bContinue;
+class BNFReadUptoIgnore : public GrfCommand
+{
+private:
+    DtaBNFScript* _pBNFScript;
+    IGNORE_MODE _eMode;
+    BNFClause* _pIgnoreClause;
+    ExprScriptVariable* _pVariableToAssign;
+    bool _bConcatVariable;
+    std::vector<std::string> _listOfConstants;
+    ExprScriptExpression* _pText;
+    int _iClauseReturnType;
+    bool _bContinue;
 
-	public:
-		BNFReadUptoIgnore(DtaBNFScript* pBNFScript, GrfBlock* pParent, IGNORE_MODE eMode, BNFClause* pIgnoreClause, bool bContinue);
-		virtual ~BNFReadUptoIgnore();
+public:
+    BNFReadUptoIgnore(DtaBNFScript* pBNFScript, GrfBlock* pParent, IGNORE_MODE eMode, BNFClause* pIgnoreClause, bool bContinue);
+    virtual ~BNFReadUptoIgnore();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-		inline void setText(ExprScriptExpression* pText) { _pText = pText; }
-		void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
-		inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants) { _listOfConstants = listOfConstants; }
+    inline void setText(ExprScriptExpression* pText)
+    {
+        _pText = pText;
+    }
+    void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
+    inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants)
+    {
+        _listOfConstants = listOfConstants;
+    }
 
-		virtual std::string toString() const;
+    virtual std::string toString() const;
 
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

@@ -32,24 +32,28 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfRemoveRecursive.h"
 
-namespace CodeWorker {
-	GrfRemoveRecursive::~GrfRemoveRecursive() {
-		delete _pVariable;
-		delete _pAttribute;
-	}
+namespace CodeWorker
+{
+GrfRemoveRecursive::~GrfRemoveRecursive()
+{
+    delete _pVariable;
+    delete _pAttribute;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfRemoveRecursive::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pVariable = visibility.getExistingVariable(*_pVariable);
-		std::string sAttribute = _pAttribute->getValue(visibility);
-		return CGRuntime::removeRecursive(pVariable, sAttribute);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfRemoveRecursive::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pVariable = visibility.getExistingVariable(*_pVariable);
+    std::string sAttribute = _pAttribute->getValue(visibility);
+    return CGRuntime::removeRecursive(pVariable, sAttribute);
+}
 
-	void GrfRemoveRecursive::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::removeRecursive(";
-		_pVariable->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pAttribute->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfRemoveRecursive::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::removeRecursive(";
+    _pVariable->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pAttribute->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

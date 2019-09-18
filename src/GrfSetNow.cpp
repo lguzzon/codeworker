@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfSetNow.h"
 
-namespace CodeWorker {
-	GrfSetNow::~GrfSetNow() {
-		delete _pConstantDateTime;
-	}
+namespace CodeWorker
+{
+GrfSetNow::~GrfSetNow()
+{
+    delete _pConstantDateTime;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetNow::executeInternal(DtaScriptVariable& visibility) {
-		std::string sConstantDateTime = _pConstantDateTime->getValue(visibility);
-		return CGRuntime::setNow(sConstantDateTime);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSetNow::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sConstantDateTime = _pConstantDateTime->getValue(visibility);
+    return CGRuntime::setNow(sConstantDateTime);
+}
 
-	void GrfSetNow::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setNow(";
-		_pConstantDateTime->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSetNow::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::setNow(";
+    _pConstantDateTime->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

@@ -35,46 +35,65 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFCheck.h"
 
-namespace CodeWorker {
-	BNFCheck::BNFCheck(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue) : _pBNFScript(pBNFScript), GrfCommand(pParent), _bContinue(bContinue), _pCondition(NULL) {}
+namespace CodeWorker
+{
+BNFCheck::BNFCheck(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue) : _pBNFScript(pBNFScript), GrfCommand(pParent), _bContinue(bContinue), _pCondition(NULL) {}
 
-	BNFCheck::~BNFCheck() {
-		delete _pCondition;
-	}
+BNFCheck::~BNFCheck()
+{
+    delete _pCondition;
+}
 
-	void BNFCheck::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFCheck(*this, env);
-	}
+void BNFCheck::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFCheck(*this, env);
+}
 
-	bool BNFCheck::isABNFCommand() const { return true; }
+bool BNFCheck::isABNFCommand() const
+{
+    return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFCheck::executeInternal(DtaScriptVariable& visibility) {
-		std::string sValue = _pCondition->getValue(visibility);
-		if (sValue.empty()) {
-			if (_bContinue) CGRuntime::throwBNFExecutionError(toString());
-			return BREAK_INTERRUPTION;
-		}
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST BNFCheck::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sValue = _pCondition->getValue(visibility);
 
-	void BNFCheck::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "// " << toString();
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "_compilerClauseSuccess = ";
-		_pCondition->compileCppBoolean(theCompilerEnvironment, false);
-		CW_BODY_STREAM << ";";
-		CW_BODY_ENDL;
-		if (_bContinue) {
-			CW_BODY_INDENT << "if (!_compilerClauseSuccess) CGRuntime::throwBNFExecutionError(";
-			CW_BODY_STREAM.writeString(toString());
-			CW_BODY_STREAM << ");";
-			CW_BODY_ENDL;
-		}
-	}
+    if (sValue.empty()) {
+        if (_bContinue) {
+            CGRuntime::throwBNFExecutionError(toString());
+        }
 
-	std::string BNFCheck::toString() const {
-		std::string sText = "#check(" + _pCondition->toString() + ")";
-		if (_bContinue) sText = "#continue " + sText;
-		return sText;
-	}
+        return BREAK_INTERRUPTION;
+    }
+
+    return NO_INTERRUPTION;
+}
+
+void BNFCheck::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "// " << toString();
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "_compilerClauseSuccess = ";
+    _pCondition->compileCppBoolean(theCompilerEnvironment, false);
+    CW_BODY_STREAM << ";";
+    CW_BODY_ENDL;
+
+    if (_bContinue) {
+        CW_BODY_INDENT << "if (!_compilerClauseSuccess) CGRuntime::throwBNFExecutionError(";
+        CW_BODY_STREAM.writeString(toString());
+        CW_BODY_STREAM << ");";
+        CW_BODY_ENDL;
+    }
+}
+
+std::string BNFCheck::toString() const
+{
+    std::string sText = "#check(" + _pCondition->toString() + ")";
+
+    if (_bContinue) {
+        sText = "#continue " + sText;
+    }
+
+    return sText;
+}
 }

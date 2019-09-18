@@ -24,41 +24,43 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptVariable;
+namespace CodeWorker
+{
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptVariable;
 
-	class BNFReadChar : public GrfCommand {
-	protected:
-		DtaBNFScript* _pBNFScript;
-		ExprScriptVariable* _pVariableToAssign;
-		bool _bConcatVariable;
-		std::vector<std::string> _listOfConstants;
-		int _iClauseReturnType;
-		bool _bContinue;
+class BNFReadChar : public GrfCommand
+{
+protected:
+    DtaBNFScript* _pBNFScript;
+    ExprScriptVariable* _pVariableToAssign;
+    bool _bConcatVariable;
+    std::vector<std::string> _listOfConstants;
+    int _iClauseReturnType;
+    bool _bContinue;
 
-	public:
-		BNFReadChar(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
-		virtual ~BNFReadChar();
+public:
+    BNFReadChar(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
+    virtual ~BNFReadChar();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-		void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
-		virtual void setConstantsToMatch(const std::vector<std::string>& listOfConstants);
+    void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
+    virtual void setConstantsToMatch(const std::vector<std::string>& listOfConstants);
 
-		virtual std::string toString() const;
+    virtual std::string toString() const;
 
-		void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-		virtual void postExecutionAssignment(DtaScriptVariable& variable, unsigned char cChar);
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+    virtual void postExecutionAssignment(DtaScriptVariable& variable, unsigned char cChar);
 
-		virtual void compileCppAssignment(CppCompilerEnvironment& theCompilerEnvironment, int iCursor) const;
-	};
+    virtual void compileCppAssignment(CppCompilerEnvironment& theCompilerEnvironment, int iCursor) const;
+};
 }
 
 #endif

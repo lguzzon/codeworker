@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptVariable.h"
 #include "GrfEnvironTable.h"
 
-namespace CodeWorker {
-	GrfEnvironTable::~GrfEnvironTable() {
-		delete _pTable;
-	}
+namespace CodeWorker
+{
+GrfEnvironTable::~GrfEnvironTable()
+{
+    delete _pTable;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfEnvironTable::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pTable = visibility.getVariable(*_pTable);
-		return CGRuntime::environTable(pTable);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfEnvironTable::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pTable = visibility.getVariable(*_pTable);
+    return CGRuntime::environTable(pTable);
+}
 
-	void GrfEnvironTable::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::environTable(";
-		_pTable->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfEnvironTable::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::environTable(";
+    _pTable->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

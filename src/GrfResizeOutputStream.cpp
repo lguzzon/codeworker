@@ -29,21 +29,25 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptExpression.h"
 #include "GrfResizeOutputStream.h"
 
-namespace CodeWorker {
-	GrfResizeOutputStream::~GrfResizeOutputStream() {
-		delete _pNewSize;
-	}
+namespace CodeWorker
+{
+GrfResizeOutputStream::~GrfResizeOutputStream()
+{
+    delete _pNewSize;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfResizeOutputStream::executeInternal(DtaScriptVariable& visibility) {
-		std::string sNewSize = _pNewSize->getValue(visibility);
-		int iNewSize = atoi(sNewSize.c_str());
-		return CGRuntime::resizeOutputStream(iNewSize);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfResizeOutputStream::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sNewSize = _pNewSize->getValue(visibility);
+    int iNewSize = atoi(sNewSize.c_str());
+    return CGRuntime::resizeOutputStream(iNewSize);
+}
 
-	void GrfResizeOutputStream::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::resizeOutputStream(";
-		_pNewSize->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfResizeOutputStream::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::resizeOutputStream(";
+    _pNewSize->compileCppInt(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

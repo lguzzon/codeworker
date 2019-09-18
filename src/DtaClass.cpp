@@ -25,58 +25,80 @@ To contact the author: codeworker@free.fr
 
 #include "DtaClass.h"
 
-namespace CodeWorker {
-	std::vector<DtaClass*> DtaClass::_idToClass;
+namespace CodeWorker
+{
+std::vector<DtaClass*> DtaClass::_idToClass;
 
 
-	DtaClass::DtaClass(GrfBlock* pBlock, const std::string& sName) : _pBlock(pBlock), _sName(sName), _pExtendedClass(NULL) {
-		_idToClass.push_back(this);
-		_iId = (EXPRESSION_TYPE) (_idToClass.size() << 8);
-	}
+DtaClass::DtaClass(GrfBlock* pBlock, const std::string& sName) : _pBlock(pBlock), _sName(sName), _pExtendedClass(NULL)
+{
+    _idToClass.push_back(this);
+    _iId = (EXPRESSION_TYPE)(_idToClass.size() << 8);
+}
 
-	DtaClass::~DtaClass() {
-		unsigned int iIndex = ((unsigned int) _iId) >> 8;
-		_idToClass[iIndex - 1] = NULL;
-	}
+DtaClass::~DtaClass()
+{
+    unsigned int iIndex = ((unsigned int) _iId) >> 8;
+    _idToClass[iIndex - 1] = NULL;
+}
 
-	EXPRESSION_TYPE DtaClass::getAttributeType(const std::string& sAttribute) const {
-		std::map<std::string, EXPRESSION_TYPE>::const_iterator cursor = _mapOfAttributes.find(sAttribute);
-		if (cursor == _mapOfAttributes.end()) return UNKNOWN_EXPRTYPE;
-		return cursor->second;
-	}
+EXPRESSION_TYPE DtaClass::getAttributeType(const std::string& sAttribute) const
+{
+    std::map<std::string, EXPRESSION_TYPE>::const_iterator cursor = _mapOfAttributes.find(sAttribute);
 
-	bool DtaClass::addAttribute(const std::string& sAttribute, EXPRESSION_TYPE parameterType, DtaClass* pClassAttribute) {
-		std::map<std::string, EXPRESSION_TYPE>::const_iterator cursor = _mapOfAttributes.find(sAttribute);
-		if (cursor == _mapOfAttributes.end()) return false;
-		if (pClassAttribute == NULL) {
-			_mapOfAttributes[sAttribute] = parameterType;
-		} else {
-			int iAttributeType = ((int) parameterType) & pClassAttribute->getId();
-			_mapOfAttributes[sAttribute] = (EXPRESSION_TYPE) iAttributeType;
-		}
-		return true;
-	}
+    if (cursor == _mapOfAttributes.end()) {
+        return UNKNOWN_EXPRTYPE;
+    }
 
-	std::string DtaClass::getCppTypeSpecifier() const {
-		return getName();
-	}
+    return cursor->second;
+}
 
-	EXPRESSION_TYPE DtaClass::composeExprType(EXPRESSION_TYPE exprType) const {
-		int iExprType = ((int) exprType) | ((int) _iId);
-		return (EXPRESSION_TYPE) iExprType;
-	}
+bool DtaClass::addAttribute(const std::string& sAttribute, EXPRESSION_TYPE parameterType, DtaClass* pClassAttribute)
+{
+    std::map<std::string, EXPRESSION_TYPE>::const_iterator cursor = _mapOfAttributes.find(sAttribute);
 
-	DtaClass* DtaClass::getClass(EXPRESSION_TYPE iId) {
-		int iIndex = ((int) iId) >> 8;
-		if  ((iIndex <= 0) || ((size_t) iIndex > _idToClass.size())) return NULL;
-		return _idToClass[iIndex - 1];
-	}
+    if (cursor == _mapOfAttributes.end()) {
+        return false;
+    }
+
+    if (pClassAttribute == NULL) {
+        _mapOfAttributes[sAttribute] = parameterType;
+    } else {
+        int iAttributeType = ((int) parameterType) & pClassAttribute->getId();
+        _mapOfAttributes[sAttribute] = (EXPRESSION_TYPE) iAttributeType;
+    }
+
+    return true;
+}
+
+std::string DtaClass::getCppTypeSpecifier() const
+{
+    return getName();
+}
+
+EXPRESSION_TYPE DtaClass::composeExprType(EXPRESSION_TYPE exprType) const
+{
+    int iExprType = ((int) exprType) | ((int) _iId);
+    return (EXPRESSION_TYPE) iExprType;
+}
+
+DtaClass* DtaClass::getClass(EXPRESSION_TYPE iId)
+{
+    int iIndex = ((int) iId) >> 8;
+
+    if ((iIndex <= 0) || ((size_t) iIndex > _idToClass.size())) {
+        return NULL;
+    }
+
+    return _idToClass[iIndex - 1];
+}
 
 
-	DtaTargetLanguageTypeSpecifier::~DtaTargetLanguageTypeSpecifier() {}
+DtaTargetLanguageTypeSpecifier::~DtaTargetLanguageTypeSpecifier() {}
 
-	std::string DtaTargetLanguageTypeSpecifier::getCppTypeSpecifier() const {
-		return "TARGET_LANGUAGE_TYPE_SPECIFIER(" + getName() + ")";
-	}
+std::string DtaTargetLanguageTypeSpecifier::getCppTypeSpecifier() const
+{
+    return "TARGET_LANGUAGE_TYPE_SPECIFIER(" + getName() + ")";
+}
 
 }

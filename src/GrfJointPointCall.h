@@ -24,23 +24,28 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class ExprScriptExpression;
+namespace CodeWorker
+{
+class ExprScriptExpression;
 
-	class GrfJointPointCall : public GrfCommand {
-	private:
-		ExprScriptVariable* _pContext;
+class GrfJointPointCall : public GrfCommand
+{
+private:
+    ExprScriptVariable* _pContext;
 
-	public:
-		inline GrfJointPointCall() : _pContext(NULL) {}
-		virtual ~GrfJointPointCall();
+public:
+    inline GrfJointPointCall() : _pContext(NULL) {}
+    virtual ~GrfJointPointCall();
 
-		inline void setContext(ExprScriptVariable* pContext) { _pContext = pContext; }
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    inline void setContext(ExprScriptVariable* pContext)
+    {
+        _pContext = pContext;
+    }
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

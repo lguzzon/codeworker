@@ -28,20 +28,24 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfNop.h"
 
-namespace CodeWorker {
-	GrfNop::~GrfNop() {
-		delete _pExpression;
-	}
+namespace CodeWorker
+{
+GrfNop::~GrfNop()
+{
+    delete _pExpression;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfNop::executeInternal(DtaScriptVariable& visibility) {
-		_pExpression->getValue(visibility);
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfNop::executeInternal(DtaScriptVariable& visibility)
+{
+    _pExpression->getValue(visibility);
+    return NO_INTERRUPTION;
+}
 
-	void GrfNop::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT;
-		_pExpression->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ";";
-		CW_BODY_ENDL;
-	}
+void GrfNop::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT;
+    _pExpression->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ";";
+    CW_BODY_ENDL;
+}
 }

@@ -162,6 +162,7 @@ lib: precoditions $(OBJECTS)
 clean:
 	-rm -f *.o *.a CodeWorker codeworker core
 	-rm -R deploy/
+	./formatSrc.sh
 
 deployStatic: CXXFLAGS += -O4 -static
 deployStatic: CC += -O4 -static

@@ -34,78 +34,108 @@ To contact the author: codeworker@free.fr
 #include "DtaProject.h"
 #include "GrfGenerateString.h"
 
-namespace CodeWorker {
-	GrfGenerateString::~GrfGenerateString() {
-		delete _pPatternFileName;
-		delete _pClass;
-		delete _pOutputString;
-		if (_pCachedScript != NULL) delete _pCachedScript;
-	}
+namespace CodeWorker
+{
+GrfGenerateString::~GrfGenerateString()
+{
+    delete _pPatternFileName;
+    delete _pClass;
+    delete _pOutputString;
 
-	void GrfGenerateString::setPatternFileName(ExprScriptScriptFile* pPatternFileName) {
-		if (pPatternFileName->isFileName()) _pPatternFileName = pPatternFileName->getFileName();
-		_pCachedScript = dynamic_cast<DtaPatternScript*>(pPatternFileName->getBody());
-		pPatternFileName->release();
-	}
+    if (_pCachedScript != NULL) {
+        delete _pCachedScript;
+    }
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfGenerateString::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pClass = visibility.getExistingVariable(*_pClass);
-		if (pClass == NULL) {
-			throw UtlException("runtime error: variable " + _pClass->toString() + " doesn't exist while calling procedure '" + std::string(getFunctionName()) + "()'");
-		}
-		DtaScriptVariable* pOutputString = visibility.getExistingVariable(*_pOutputString);
-		if (pOutputString == NULL) {
-			throw UtlException("runtime error: variable " + _pOutputString->toString() + " doesn't exist while calling procedure '" + std::string(getFunctionName()) + "()'");
-		}
+void GrfGenerateString::setPatternFileName(ExprScriptScriptFile* pPatternFileName)
+{
+    if (pPatternFileName->isFileName()) {
+        _pPatternFileName = pPatternFileName->getFileName();
+    }
 
-		EXECUTE_FUNCTION* executeFunction = NULL;
-		if (_pPatternFileName != NULL) {
-			std::string sPatternFileName = _pPatternFileName->getValue(visibility);
-			if ((_pCachedScript == NULL) || (_sCachedPatternFile != sPatternFileName) || ScpStream::existVirtualFile(sPatternFileName)) {
-				executeFunction = DtaScript::getRegisteredScript(sPatternFileName.c_str());
-				if (executeFunction == NULL) {
-					if (_pCachedScript != NULL) delete _pCachedScript;
-					_pCachedScript = new DtaPatternScript(getParent());
-					_sCachedPatternFile = sPatternFileName;
-					_pCachedScript->parseFile(sPatternFileName.c_str());
-				}
-			}
-		}
+    _pCachedScript = dynamic_cast<DtaPatternScript*>(pPatternFileName->getBody());
+    pPatternFileName->release();
+}
 
-		return executeScript(pOutputString, pClass, executeFunction);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfGenerateString::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pClass = visibility.getExistingVariable(*_pClass);
 
-	SEQUENCE_INTERRUPTION_LIST GrfGenerateString::executeScript(DtaScriptVariable* pOutputString, DtaScriptVariable* pThisContext, EXECUTE_FUNCTION* executeFunction) {
-		if (executeFunction != NULL) {
-			CGRuntime::generateString(executeFunction, CppParsingTree_var(pThisContext), CppParsingTree_var(pOutputString));
-			return NO_INTERRUPTION;
-		}
-		std::string sOutputString;
-		SEQUENCE_INTERRUPTION_LIST result = _pCachedScript->generateString(sOutputString, *pThisContext);
-		if (result == NO_INTERRUPTION) pOutputString->setValue(sOutputString.c_str());
-		return result;
-	}
+    if (pClass == NULL) {
+        throw UtlException("runtime error: variable " + _pClass->toString() + " doesn't exist while calling procedure '" + std::string(getFunctionName()) + "()'");
+    }
 
-	void GrfGenerateString::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		ExprScriptConstant* pConstantFileName = dynamic_cast<ExprScriptConstant*>(_pPatternFileName);
-		std::string sScriptFilename;
-		if (pConstantFileName == NULL) {
-			sScriptFilename = theCompilerEnvironment.newInlineScriptFilename();
-		} else {
-			sScriptFilename = pConstantFileName->getConstant();
-		}
-		std::string sRadical = DtaScript::convertFilenameAsIdentifier(CppCompilerEnvironment::getRadical(CppCompilerEnvironment::filename2Module(sScriptFilename)));
-		CW_BODY_INDENT << "CGRuntime::" << getFunctionName() << "(&Execute" << sRadical << "::instance(), ";
-		_pClass->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pOutputString->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-		if (_pCachedScript == NULL) {
-			_pCachedScript = new DtaPatternScript(getParent());
-			_sCachedPatternFile = sScriptFilename;
-			_pCachedScript->parseFile(_sCachedPatternFile.c_str());
-		}
-		_pCachedScript->compileCpp(theCompilerEnvironment, sScriptFilename);
-	}
+    DtaScriptVariable* pOutputString = visibility.getExistingVariable(*_pOutputString);
+
+    if (pOutputString == NULL) {
+        throw UtlException("runtime error: variable " + _pOutputString->toString() + " doesn't exist while calling procedure '" + std::string(getFunctionName()) + "()'");
+    }
+
+    EXECUTE_FUNCTION* executeFunction = NULL;
+
+    if (_pPatternFileName != NULL) {
+        std::string sPatternFileName = _pPatternFileName->getValue(visibility);
+
+        if ((_pCachedScript == NULL) || (_sCachedPatternFile != sPatternFileName) || ScpStream::existVirtualFile(sPatternFileName)) {
+            executeFunction = DtaScript::getRegisteredScript(sPatternFileName.c_str());
+
+            if (executeFunction == NULL) {
+                if (_pCachedScript != NULL) {
+                    delete _pCachedScript;
+                }
+
+                _pCachedScript = new DtaPatternScript(getParent());
+                _sCachedPatternFile = sPatternFileName;
+                _pCachedScript->parseFile(sPatternFileName.c_str());
+            }
+        }
+    }
+
+    return executeScript(pOutputString, pClass, executeFunction);
+}
+
+SEQUENCE_INTERRUPTION_LIST GrfGenerateString::executeScript(DtaScriptVariable* pOutputString, DtaScriptVariable* pThisContext, EXECUTE_FUNCTION* executeFunction)
+{
+    if (executeFunction != NULL) {
+        CGRuntime::generateString(executeFunction, CppParsingTree_var(pThisContext), CppParsingTree_var(pOutputString));
+        return NO_INTERRUPTION;
+    }
+
+    std::string sOutputString;
+    SEQUENCE_INTERRUPTION_LIST result = _pCachedScript->generateString(sOutputString, *pThisContext);
+
+    if (result == NO_INTERRUPTION) {
+        pOutputString->setValue(sOutputString.c_str());
+    }
+
+    return result;
+}
+
+void GrfGenerateString::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    ExprScriptConstant* pConstantFileName = dynamic_cast<ExprScriptConstant*>(_pPatternFileName);
+    std::string sScriptFilename;
+
+    if (pConstantFileName == NULL) {
+        sScriptFilename = theCompilerEnvironment.newInlineScriptFilename();
+    } else {
+        sScriptFilename = pConstantFileName->getConstant();
+    }
+
+    std::string sRadical = DtaScript::convertFilenameAsIdentifier(CppCompilerEnvironment::getRadical(CppCompilerEnvironment::filename2Module(sScriptFilename)));
+    CW_BODY_INDENT << "CGRuntime::" << getFunctionName() << "(&Execute" << sRadical << "::instance(), ";
+    _pClass->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pOutputString->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+
+    if (_pCachedScript == NULL) {
+        _pCachedScript = new DtaPatternScript(getParent());
+        _sCachedPatternFile = sScriptFilename;
+        _pCachedScript->parseFile(_sCachedPatternFile.c_str());
+    }
+
+    _pCachedScript->compileCpp(theCompilerEnvironment, sScriptFilename);
+}
 }

@@ -31,45 +31,65 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFBreak.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 
-	BNFBreak::BNFBreak(GrfBlock* pParent) : GrfCommand(pParent), _pCondition(NULL) {}
+BNFBreak::BNFBreak(GrfBlock* pParent) : GrfCommand(pParent), _pCondition(NULL) {}
 
-	BNFBreak::~BNFBreak() {
-		delete _pCondition;
-	}
+BNFBreak::~BNFBreak()
+{
+    delete _pCondition;
+}
 
-	void BNFBreak::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFBreak(*this, env);
-	}
+void BNFBreak::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFBreak(*this, env);
+}
 
-	bool BNFBreak::isABNFCommand() const { return true; }
+bool BNFBreak::isABNFCommand() const
+{
+    return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFBreak::executeInternal(DtaScriptVariable& visibility) {
-		std::string sValue = (_pCondition != NULL)?_pCondition->getValue(visibility):"true";
-		if (sValue.empty()) {
-			return NO_INTERRUPTION;
-		}
-		return CONTINUE_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST BNFBreak::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sValue = (_pCondition != NULL) ? _pCondition->getValue(visibility) : "true";
 
-	void BNFBreak::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		if (theCompilerEnvironment.getLastRepeatCursor(true) < 0) throw UtlException("while translating a BNF directive #break to C++: #break must be included in a repeated sequence");
-		CW_BODY_INDENT << "// " << toString();
-		CW_BODY_ENDL;
-		if (_pCondition != NULL) {
-			CW_BODY_INDENT << "if (";
-			_pCondition->compileCppBoolean(theCompilerEnvironment, false);
-			CW_BODY_STREAM << ") goto _compilerRepeatLabel" << theCompilerEnvironment.getLastRepeatCursor(true) << ";";
-			CW_BODY_ENDL;
-		} else {
-			CW_BODY_INDENT << "goto _compilerRepeatLabel" << theCompilerEnvironment.getLastRepeatCursor(true) << ";";CW_BODY_ENDL;
-		}
-	}
+    if (sValue.empty()) {
+        return NO_INTERRUPTION;
+    }
 
-	std::string BNFBreak::toString() const {
-		std::string sText = "#break";
-		if (_pCondition != NULL) sText += "(" + _pCondition->toString() + ")";
-		return sText;
-	}
+    return CONTINUE_INTERRUPTION;
+}
+
+void BNFBreak::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    if (theCompilerEnvironment.getLastRepeatCursor(true) < 0) {
+        throw UtlException("while translating a BNF directive #break to C++: #break must be included in a repeated sequence");
+    }
+
+    CW_BODY_INDENT << "// " << toString();
+    CW_BODY_ENDL;
+
+    if (_pCondition != NULL) {
+        CW_BODY_INDENT << "if (";
+        _pCondition->compileCppBoolean(theCompilerEnvironment, false);
+        CW_BODY_STREAM << ") goto _compilerRepeatLabel" << theCompilerEnvironment.getLastRepeatCursor(true) << ";";
+        CW_BODY_ENDL;
+    } else {
+        CW_BODY_INDENT << "goto _compilerRepeatLabel" << theCompilerEnvironment.getLastRepeatCursor(true) << ";";
+        CW_BODY_ENDL;
+    }
+}
+
+std::string BNFBreak::toString() const
+{
+    std::string sText = "#break";
+
+    if (_pCondition != NULL) {
+        sText += "(" + _pCondition->toString() + ")";
+    }
+
+    return sText;
+}
 }

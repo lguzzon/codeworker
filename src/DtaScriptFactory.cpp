@@ -32,18 +32,37 @@ To contact the author: codeworker@free.fr
 
 #include "DtaScriptFactory.h"
 
-namespace CodeWorker {
-	DtaScript* DtaScriptFactory::create(SCRIPT_TYPE eScriptType, GrfBlock& block) {
-		DtaScript* pScript;
-		switch(eScriptType) {
-			case BNF_SCRIPT: pScript = new DtaBNFScript(&block);break;
-			case FREE_SCRIPT: pScript = new DtaDesignScript(&block);break;
-			case COMMON_SCRIPT: pScript = new DtaScript(&block);break;
-			case PATTERN_SCRIPT: pScript = new DtaPatternScript(&block);break;
-			case TRANSLATE_SCRIPT: pScript = new DtaTranslateScript(&block);break;
-			default:
-				throw UtlException("internal error: unhandled script type");
-		}
-		return pScript;
-	}
+namespace CodeWorker
+{
+DtaScript* DtaScriptFactory::create(SCRIPT_TYPE eScriptType, GrfBlock& block)
+{
+    DtaScript* pScript;
+
+    switch (eScriptType) {
+    case BNF_SCRIPT:
+        pScript = new DtaBNFScript(&block);
+        break;
+
+    case FREE_SCRIPT:
+        pScript = new DtaDesignScript(&block);
+        break;
+
+    case COMMON_SCRIPT:
+        pScript = new DtaScript(&block);
+        break;
+
+    case PATTERN_SCRIPT:
+        pScript = new DtaPatternScript(&block);
+        break;
+
+    case TRANSLATE_SCRIPT:
+        pScript = new DtaTranslateScript(&block);
+        break;
+
+    default:
+        throw UtlException("internal error: unhandled script type");
+    }
+
+    return pScript;
+}
 }

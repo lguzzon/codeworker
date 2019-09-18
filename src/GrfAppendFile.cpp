@@ -30,24 +30,28 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfAppendFile.h"
 
-namespace CodeWorker {
-	GrfAppendFile::~GrfAppendFile() {
-		delete _pFilename;
-		delete _pContent;
-	}
+namespace CodeWorker
+{
+GrfAppendFile::~GrfAppendFile()
+{
+    delete _pFilename;
+    delete _pContent;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfAppendFile::executeInternal(DtaScriptVariable& visibility) {
-		std::string sFilename = _pFilename->getValue(visibility);
-		std::string sContent = _pContent->getValue(visibility);
-		return CGRuntime::appendFile(sFilename, sContent);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfAppendFile::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sFilename = _pFilename->getValue(visibility);
+    std::string sContent = _pContent->getValue(visibility);
+    return CGRuntime::appendFile(sFilename, sContent);
+}
 
-	void GrfAppendFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::appendFile(";
-		_pFilename->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pContent->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfAppendFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::appendFile(";
+    _pFilename->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pContent->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

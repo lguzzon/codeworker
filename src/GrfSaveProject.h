@@ -26,54 +26,67 @@ To contact the author: codeworker@free.fr
 //##protect##"INCLUDE FILES"
 #include <ostream>
 
-namespace CodeWorker {
-	class UtlXMLStream;
-	class DtaScriptVariable;
+namespace CodeWorker
+{
+class UtlXMLStream;
+class DtaScriptVariable;
 }
 //##protect##"INCLUDE FILES"
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 class ExprScriptVariable;
 
-	class GrfSaveProject : public GrfCommand {
-		private:
-			ExprScriptExpression* _pXMLorTXTFileName;
-			ExprScriptVariable* _pNodeToSave;
+class GrfSaveProject : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pXMLorTXTFileName;
+    ExprScriptVariable* _pNodeToSave;
 
-//##protect##"attributes"
-//##protect##"attributes"
+    //##protect##"attributes"
+    //##protect##"attributes"
 
-		public:
-			GrfSaveProject() : _pXMLorTXTFileName(NULL), _pNodeToSave(NULL) {
-//##protect##"constructor"
-//##protect##"constructor"
-			}
-			virtual ~GrfSaveProject();
-
-			virtual const char* getFunctionName() const { return "saveProject"; }
-
-			inline void setXMLorTXTFileName(ExprScriptExpression* pXMLorTXTFileName) { _pXMLorTXTFileName = pXMLorTXTFileName; }
-			inline void setNodeToSave(ExprScriptVariable* pNodeToSave) { _pNodeToSave = pNodeToSave; }
-
-			void populateDefaultParameters();
-
-//##protect##"interface"
-//##protect##"interface"
-
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-
-//##protect##"declarations"
 public:
-	static void generateXMLFile(UtlXMLStream& myXMLFile, DtaScriptVariable& myNode, const std::string& sObjectName = "");
-	static void generateTextFile(std::ostream& theStream, DtaScriptVariable& myNode, const std::string& sIndent = "");
-//##protect##"declarations"
-	};
+    GrfSaveProject() : _pXMLorTXTFileName(NULL), _pNodeToSave(NULL)
+    {
+        //##protect##"constructor"
+        //##protect##"constructor"
+    }
+    virtual ~GrfSaveProject();
+
+    virtual const char* getFunctionName() const
+    {
+        return "saveProject";
+    }
+
+    inline void setXMLorTXTFileName(ExprScriptExpression* pXMLorTXTFileName)
+    {
+        _pXMLorTXTFileName = pXMLorTXTFileName;
+    }
+    inline void setNodeToSave(ExprScriptVariable* pNodeToSave)
+    {
+        _pNodeToSave = pNodeToSave;
+    }
+
+    void populateDefaultParameters();
+
+    //##protect##"interface"
+    //##protect##"interface"
+
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+
+    //##protect##"declarations"
+public:
+    static void generateXMLFile(UtlXMLStream& myXMLFile, DtaScriptVariable& myNode, const std::string& sObjectName = "");
+    static void generateTextFile(std::ostream& theStream, DtaScriptVariable& myNode, const std::string& sIndent = "");
+    //##protect##"declarations"
+};
 }
 
 #endif

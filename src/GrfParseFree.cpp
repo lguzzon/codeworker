@@ -34,97 +34,128 @@ To contact the author: codeworker@free.fr
 #include "DtaProject.h"
 #include "GrfParseFree.h"
 
-namespace CodeWorker {
-	GrfParseFree::~GrfParseFree() {
-		delete _pDesignFileName;
-		delete _pClass;
-		delete _pFileName;
-	}
+namespace CodeWorker
+{
+GrfParseFree::~GrfParseFree()
+{
+    delete _pDesignFileName;
+    delete _pClass;
+    delete _pFileName;
+}
 
-	void GrfParseFree::setDesignFileName(ExprScriptScriptFile* pDesignFileName) {
-		if (pDesignFileName->isFileName()) _pDesignFileName = pDesignFileName->getFileName();
-		_pCachedScript = dynamic_cast<DtaDesignScript*>(pDesignFileName->getBody());
-		pDesignFileName->release();
-	}
+void GrfParseFree::setDesignFileName(ExprScriptScriptFile* pDesignFileName)
+{
+    if (pDesignFileName->isFileName()) {
+        _pDesignFileName = pDesignFileName->getFileName();
+    }
 
-	SEQUENCE_INTERRUPTION_LIST GrfParseFree::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pClass = visibility.getVariable(*_pClass);
-		if (pClass == NULL) throw UtlException("runtime error: variable '" + _pClass->toString() + "' doesn't exist while calling procedure 'parseFree()'");
-		std::string sDesignFileName = _pDesignFileName->getValue(visibility);
-		std::string sInputFile = _pFileName->getValue(visibility);
+    _pCachedScript = dynamic_cast<DtaDesignScript*>(pDesignFileName->getBody());
+    pDesignFileName->release();
+}
 
-		EXECUTE_FUNCTION* executeFunction = NULL;
-		if (_pDesignFileName != NULL) {
-			std::string sDesignFileName = _pDesignFileName->getValue(visibility);
-			if ((_pCachedScript == NULL) || (_sCachedDesignFile != sDesignFileName) || ScpStream::existVirtualFile(sDesignFileName)) {
-				executeFunction = DtaScript::getRegisteredScript(sDesignFileName.c_str());
-				if (executeFunction == NULL) {
-					if (_pCachedScript != NULL) delete _pCachedScript;
-					_pCachedScript = new DtaDesignScript(getParent());
-					_sCachedDesignFile = sDesignFileName;
-					_pCachedScript->parseFile(sDesignFileName.c_str());
-				}
-			}
-		}
+SEQUENCE_INTERRUPTION_LIST GrfParseFree::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pClass = visibility.getVariable(*_pClass);
 
-		SEQUENCE_INTERRUPTION_LIST result = executeScript(sInputFile.c_str(), pClass, executeFunction);
-		switch(result) {
-			case CONTINUE_INTERRUPTION:
-			case BREAK_INTERRUPTION:
-			case RETURN_INTERRUPTION:
-				result = NO_INTERRUPTION;
-				break;
-		}
-		return result;
-	}
+    if (pClass == NULL) {
+        throw UtlException("runtime error: variable '" + _pClass->toString() + "' doesn't exist while calling procedure 'parseFree()'");
+    }
 
-	SEQUENCE_INTERRUPTION_LIST GrfParseFree::executeScript(const char* sInputFile, DtaScriptVariable* pThisContext, EXECUTE_FUNCTION* executeFunction) {
-		if (executeFunction != NULL) {
-			CGRuntime::parseFree(executeFunction, CppParsingTree_var(pThisContext), sInputFile);
-			return NO_INTERRUPTION;
-		}
-		return _pCachedScript->loadDesign(sInputFile, *pThisContext);
-	}
+    std::string sDesignFileName = _pDesignFileName->getValue(visibility);
+    std::string sInputFile = _pFileName->getValue(visibility);
 
-	void GrfParseFree::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		ExprScriptConstant* pConstantFileName = dynamic_cast<ExprScriptConstant*>(_pDesignFileName);
-		std::string sScriptFilename;
-		if (pConstantFileName == NULL) {
-			sScriptFilename = theCompilerEnvironment.newInlineScriptFilename();
-		} else {
-			sScriptFilename = pConstantFileName->getConstant();
-		}
-		std::string sRadical = DtaScript::convertFilenameAsIdentifier(CppCompilerEnvironment::getRadical(CppCompilerEnvironment::filename2Module(sScriptFilename)));
-		CW_BODY_INDENT << "CGRuntime::parseFree(&Execute" << sRadical << "::instance(), ";
-		_pClass->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pFileName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-		if (_pCachedScript == NULL) {
-			_pCachedScript = new DtaDesignScript(getParent());
-			_sCachedDesignFile = sScriptFilename;
-			_pCachedScript->parseFile(_sCachedDesignFile.c_str());
-		}
-		_pCachedScript->compileCpp(theCompilerEnvironment, sScriptFilename);
-	}
+    EXECUTE_FUNCTION* executeFunction = NULL;
 
-	void GrfParseFree::compileCppForQuiet(CppCompilerEnvironment& theCompilerEnvironment) const {
-		ExprScriptConstant* pConstantFileName = dynamic_cast<ExprScriptConstant*>(_pDesignFileName);
-		std::string sScriptFilename;
-		if (pConstantFileName == NULL) {
-			sScriptFilename = theCompilerEnvironment.newInlineScriptFilename();
-		} else {
-			sScriptFilename = pConstantFileName->getConstant();
-		}
-		std::string sRadical = DtaScript::convertFilenameAsIdentifier(CppCompilerEnvironment::getRadical(CppCompilerEnvironment::filename2Module(sScriptFilename)));
-		CW_BODY_STREAM << "\tCGRuntime::parseFree(&Execute" << sRadical << "::instance(), pThisTree, sFilename);";
-		CW_BODY_ENDL;
-		if (_pCachedScript == NULL) {
-			_pCachedScript = new DtaDesignScript(getParent());
-			_sCachedDesignFile = sScriptFilename;
-			_pCachedScript->parseFile(_sCachedDesignFile.c_str());
-		}
-		_pCachedScript->compileCpp(theCompilerEnvironment, sScriptFilename);
-	}
+    if (_pDesignFileName != NULL) {
+        std::string sDesignFileName = _pDesignFileName->getValue(visibility);
+
+        if ((_pCachedScript == NULL) || (_sCachedDesignFile != sDesignFileName) || ScpStream::existVirtualFile(sDesignFileName)) {
+            executeFunction = DtaScript::getRegisteredScript(sDesignFileName.c_str());
+
+            if (executeFunction == NULL) {
+                if (_pCachedScript != NULL) {
+                    delete _pCachedScript;
+                }
+
+                _pCachedScript = new DtaDesignScript(getParent());
+                _sCachedDesignFile = sDesignFileName;
+                _pCachedScript->parseFile(sDesignFileName.c_str());
+            }
+        }
+    }
+
+    SEQUENCE_INTERRUPTION_LIST result = executeScript(sInputFile.c_str(), pClass, executeFunction);
+
+    switch (result) {
+    case CONTINUE_INTERRUPTION:
+    case BREAK_INTERRUPTION:
+    case RETURN_INTERRUPTION:
+        result = NO_INTERRUPTION;
+        break;
+    }
+
+    return result;
+}
+
+SEQUENCE_INTERRUPTION_LIST GrfParseFree::executeScript(const char* sInputFile, DtaScriptVariable* pThisContext, EXECUTE_FUNCTION* executeFunction)
+{
+    if (executeFunction != NULL) {
+        CGRuntime::parseFree(executeFunction, CppParsingTree_var(pThisContext), sInputFile);
+        return NO_INTERRUPTION;
+    }
+
+    return _pCachedScript->loadDesign(sInputFile, *pThisContext);
+}
+
+void GrfParseFree::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    ExprScriptConstant* pConstantFileName = dynamic_cast<ExprScriptConstant*>(_pDesignFileName);
+    std::string sScriptFilename;
+
+    if (pConstantFileName == NULL) {
+        sScriptFilename = theCompilerEnvironment.newInlineScriptFilename();
+    } else {
+        sScriptFilename = pConstantFileName->getConstant();
+    }
+
+    std::string sRadical = DtaScript::convertFilenameAsIdentifier(CppCompilerEnvironment::getRadical(CppCompilerEnvironment::filename2Module(sScriptFilename)));
+    CW_BODY_INDENT << "CGRuntime::parseFree(&Execute" << sRadical << "::instance(), ";
+    _pClass->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pFileName->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+
+    if (_pCachedScript == NULL) {
+        _pCachedScript = new DtaDesignScript(getParent());
+        _sCachedDesignFile = sScriptFilename;
+        _pCachedScript->parseFile(_sCachedDesignFile.c_str());
+    }
+
+    _pCachedScript->compileCpp(theCompilerEnvironment, sScriptFilename);
+}
+
+void GrfParseFree::compileCppForQuiet(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    ExprScriptConstant* pConstantFileName = dynamic_cast<ExprScriptConstant*>(_pDesignFileName);
+    std::string sScriptFilename;
+
+    if (pConstantFileName == NULL) {
+        sScriptFilename = theCompilerEnvironment.newInlineScriptFilename();
+    } else {
+        sScriptFilename = pConstantFileName->getConstant();
+    }
+
+    std::string sRadical = DtaScript::convertFilenameAsIdentifier(CppCompilerEnvironment::getRadical(CppCompilerEnvironment::filename2Module(sScriptFilename)));
+    CW_BODY_STREAM << "\tCGRuntime::parseFree(&Execute" << sRadical << "::instance(), pThisTree, sFilename);";
+    CW_BODY_ENDL;
+
+    if (_pCachedScript == NULL) {
+        _pCachedScript = new DtaDesignScript(getParent());
+        _sCachedDesignFile = sScriptFilename;
+        _pCachedScript->parseFile(_sCachedDesignFile.c_str());
+    }
+
+    _pCachedScript->compileCpp(theCompilerEnvironment, sScriptFilename);
+}
 }

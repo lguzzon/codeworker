@@ -24,28 +24,39 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfProduceHTML : public GrfCommand {
-		private:
-			ExprScriptExpression* _pScriptFileName;
-			ExprScriptExpression* _pHTMLFileName;
+class GrfProduceHTML : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pScriptFileName;
+    ExprScriptExpression* _pHTMLFileName;
 
-		public:
-			GrfProduceHTML() : _pScriptFileName(NULL), _pHTMLFileName(NULL) {}
-			virtual ~GrfProduceHTML();
+public:
+    GrfProduceHTML() : _pScriptFileName(NULL), _pHTMLFileName(NULL) {}
+    virtual ~GrfProduceHTML();
 
-			virtual const char* getFunctionName() const { return "produceHTML"; }
+    virtual const char* getFunctionName() const
+    {
+        return "produceHTML";
+    }
 
-			inline void setScriptFileName(ExprScriptExpression* pScriptFileName) { _pScriptFileName = pScriptFileName; }
-			inline void setHTMLFileName(ExprScriptExpression* pHTMLFileName) { _pHTMLFileName = pHTMLFileName; }
+    inline void setScriptFileName(ExprScriptExpression* pScriptFileName)
+    {
+        _pScriptFileName = pScriptFileName;
+    }
+    inline void setHTMLFileName(ExprScriptExpression* pHTMLFileName)
+    {
+        _pHTMLFileName = pHTMLFileName;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

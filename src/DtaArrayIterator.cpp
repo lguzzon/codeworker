@@ -26,58 +26,104 @@ To contact the author: codeworker@free.fr
 #include "DtaScriptVariable.h"
 #include "DtaArrayIterator.h"
 
-namespace CodeWorker {
-	DtaArrayIterator::~DtaArrayIterator() {}
-	DtaScriptVariable* DtaArrayIterator::itemNoRef() const {
-		if (_pItemNoRef == NULL) {
-			_pItemNoRef = item();
-			while (_pItemNoRef->getReferencedVariable()) _pItemNoRef = _pItemNoRef->getReferencedVariable();
-		}
-		return _pItemNoRef;
-	}
+namespace CodeWorker
+{
+DtaArrayIterator::~DtaArrayIterator() {}
+DtaScriptVariable* DtaArrayIterator::itemNoRef() const
+{
+    if (_pItemNoRef == NULL) {
+        _pItemNoRef = item();
 
-	DtaListIterator::~DtaListIterator() {}
-	DtaArrayIterator* DtaListIterator::clone() const { return new DtaListIterator(*this); }
-	int DtaListIterator::size() const { return _list.size(); }
-	bool DtaListIterator::end() const { return i == _list.end(); }
-	const char* DtaListIterator::key() const { return (*i)->getName(); }
-	DtaScriptVariable* DtaListIterator::item() const { return *i; }
+        while (_pItemNoRef->getReferencedVariable()) {
+            _pItemNoRef = _pItemNoRef->getReferencedVariable();
+        }
+    }
 
-	bool DtaListIterator::prec() {
-		if (i == _list.begin()) return false;
-		--_iCurrentPosition;
-		--i;
-		_pItemNoRef = NULL;
-		return true;
-	}
+    return _pItemNoRef;
+}
 
-	bool DtaListIterator::next() {
-		++_iCurrentPosition;
-		++i;
-		_pItemNoRef = NULL;
-		return i != _list.end();
-	}
+DtaListIterator::~DtaListIterator() {}
+DtaArrayIterator* DtaListIterator::clone() const
+{
+    return new DtaListIterator(*this);
+}
+int DtaListIterator::size() const
+{
+    return _list.size();
+}
+bool DtaListIterator::end() const
+{
+    return i == _list.end();
+}
+const char* DtaListIterator::key() const
+{
+    return (*i)->getName();
+}
+DtaScriptVariable* DtaListIterator::item() const
+{
+    return *i;
+}
+
+bool DtaListIterator::prec()
+{
+    if (i == _list.begin()) {
+        return false;
+    }
+
+    --_iCurrentPosition;
+    --i;
+    _pItemNoRef = NULL;
+    return true;
+}
+
+bool DtaListIterator::next()
+{
+    ++_iCurrentPosition;
+    ++i;
+    _pItemNoRef = NULL;
+    return i != _list.end();
+}
 
 
-	DtaReverseListIterator::~DtaReverseListIterator() {}
-	DtaArrayIterator* DtaReverseListIterator::clone() const { return new DtaReverseListIterator(*this); }
-	int DtaReverseListIterator::size() const { return _list.size(); }
-	bool DtaReverseListIterator::end() const { return i == _list.rend(); }
-	const char* DtaReverseListIterator::key() const { return (*i)->getName(); }
-	DtaScriptVariable* DtaReverseListIterator::item() const { return *i; }
+DtaReverseListIterator::~DtaReverseListIterator() {}
+DtaArrayIterator* DtaReverseListIterator::clone() const
+{
+    return new DtaReverseListIterator(*this);
+}
+int DtaReverseListIterator::size() const
+{
+    return _list.size();
+}
+bool DtaReverseListIterator::end() const
+{
+    return i == _list.rend();
+}
+const char* DtaReverseListIterator::key() const
+{
+    return (*i)->getName();
+}
+DtaScriptVariable* DtaReverseListIterator::item() const
+{
+    return *i;
+}
 
-	bool DtaReverseListIterator::prec() {
-		if (i == _list.rbegin()) return false;
-		--_iCurrentPosition;
-		--i;
-		_pItemNoRef = NULL;
-		return true;
-	}
+bool DtaReverseListIterator::prec()
+{
+    if (i == _list.rbegin()) {
+        return false;
+    }
 
-	bool DtaReverseListIterator::next() {
-		++_iCurrentPosition;
-		++i;
-		_pItemNoRef = NULL;
-		return i != _list.rend();
-	}
+    --_iCurrentPosition;
+    --i;
+    _pItemNoRef = NULL;
+    return true;
+}
+
+bool DtaReverseListIterator::next()
+{
+    ++_iCurrentPosition;
+    ++i;
+    _pItemNoRef = NULL;
+    return i != _list.rend();
+}
 }

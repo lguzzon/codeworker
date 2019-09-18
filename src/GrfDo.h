@@ -24,24 +24,29 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class ExprScriptVariable;
+namespace CodeWorker
+{
+class ExprScriptVariable;
 
-	class GrfDo : public GrfBlock {
-	private:
-		ExprScriptExpression* _pCondition;
+class GrfDo : public GrfBlock
+{
+private:
+    ExprScriptExpression* _pCondition;
 
-	public:
-		GrfDo(GrfBlock* pBlock) : GrfBlock(pBlock), _pCondition(NULL) {}
-		virtual ~GrfDo();
+public:
+    GrfDo(GrfBlock* pBlock) : GrfBlock(pBlock), _pCondition(NULL) {}
+    virtual ~GrfDo();
 
-		inline void setCondition(ExprScriptExpression* pCondition) { _pCondition = pCondition; }
+    inline void setCondition(ExprScriptExpression* pCondition)
+    {
+        _pCondition = pCondition;
+    }
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

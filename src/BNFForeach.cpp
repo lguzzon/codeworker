@@ -35,36 +35,54 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFForeach.h"
 
-namespace CodeWorker {
-	BNFForeach::BNFForeach(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue) : _pBNFScript(pBNFScript), GrfForeach(pParent), _bContinue(bContinue) {}
+namespace CodeWorker
+{
+BNFForeach::BNFForeach(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue) : _pBNFScript(pBNFScript), GrfForeach(pParent), _bContinue(bContinue) {}
 
-	BNFForeach::~BNFForeach() {
-	}
+BNFForeach::~BNFForeach()
+{
+}
 
-	void BNFForeach::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFForeach(*this, env);
-	}
+void BNFForeach::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFForeach(*this, env);
+}
 
-	bool BNFForeach::isABNFCommand() const { return true; }
+bool BNFForeach::isABNFCommand() const
+{
+    return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFForeach::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = GrfForeach::executeInternal(visibility);
-		if (result != NO_INTERRUPTION) {
-			if (_bContinue) CGRuntime::throwBNFExecutionError(toString());
-			result = BREAK_INTERRUPTION;
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST BNFForeach::executeInternal(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result = GrfForeach::executeInternal(visibility);
 
-	void BNFForeach::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "// " << toString();
-		CW_BODY_ENDL;
-		// TO DO!
-	}
+    if (result != NO_INTERRUPTION) {
+        if (_bContinue) {
+            CGRuntime::throwBNFExecutionError(toString());
+        }
 
-	std::string BNFForeach::toString() const {
-		std::string sText = "#foreach()";
-		if (_bContinue) sText = "#continue " + sText;
-		return sText;
-	}
+        result = BREAK_INTERRUPTION;
+    }
+
+    return result;
+}
+
+void BNFForeach::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "// " << toString();
+    CW_BODY_ENDL;
+    // TO DO!
+}
+
+std::string BNFForeach::toString() const
+{
+    std::string sText = "#foreach()";
+
+    if (_bContinue) {
+        sText = "#continue " + sText;
+    }
+
+    return sText;
+}
 }

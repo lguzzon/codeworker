@@ -29,37 +29,50 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfDo.h"
 
-namespace CodeWorker {
-	GrfDo::~GrfDo() {
-		delete _pCondition;
-	}
+namespace CodeWorker
+{
+GrfDo::~GrfDo()
+{
+    delete _pCondition;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfDo::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		std::string sCondition;
-		do {
-			result = GrfBlock::executeInternal(visibility);
-			switch(result) {
-				case CONTINUE_INTERRUPTION:
-					result = NO_INTERRUPTION;
-				case NO_INTERRUPTION: break;
-				case BREAK_INTERRUPTION: return NO_INTERRUPTION;
-				default:
-					return result;
+SEQUENCE_INTERRUPTION_LIST GrfDo::executeInternal(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result;
+    std::string sCondition;
 
-			}
-			sCondition = _pCondition->getValue(visibility);
-		} while (!sCondition.empty());
-		return result;
-	}
+    do {
+        result = GrfBlock::executeInternal(visibility);
 
-	void GrfDo::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "do ";
-		theCompilerEnvironment.carriageReturnAfterBlock(false);
-		GrfBlock::compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << " while (";
-		_pCondition->compileCppBoolean(theCompilerEnvironment, false);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+        switch (result) {
+        case CONTINUE_INTERRUPTION:
+            result = NO_INTERRUPTION;
+
+        case NO_INTERRUPTION:
+            break;
+
+        case BREAK_INTERRUPTION:
+            return NO_INTERRUPTION;
+
+        default:
+            return result;
+
+        }
+
+        sCondition = _pCondition->getValue(visibility);
+    } while (!sCondition.empty());
+
+    return result;
+}
+
+void GrfDo::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "do ";
+    theCompilerEnvironment.carriageReturnAfterBlock(false);
+    GrfBlock::compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << " while (";
+    _pCondition->compileCppBoolean(theCompilerEnvironment, false);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfSetNow : public GrfCommand {
-		private:
-			ExprScriptExpression* _pConstantDateTime;
+class GrfSetNow : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pConstantDateTime;
 
-		public:
-			GrfSetNow() : _pConstantDateTime(NULL) {}
-			virtual ~GrfSetNow();
+public:
+    GrfSetNow() : _pConstantDateTime(NULL) {}
+    virtual ~GrfSetNow();
 
-			virtual const char* getFunctionName() const { return "setNow"; }
+    virtual const char* getFunctionName() const
+    {
+        return "setNow";
+    }
 
-			inline void setConstantDateTime(ExprScriptExpression* pConstantDateTime) { _pConstantDateTime = pConstantDateTime; }
+    inline void setConstantDateTime(ExprScriptExpression* pConstantDateTime)
+    {
+        _pConstantDateTime = pConstantDateTime;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

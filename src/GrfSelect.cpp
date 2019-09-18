@@ -31,41 +31,56 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfSelect.h"
 
-namespace CodeWorker {
-	GrfSelect::~GrfSelect() {
-		delete _pMotifExpr;
-	}
+namespace CodeWorker
+{
+GrfSelect::~GrfSelect()
+{
+    delete _pMotifExpr;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSelect::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
-		std::list<DtaScriptVariable*> listOfNodes;
-		_pMotifExpr->filterNodes(visibility, visibility, listOfNodes);
-		if (!listOfNodes.empty()) {
-			DtaScriptVariable stackSelect(&visibility, "##stack## select");
-			stackSelect.createIterator(_pIndexExpr->getName().c_str(), &_pArrayIteratorData);
-			result = executeSelect(listOfNodes, stackSelect);
-			if (result == BREAK_INTERRUPTION) result = NO_INTERRUPTION;
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSelect::executeInternal(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
+    std::list<DtaScriptVariable*> listOfNodes;
+    _pMotifExpr->filterNodes(visibility, visibility, listOfNodes);
 
-	SEQUENCE_INTERRUPTION_LIST GrfSelect::executeSelect(const std::list<DtaScriptVariable*>& listOfNodes, DtaScriptVariable& stackSelect) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		DtaListIterator iteratorData(listOfNodes);
-		DtaArrayIterator* pOldArrayIteratorData = _pArrayIteratorData;
-		_pArrayIteratorData = &iteratorData;
-		if (!iteratorData.end()) {
-			do {
-				result = GrfBlock::executeInternal(stackSelect);
-				if ((result != CONTINUE_INTERRUPTION) && (result != NO_INTERRUPTION)) return result;
-			} while (iteratorData.next());
-		}
-		_pArrayIteratorData = pOldArrayIteratorData;
-		return NO_INTERRUPTION;
-	}
+    if (!listOfNodes.empty()) {
+        DtaScriptVariable stackSelect(&visibility, "##stack## select");
+        stackSelect.createIterator(_pIndexExpr->getName().c_str(), &_pArrayIteratorData);
+        result = executeSelect(listOfNodes, stackSelect);
 
-	void GrfSelect::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "<unhandled 'select' statement>";
-		CW_BODY_ENDL;
-	}
+        if (result == BREAK_INTERRUPTION) {
+            result = NO_INTERRUPTION;
+        }
+    }
+
+    return result;
+}
+
+SEQUENCE_INTERRUPTION_LIST GrfSelect::executeSelect(const std::list<DtaScriptVariable*>& listOfNodes, DtaScriptVariable& stackSelect)
+{
+    SEQUENCE_INTERRUPTION_LIST result;
+    DtaListIterator iteratorData(listOfNodes);
+    DtaArrayIterator* pOldArrayIteratorData = _pArrayIteratorData;
+    _pArrayIteratorData = &iteratorData;
+
+    if (!iteratorData.end()) {
+        do {
+            result = GrfBlock::executeInternal(stackSelect);
+
+            if ((result != CONTINUE_INTERRUPTION) && (result != NO_INTERRUPTION)) {
+                return result;
+            }
+        } while (iteratorData.next());
+    }
+
+    _pArrayIteratorData = pOldArrayIteratorData;
+    return NO_INTERRUPTION;
+}
+
+void GrfSelect::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "<unhandled 'select' statement>";
+    CW_BODY_ENDL;
+}
 }

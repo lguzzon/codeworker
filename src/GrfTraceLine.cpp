@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfTraceLine.h"
 
-namespace CodeWorker {
-	GrfTraceLine::~GrfTraceLine() {
-		delete _pLine;
-	}
+namespace CodeWorker
+{
+GrfTraceLine::~GrfTraceLine()
+{
+    delete _pLine;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfTraceLine::executeInternal(DtaScriptVariable& visibility) {
-		std::string sLine = _pLine->getValue(visibility);
-		return CGRuntime::traceLine(sLine);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfTraceLine::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sLine = _pLine->getValue(visibility);
+    return CGRuntime::traceLine(sLine);
+}
 
-	void GrfTraceLine::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::traceLine(";
-		_pLine->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfTraceLine::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::traceLine(";
+    _pLine->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

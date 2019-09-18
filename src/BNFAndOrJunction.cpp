@@ -35,52 +35,74 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFAndOrJunction.h"
 
-namespace CodeWorker {
-	BNFAndOrJunction::BNFAndOrJunction(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue) : _pBNFScript(pBNFScript), GrfBlock(pParent), _bContinue(bContinue), _pLeftMember(NULL) {}
+namespace CodeWorker
+{
+BNFAndOrJunction::BNFAndOrJunction(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue) : _pBNFScript(pBNFScript), GrfBlock(pParent), _bContinue(bContinue), _pLeftMember(NULL) {}
 
-	BNFAndOrJunction::~BNFAndOrJunction() {
-		delete _pLeftMember;
-	}
+BNFAndOrJunction::~BNFAndOrJunction()
+{
+    delete _pLeftMember;
+}
 
-	void BNFAndOrJunction::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFAndOrJunction(*this, env);
-	}
+void BNFAndOrJunction::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFAndOrJunction(*this, env);
+}
 
-	bool BNFAndOrJunction::isABNFCommand() const { return true; }
+bool BNFAndOrJunction::isABNFCommand() const
+{
+    return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFAndOrJunction::executeInternal(DtaScriptVariable& visibility) {
-		int iLocation = CGRuntime::getInputLocation();
-		int iImplicitCopyPosition = _pBNFScript->skipEmptyChars(visibility);
-		SEQUENCE_INTERRUPTION_LIST result = _pLeftMember->execute(visibility);
-		if (result != CONTINUE_INTERRUPTION) {
-			SEQUENCE_INTERRUPTION_LIST result2 = GrfBlock::executeInternal(visibility);
-			if ((result == BREAK_INTERRUPTION) && (result2 == BREAK_INTERRUPTION)) {
-				BNF_SYMBOL_HAS_FAILED
-			} else if (result2 != BREAK_INTERRUPTION) {
-				result = result2;
-			}
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST BNFAndOrJunction::executeInternal(DtaScriptVariable& visibility)
+{
+    int iLocation = CGRuntime::getInputLocation();
+    int iImplicitCopyPosition = _pBNFScript->skipEmptyChars(visibility);
+    SEQUENCE_INTERRUPTION_LIST result = _pLeftMember->execute(visibility);
 
-	void BNFAndOrJunction::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CPP_COMPILER_BNF_SYMBOL_BEGIN;
-		_pLeftMember->compileCpp(theCompilerEnvironment);
-		CW_BODY_INDENT << "bool _compilerClauseSuccess" << iCursor << " = _compilerClauseSuccess;";CW_BODY_ENDL;
-		GrfBlock::compileCppBNFSequence(theCompilerEnvironment);
-		CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";CW_BODY_ENDL;
-		theCompilerEnvironment.incrementIndentation();
-		CW_BODY_INDENT << "_compilerClauseSuccess = _compilerClauseSuccess" << iCursor << ";";CW_BODY_ENDL;
-		CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";CW_BODY_ENDL;
-		CPP_COMPILER_BNF_SYMBOL_HAS_FAILED;
-		CW_BODY_INDENT << "}";CW_BODY_ENDL;
-		theCompilerEnvironment.decrementIndentation();
-		CW_BODY_INDENT << "}";CW_BODY_ENDL;
-	}
+    if (result != CONTINUE_INTERRUPTION) {
+        SEQUENCE_INTERRUPTION_LIST result2 = GrfBlock::executeInternal(visibility);
 
-	std::string BNFAndOrJunction::toString() const {
-		std::string sText = _pLeftMember->toString() + " &| " + getCommands()[0]->toString();
-		if (_bContinue) sText = "#continue " + sText;
-		return sText;
-	}
+        if ((result == BREAK_INTERRUPTION) && (result2 == BREAK_INTERRUPTION)) {
+            BNF_SYMBOL_HAS_FAILED
+        } else if (result2 != BREAK_INTERRUPTION) {
+            result = result2;
+        }
+    }
+
+    return result;
+}
+
+void BNFAndOrJunction::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CPP_COMPILER_BNF_SYMBOL_BEGIN;
+    _pLeftMember->compileCpp(theCompilerEnvironment);
+    CW_BODY_INDENT << "bool _compilerClauseSuccess" << iCursor << " = _compilerClauseSuccess;";
+    CW_BODY_ENDL;
+    GrfBlock::compileCppBNFSequence(theCompilerEnvironment);
+    CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";
+    CW_BODY_ENDL;
+    theCompilerEnvironment.incrementIndentation();
+    CW_BODY_INDENT << "_compilerClauseSuccess = _compilerClauseSuccess" << iCursor << ";";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";
+    CW_BODY_ENDL;
+    CPP_COMPILER_BNF_SYMBOL_HAS_FAILED;
+    CW_BODY_INDENT << "}";
+    CW_BODY_ENDL;
+    theCompilerEnvironment.decrementIndentation();
+    CW_BODY_INDENT << "}";
+    CW_BODY_ENDL;
+}
+
+std::string BNFAndOrJunction::toString() const
+{
+    std::string sText = _pLeftMember->toString() + " &| " + getCommands()[0]->toString();
+
+    if (_bContinue) {
+        sText = "#continue " + sText;
+    }
+
+    return sText;
+}
 }

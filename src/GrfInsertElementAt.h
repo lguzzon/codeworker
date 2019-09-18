@@ -24,31 +24,45 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptVariable;
 class ExprScriptExpression;
 
-	class GrfInsertElementAt : public GrfCommand {
-		private:
-			ExprScriptVariable* _pList;
-			ExprScriptExpression* _pKey;
-			ExprScriptExpression* _pPosition;
+class GrfInsertElementAt : public GrfCommand
+{
+private:
+    ExprScriptVariable* _pList;
+    ExprScriptExpression* _pKey;
+    ExprScriptExpression* _pPosition;
 
-		public:
-			GrfInsertElementAt() : _pList(NULL), _pKey(NULL), _pPosition(NULL) {}
-			virtual ~GrfInsertElementAt();
+public:
+    GrfInsertElementAt() : _pList(NULL), _pKey(NULL), _pPosition(NULL) {}
+    virtual ~GrfInsertElementAt();
 
-			virtual const char* getFunctionName() const { return "insertElementAt"; }
+    virtual const char* getFunctionName() const
+    {
+        return "insertElementAt";
+    }
 
-			inline void setList(ExprScriptVariable* pList) { _pList = pList; }
-			inline void setKey(ExprScriptExpression* pKey) { _pKey = pKey; }
-			inline void setPosition(ExprScriptExpression* pPosition) { _pPosition = pPosition; }
+    inline void setList(ExprScriptVariable* pList)
+    {
+        _pList = pList;
+    }
+    inline void setKey(ExprScriptExpression* pKey)
+    {
+        _pKey = pKey;
+    }
+    inline void setPosition(ExprScriptExpression* pPosition)
+    {
+        _pPosition = pPosition;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

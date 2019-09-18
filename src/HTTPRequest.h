@@ -24,20 +24,22 @@ To contact the author: codeworker@free.fr
 
 #include <string>
 
-namespace CodeWorker {
-	class DtaScriptVariable;
+namespace CodeWorker
+{
+class DtaScriptVariable;
 
-	class HTTPRequest {
-		public:
-			HTTPRequest();
-			~HTTPRequest() {}
+class HTTPRequest
+{
+public:
+    HTTPRequest();
+    ~HTTPRequest() {}
 
-			std::string get(const std::string& sURL, DtaScriptVariable* pSession, DtaScriptVariable* pArguments);
-			std::string post(const std::string& sURL, DtaScriptVariable* pSession, DtaScriptVariable* pArguments);
-			std::string send(const std::string& sURL, DtaScriptVariable* pSession);
+    std::string get(const std::string& sURL, DtaScriptVariable* pSession, DtaScriptVariable* pArguments);
+    std::string post(const std::string& sURL, DtaScriptVariable* pSession, DtaScriptVariable* pArguments);
+    std::string send(const std::string& sURL, DtaScriptVariable* pSession);
 
-			static std::string UUID();
-	};
+    static std::string UUID();
+};
 }
 
 #endif

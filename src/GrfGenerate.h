@@ -24,44 +24,61 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
-	class ExprScriptVariable;
-	class ExprScriptExpression;
-	class ExprScriptScriptFile;
-	class DtaPatternScript;
+namespace CodeWorker
+{
+class ExprScriptVariable;
+class ExprScriptExpression;
+class ExprScriptScriptFile;
+class DtaPatternScript;
 
-	class EXECUTE_FUNCTION;
+class EXECUTE_FUNCTION;
 
-	class GrfGenerate : public GrfCommand {
-	private:
-		ExprScriptExpression* _pPatternFileName;
-		ExprScriptVariable* _pClass;
-		ExprScriptExpression* _pFileName;
-		std::string _sCurrentDirectoryAtCompileTime;
+class GrfGenerate : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pPatternFileName;
+    ExprScriptVariable* _pClass;
+    ExprScriptExpression* _pFileName;
+    std::string _sCurrentDirectoryAtCompileTime;
 
-	protected:
-		mutable DtaPatternScript* _pCachedScript;
-		mutable std::string _sCachedPatternFile;
+protected:
+    mutable DtaPatternScript* _pCachedScript;
+    mutable std::string _sCachedPatternFile;
 
-	public:
-		GrfGenerate();
-		virtual ~GrfGenerate();
+public:
+    GrfGenerate();
+    virtual ~GrfGenerate();
 
-		virtual const char* getFunctionName() const { return "generate"; }
+    virtual const char* getFunctionName() const
+    {
+        return "generate";
+    }
 
-		void setPatternFileName(ExprScriptScriptFile* pPatternFileName);
-		inline void setPatternFileName(ExprScriptExpression* pPatternFileName) { _pPatternFileName = pPatternFileName; }
-		inline void setThis(ExprScriptVariable* pClass) { _pClass = pClass; }
-		inline void setOutputFileName(ExprScriptExpression* pFileName) { _pFileName = pFileName; }
+    void setPatternFileName(ExprScriptScriptFile* pPatternFileName);
+    inline void setPatternFileName(ExprScriptExpression* pPatternFileName)
+    {
+        _pPatternFileName = pPatternFileName;
+    }
+    inline void setThis(ExprScriptVariable* pClass)
+    {
+        _pClass = pClass;
+    }
+    inline void setOutputFileName(ExprScriptExpression* pFileName)
+    {
+        _pFileName = pFileName;
+    }
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		inline DtaPatternScript* getCachedScript() const { return _pCachedScript; }
+protected:
+    inline DtaPatternScript* getCachedScript() const
+    {
+        return _pCachedScript;
+    }
 
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-		virtual SEQUENCE_INTERRUPTION_LIST executeScript(const char* sOutputFile, DtaScriptVariable* pThisContext, EXECUTE_FUNCTION* executeFunction);
-	};
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+    virtual SEQUENCE_INTERRUPTION_LIST executeScript(const char* sOutputFile, DtaScriptVariable* pThisContext, EXECUTE_FUNCTION* executeFunction);
+};
 }
 
 #endif

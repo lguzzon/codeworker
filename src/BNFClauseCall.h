@@ -24,73 +24,106 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptExpression;
-	class ExprScriptVariable;
-	class ASTCommand;
+namespace CodeWorker
+{
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptExpression;
+class ExprScriptVariable;
+class ASTCommand;
 
-	class BNFClauseCall : public GrfCommand {
-	private:
-		DtaBNFScript* _pBNFScript;
-		BNFClause* _pClause;
-		std::vector<ExprScriptExpression*> _listOfParameters;
-		ExprScriptExpression* _pTemplateExpression;
-		ExprScriptVariable* _pVariableToAssign;
-		bool _bConcatVariable;
-		std::vector<std::string> _listOfConstants;
-		int _iClauseReturnType;
-		bool _bContinue;
-		bool _bNoCase; // used only when a list of constants is present
-		int _iSuperCallDepth;
-		std::list<ASTCommand*>* _pASTcommands;
+class BNFClauseCall : public GrfCommand
+{
+private:
+    DtaBNFScript* _pBNFScript;
+    BNFClause* _pClause;
+    std::vector<ExprScriptExpression*> _listOfParameters;
+    ExprScriptExpression* _pTemplateExpression;
+    ExprScriptVariable* _pVariableToAssign;
+    bool _bConcatVariable;
+    std::vector<std::string> _listOfConstants;
+    int _iClauseReturnType;
+    bool _bContinue;
+    bool _bNoCase; // used only when a list of constants is present
+    int _iSuperCallDepth;
+    std::list<ASTCommand*>* _pASTcommands;
 
-	public:
-		BNFClauseCall(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue, bool bNoCase);
-		virtual ~BNFClauseCall();
+public:
+    BNFClauseCall(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue, bool bNoCase);
+    virtual ~BNFClauseCall();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-		inline DtaBNFScript& getBNFScript() const { return *_pBNFScript; }
-		inline BNFClause& getClause() const { return *_pClause; }
-		inline void setClause(BNFClause* pClause) { _pClause = pClause; }
-		inline const std::vector<ExprScriptExpression*>& getParameters() const { return _listOfParameters; }
-		inline void addParameter(ExprScriptExpression* pParameter) { _listOfParameters.push_back(pParameter); }
-		inline ExprScriptExpression* getTemplateExpression() const { return _pTemplateExpression; }
-		inline void setTemplateExpression(ExprScriptExpression* pTemplateExpression) { _pTemplateExpression = pTemplateExpression; }
-		BNFClause& getInstantiatedClause(DtaScriptVariable& visibility, std::string& sInstantiationKey) const;
-		inline int getSuperCallDepth() const { return _iSuperCallDepth; }
-		inline void setSuperCallDepth(int iSuperCallDepth) { _iSuperCallDepth = iSuperCallDepth; }
+    inline DtaBNFScript& getBNFScript() const
+    {
+        return *_pBNFScript;
+    }
+    inline BNFClause& getClause() const
+    {
+        return *_pClause;
+    }
+    inline void setClause(BNFClause* pClause)
+    {
+        _pClause = pClause;
+    }
+    inline const std::vector<ExprScriptExpression*>& getParameters() const
+    {
+        return _listOfParameters;
+    }
+    inline void addParameter(ExprScriptExpression* pParameter)
+    {
+        _listOfParameters.push_back(pParameter);
+    }
+    inline ExprScriptExpression* getTemplateExpression() const
+    {
+        return _pTemplateExpression;
+    }
+    inline void setTemplateExpression(ExprScriptExpression* pTemplateExpression)
+    {
+        _pTemplateExpression = pTemplateExpression;
+    }
+    BNFClause& getInstantiatedClause(DtaScriptVariable& visibility, std::string& sInstantiationKey) const;
+    inline int getSuperCallDepth() const
+    {
+        return _iSuperCallDepth;
+    }
+    inline void setSuperCallDepth(int iSuperCallDepth)
+    {
+        _iSuperCallDepth = iSuperCallDepth;
+    }
 
-		void addASTCommand(ASTCommand* pCommand);
+    void addASTCommand(ASTCommand* pCommand);
 
-		void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
-		void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat);
-		inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants) { _listOfConstants = listOfConstants; }
+    void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
+    void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat);
+    inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants)
+    {
+        _listOfConstants = listOfConstants;
+    }
 
-		virtual std::string toString() const;
+    virtual std::string toString() const;
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual void callBeforeExecutionCBK(DtaScriptVariable& visibility);
-		virtual void callRecursiveBeforeExecutionCBK(GrfExecutionContext* pContext, DtaScriptVariable& visibility);
-		virtual void callAfterExecutionCBK(DtaScriptVariable& visibility);
+protected:
+    virtual void callBeforeExecutionCBK(DtaScriptVariable& visibility);
+    virtual void callRecursiveBeforeExecutionCBK(GrfExecutionContext* pContext, DtaScriptVariable& visibility);
+    virtual void callAfterExecutionCBK(DtaScriptVariable& visibility);
 
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 
 
-	class BNFRootClauseCall : public BNFClauseCall {
-	public:
-		BNFRootClauseCall(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bNoCase);
-		virtual ~BNFRootClauseCall();
+class BNFRootClauseCall : public BNFClauseCall
+{
+public:
+    BNFRootClauseCall(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bNoCase);
+    virtual ~BNFRootClauseCall();
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-	};
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+};
 }
 
 #endif

@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptVariable.h"
 #include "GrfSortArray.h"
 
-namespace CodeWorker {
-	GrfSortArray::~GrfSortArray() {
-		delete _pArray;
-	}
+namespace CodeWorker
+{
+GrfSortArray::~GrfSortArray()
+{
+    delete _pArray;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSortArray::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pArray = visibility.getVariable(*_pArray);
-		return CGRuntime::sortArray(pArray);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSortArray::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pArray = visibility.getVariable(*_pArray);
+    return CGRuntime::sortArray(pArray);
+}
 
-	void GrfSortArray::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::sortArray(";
-		_pArray->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSortArray::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::sortArray(";
+    _pArray->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

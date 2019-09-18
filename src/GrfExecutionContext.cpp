@@ -30,70 +30,82 @@ To contact the author: codeworker@free.fr
 #include "BNFClauseCall.h"
 #include "GrfExecutionContext.h"
 
-namespace CodeWorker {
-	GrfExecutionContext::GrfExecutionContext(GrfBlock* pParent) : GrfBlock(pParent), _pLastCommand(NULL), _pLastExecutionContext(NULL) {}
+namespace CodeWorker
+{
+GrfExecutionContext::GrfExecutionContext(GrfBlock* pParent) : GrfBlock(pParent), _pLastCommand(NULL), _pLastExecutionContext(NULL) {}
 
-	GrfExecutionContext::~GrfExecutionContext() {}
+GrfExecutionContext::~GrfExecutionContext() {}
 
-	void GrfExecutionContext::clearRecursively(GrfCommand* pCommand) {
-		pCommand->clearCounter();
-		pCommand->clearTimer();
-	}
+void GrfExecutionContext::clearRecursively(GrfCommand* pCommand)
+{
+    pCommand->clearCounter();
+    pCommand->clearTimer();
+}
 
-	void GrfExecutionContext::handleBeforeExecutionCBK(GrfCommand* pCommand, DtaScriptVariable& /*visibility*/) {
-		_pLastCommand = pCommand;
-	}
+void GrfExecutionContext::handleBeforeExecutionCBK(GrfCommand* pCommand, DtaScriptVariable& /*visibility*/)
+{
+    _pLastCommand = pCommand;
+}
 
-	void GrfExecutionContext::handleAfterExecutionCBK(GrfCommand* pCommand, DtaScriptVariable& /*visibility*/) {
-		_pLastCommand = NULL;
-	}
+void GrfExecutionContext::handleAfterExecutionCBK(GrfCommand* pCommand, DtaScriptVariable& /*visibility*/)
+{
+    _pLastCommand = NULL;
+}
 
-	void GrfExecutionContext::handleBeforeScriptExecutionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/) {
-		applyRecursively(clearRecursively);
-	}
+void GrfExecutionContext::handleBeforeScriptExecutionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/)
+{
+    applyRecursively(clearRecursively);
+}
 
-	void GrfExecutionContext::handleAfterScriptExecutionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/) {}
+void GrfExecutionContext::handleAfterScriptExecutionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/) {}
 
-	void GrfExecutionContext::handleStartingFunction(GrfFunction* pFunction) {
-		if (pFunction->_sParsingFilePtr != NULL) {
-			_stack.push_front(_pLastCommand);
-		}
-	}
+void GrfExecutionContext::handleStartingFunction(GrfFunction* pFunction)
+{
+    if (pFunction->_sParsingFilePtr != NULL) {
+        _stack.push_front(_pLastCommand);
+    }
+}
 
-	void GrfExecutionContext::handleEndingFunction(GrfFunction* pFunction) {
-		if (pFunction->_sParsingFilePtr != NULL) {
-			_stack.pop_front();
-		}
-	}
+void GrfExecutionContext::handleEndingFunction(GrfFunction* pFunction)
+{
+    if (pFunction->_sParsingFilePtr != NULL) {
+        _stack.pop_front();
+    }
+}
 
-	void GrfExecutionContext::handleStartingBNFClause(BNFClauseCall* pClauseCall) {
-		if (pClauseCall->_sParsingFilePtr != NULL) {
-			_stack.push_front(_pLastCommand);
-		}
-	}
+void GrfExecutionContext::handleStartingBNFClause(BNFClauseCall* pClauseCall)
+{
+    if (pClauseCall->_sParsingFilePtr != NULL) {
+        _stack.push_front(_pLastCommand);
+    }
+}
 
-	void GrfExecutionContext::handleEndingBNFClause(BNFClauseCall* pClauseCall) {
-		if (pClauseCall->_sParsingFilePtr != NULL) {
-			_stack.pop_front();
-		}
-	}
+void GrfExecutionContext::handleEndingBNFClause(BNFClauseCall* pClauseCall)
+{
+    if (pClauseCall->_sParsingFilePtr != NULL) {
+        _stack.pop_front();
+    }
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfExecutionContext::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		bool bRequiresSymbols = DtaScript::requiresParsingInformation();
-		DtaScript::requiresParsingInformation(true);
-		_pLastExecutionContext = GrfCommand::getCurrentExecutionContext();
-		setCurrentExecutionContext(this);
-		try {
-			applyRecursively(clearRecursively);
-			result = openSession(visibility);
-		} catch(std::exception&/* exception*/) {
-			setCurrentExecutionContext(_pLastExecutionContext);
-			DtaScript::requiresParsingInformation(bRequiresSymbols);
-			throw/* UtlException(exception)*/;
-		}
-		setCurrentExecutionContext(_pLastExecutionContext);
-		DtaScript::requiresParsingInformation(bRequiresSymbols);
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfExecutionContext::executeInternal(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result;
+    bool bRequiresSymbols = DtaScript::requiresParsingInformation();
+    DtaScript::requiresParsingInformation(true);
+    _pLastExecutionContext = GrfCommand::getCurrentExecutionContext();
+    setCurrentExecutionContext(this);
+
+    try {
+        applyRecursively(clearRecursively);
+        result = openSession(visibility);
+    } catch (std::exception&/* exception*/) {
+        setCurrentExecutionContext(_pLastExecutionContext);
+        DtaScript::requiresParsingInformation(bRequiresSymbols);
+        throw/* UtlException(exception)*/;
+    }
+
+    setCurrentExecutionContext(_pLastExecutionContext);
+    DtaScript::requiresParsingInformation(bRequiresSymbols);
+    return result;
+}
 }

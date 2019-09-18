@@ -24,28 +24,39 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfSaveBinaryToFile : public GrfCommand {
-		private:
-			ExprScriptExpression* _pFilename;
-			ExprScriptExpression* _pContent;
+class GrfSaveBinaryToFile : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pFilename;
+    ExprScriptExpression* _pContent;
 
-		public:
-			GrfSaveBinaryToFile() : _pFilename(NULL), _pContent(NULL) {}
-			virtual ~GrfSaveBinaryToFile();
+public:
+    GrfSaveBinaryToFile() : _pFilename(NULL), _pContent(NULL) {}
+    virtual ~GrfSaveBinaryToFile();
 
-			virtual const char* getFunctionName() const { return "saveBinaryToFile"; }
+    virtual const char* getFunctionName() const
+    {
+        return "saveBinaryToFile";
+    }
 
-			inline void setFilename(ExprScriptExpression* pFilename) { _pFilename = pFilename; }
-			inline void setContent(ExprScriptExpression* pContent) { _pContent = pContent; }
+    inline void setFilename(ExprScriptExpression* pFilename)
+    {
+        _pFilename = pFilename;
+    }
+    inline void setContent(ExprScriptExpression* pContent)
+    {
+        _pContent = pContent;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

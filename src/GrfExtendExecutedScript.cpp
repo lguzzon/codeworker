@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfExtendExecutedScript.h"
 
-namespace CodeWorker {
-	GrfExtendExecutedScript::~GrfExtendExecutedScript() {
-		delete _pScriptContent;
-	}
+namespace CodeWorker
+{
+GrfExtendExecutedScript::~GrfExtendExecutedScript()
+{
+    delete _pScriptContent;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfExtendExecutedScript::executeInternal(DtaScriptVariable& visibility) {
-		std::string sScriptContent = _pScriptContent->getValue(visibility);
-		return CGRuntime::extendExecutedScript(sScriptContent);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfExtendExecutedScript::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sScriptContent = _pScriptContent->getValue(visibility);
+    return CGRuntime::extendExecutedScript(sScriptContent);
+}
 
-	void GrfExtendExecutedScript::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::extendExecutedScript(";
-		_pScriptContent->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfExtendExecutedScript::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::extendExecutedScript(";
+    _pScriptContent->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

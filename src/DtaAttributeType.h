@@ -25,57 +25,87 @@ To contact the author: codeworker@free.fr
 #include <map>
 #include <string>
 
-namespace CodeWorker {
-	class DtaAttributeType;
-	class DtaScriptVariable;
+namespace CodeWorker
+{
+class DtaAttributeType;
+class DtaScriptVariable;
 
-	class DtaFollowingAttributeInfo {
-	private:
-		DtaAttributeType* _pAttributeType;
-		int _iNumberOfUse;
+class DtaFollowingAttributeInfo
+{
+private:
+    DtaAttributeType* _pAttributeType;
+    int _iNumberOfUse;
 
-	public:
-		DtaFollowingAttributeInfo(DtaAttributeType* pType) : _iNumberOfUse(0), _pAttributeType(pType) {}
+public:
+    DtaFollowingAttributeInfo(DtaAttributeType* pType) : _iNumberOfUse(0), _pAttributeType(pType) {}
 
-		inline DtaAttributeType& getAttributeType() const { return *_pAttributeType; }
-		inline int getNumberOfUse() const { return _iNumberOfUse; }
-		inline void incrementUse() { _iNumberOfUse++; }
+    inline DtaAttributeType& getAttributeType() const
+    {
+        return *_pAttributeType;
+    }
+    inline int getNumberOfUse() const
+    {
+        return _iNumberOfUse;
+    }
+    inline void incrementUse()
+    {
+        _iNumberOfUse++;
+    }
 
-		bool isAttribute() const;
-		void insertAttribute(DtaScriptVariable& myUser);
-	};
+    bool isAttribute() const;
+    void insertAttribute(DtaScriptVariable& myUser);
+};
 
-	class DtaAttributeType {
-	private:
-		static std::map<std::string, DtaAttributeType*> _mapOfTypes;
+class DtaAttributeType
+{
+private:
+    static std::map<std::string, DtaAttributeType*> _mapOfTypes;
 
-		std::string _sName;
-		int _iNumberOfUse;
-		int _iNumberOfElements;
-		std::map<std::string, DtaFollowingAttributeInfo*> _mapOfAttributes;
-		std::map<std::string, DtaFollowingAttributeInfo*> _mapOfAttributeElements;
+    std::string _sName;
+    int _iNumberOfUse;
+    int _iNumberOfElements;
+    std::map<std::string, DtaFollowingAttributeInfo*> _mapOfAttributes;
+    std::map<std::string, DtaFollowingAttributeInfo*> _mapOfAttributeElements;
 
-	protected:
-		DtaAttributeType(const std::string& sName);
+protected:
+    DtaAttributeType(const std::string& sName);
 
-		void insertUser(DtaScriptVariable& myUser);
-		void insertElement(DtaScriptVariable& myUser);
-		void insertAttribute(DtaScriptVariable& myUser);
+    void insertUser(DtaScriptVariable& myUser);
+    void insertElement(DtaScriptVariable& myUser);
+    void insertAttribute(DtaScriptVariable& myUser);
 
-	public:
-		static inline const std::map<std::string, DtaAttributeType*>& getTypes() { return _mapOfTypes; }
-		static DtaAttributeType* getAttributeType(const std::string& sName);
+public:
+    static inline const std::map<std::string, DtaAttributeType*>& getTypes()
+    {
+        return _mapOfTypes;
+    }
+    static DtaAttributeType* getAttributeType(const std::string& sName);
 
-		inline const std::string& getName() const { return _sName; }
-		inline const std::map<std::string, DtaFollowingAttributeInfo*>& getAttributes() const { return _mapOfAttributes; }
-		inline const std::map<std::string, DtaFollowingAttributeInfo*>& getAttributeElements() const { return _mapOfAttributeElements; }
-		inline int getNumberOfUse() const { return _iNumberOfUse; }
-		inline int getNumberOfElementUse() const { return _iNumberOfElements; }
-		bool isAttribute() const;
+    inline const std::string& getName() const
+    {
+        return _sName;
+    }
+    inline const std::map<std::string, DtaFollowingAttributeInfo*>& getAttributes() const
+    {
+        return _mapOfAttributes;
+    }
+    inline const std::map<std::string, DtaFollowingAttributeInfo*>& getAttributeElements() const
+    {
+        return _mapOfAttributeElements;
+    }
+    inline int getNumberOfUse() const
+    {
+        return _iNumberOfUse;
+    }
+    inline int getNumberOfElementUse() const
+    {
+        return _iNumberOfElements;
+    }
+    bool isAttribute() const;
 
-		static DtaAttributeType& extractProjectTypes(DtaScriptVariable& visibility);
-		static void removeProjectTypes();
-	};
+    static DtaAttributeType& extractProjectTypes(DtaScriptVariable& visibility);
+    static void removeProjectTypes();
+};
 }
 
 #endif

@@ -30,24 +30,28 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfSaveBinaryToFile.h"
 
-namespace CodeWorker {
-	GrfSaveBinaryToFile::~GrfSaveBinaryToFile() {
-		delete _pFilename;
-		delete _pContent;
-	}
+namespace CodeWorker
+{
+GrfSaveBinaryToFile::~GrfSaveBinaryToFile()
+{
+    delete _pFilename;
+    delete _pContent;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSaveBinaryToFile::executeInternal(DtaScriptVariable& visibility) {
-		std::string sFilename = _pFilename->getValue(visibility);
-		std::string sContent = _pContent->getValue(visibility);
-		return CGRuntime::saveBinaryToFile(sFilename, sContent);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSaveBinaryToFile::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sFilename = _pFilename->getValue(visibility);
+    std::string sContent = _pContent->getValue(visibility);
+    return CGRuntime::saveBinaryToFile(sFilename, sContent);
+}
 
-	void GrfSaveBinaryToFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::saveBinaryToFile(";
-		_pFilename->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pContent->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSaveBinaryToFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::saveBinaryToFile(";
+    _pFilename->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pContent->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

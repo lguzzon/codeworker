@@ -37,44 +37,56 @@ To contact the author: codeworker@free.fr
 
 #include "GrfInsertTextOnceToFloatingLocation.h"
 
-namespace CodeWorker {
-	GrfInsertTextOnceToFloatingLocation::~GrfInsertTextOnceToFloatingLocation() {
-		delete _pLocation;
-		delete _pText;
-	}
+namespace CodeWorker
+{
+GrfInsertTextOnceToFloatingLocation::~GrfInsertTextOnceToFloatingLocation()
+{
+    delete _pLocation;
+    delete _pText;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfInsertTextOnceToFloatingLocation::executeInternal(DtaScriptVariable& visibility) {
-		std::string sLocation = _pLocation->getValue(visibility);
-		std::string sText = _pText->getValue(visibility);
-//##protect##"execute"
-		if (*_pOutputCoverage != NULL) {
-			ScpStream* pOwner;
-			int iLocation = CGRuntime::getOutputStream()->getFloatingLocation(sLocation, pOwner);
-			if (pOwner == NULL) throw UtlException("the floating location '" + sLocation + "' doesn't exist");
-			if (CGRuntime::getOutputStream()->insertTextOnce(sText, iLocation)) {
-				int iCoverageLocation = iLocation + (*_pOutputCoverage)->getIntValue();
-				DtaScriptVariable* pCoverage = GrfInsertText::getCoverageItem(*_pOutputCoverage, sText.size(), iCoverageLocation, "I");
-				pCoverage->insertNode("script")->setValue(_iFileLocation);
-				pCoverage->insertNode("output")->setValue(iCoverageLocation);
-			}
-			return NO_INTERRUPTION;
-		}
-//##protect##"execute"
-		return CGRuntime::insertTextOnceToFloatingLocation(sLocation, sText);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfInsertTextOnceToFloatingLocation::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sLocation = _pLocation->getValue(visibility);
+    std::string sText = _pText->getValue(visibility);
+
+    //##protect##"execute"
+    if (*_pOutputCoverage != NULL) {
+        ScpStream* pOwner;
+        int iLocation = CGRuntime::getOutputStream()->getFloatingLocation(sLocation, pOwner);
+
+        if (pOwner == NULL) {
+            throw UtlException("the floating location '" + sLocation + "' doesn't exist");
+        }
+
+        if (CGRuntime::getOutputStream()->insertTextOnce(sText, iLocation)) {
+            int iCoverageLocation = iLocation + (*_pOutputCoverage)->getIntValue();
+            DtaScriptVariable* pCoverage = GrfInsertText::getCoverageItem(*_pOutputCoverage, sText.size(), iCoverageLocation, "I");
+            pCoverage->insertNode("script")->setValue(_iFileLocation);
+            pCoverage->insertNode("output")->setValue(iCoverageLocation);
+        }
+
+        return NO_INTERRUPTION;
+    }
+
+    //##protect##"execute"
+    return CGRuntime::insertTextOnceToFloatingLocation(sLocation, sText);
+}
 
 //##protect##"implementation"
-	void GrfInsertTextOnceToFloatingLocation::prepareCoverage(DtaScriptVariable* const* pOutputCoverage) {
-		_pOutputCoverage = pOutputCoverage;
-	}
+void GrfInsertTextOnceToFloatingLocation::prepareCoverage(DtaScriptVariable* const* pOutputCoverage)
+{
+    _pOutputCoverage = pOutputCoverage;
+}
 //##protect##"implementation"
 
-	void GrfInsertTextOnceToFloatingLocation::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::insertTextOnceToFloatingLocation(";
-		_pLocation->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pText->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfInsertTextOnceToFloatingLocation::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::insertTextOnceToFloatingLocation(";
+    _pLocation->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pText->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

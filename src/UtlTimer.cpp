@@ -18,7 +18,9 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 This implementation is inspired of 'ABE::Chronograph', written by Eric NICOLAS
-*/// Various os-dependant implementations of Chronograph
+*/
+
+// Various os-dependant implementations of Chronograph
 // WIN32 :
 //   QueryPerformanceCounter
 //   QueryPerformanceFrequency
@@ -35,34 +37,39 @@ This implementation is inspired of 'ABE::Chronograph', written by Eric NICOLAS
 
 #include "UtlTimer.h"
 
-namespace CodeWorker {
-	unsigned long UtlTimer::getTimeInMillis() {
-		if (active_) {
-			stop();
-			start();
-		}
-		return (unsigned long) (elapsed_ / freqInMillis_);
-	}
+namespace CodeWorker
+{
+unsigned long UtlTimer::getTimeInMillis()
+{
+    if (active_) {
+        stop();
+        start();
+    }
 
-	int64 UtlTimer::now() {
-#ifdef WIN32
-		LARGE_INTEGER value;
-		QueryPerformanceCounter(&value);
-		return (int64)value.QuadPart;
-#else
-        struct timeval tv;
-		gettimeofday(&tv, NULL);
-		return (int64)tv.tv_sec * 1000000 + (int64)tv.tv_usec;
-#endif
-	}
+    return (unsigned long)(elapsed_ / freqInMillis_);
+}
 
-	int64 UtlTimer::freq() {
+int64 UtlTimer::now()
+{
 #ifdef WIN32
-		LARGE_INTEGER freq;
-		QueryPerformanceFrequency(&freq);
-		return (int64)freq.QuadPart;
+    LARGE_INTEGER value;
+    QueryPerformanceCounter(&value);
+    return (int64)value.QuadPart;
 #else
-		return (int64)1000000;
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (int64)tv.tv_sec * 1000000 + (int64)tv.tv_usec;
 #endif
-	}
+}
+
+int64 UtlTimer::freq()
+{
+#ifdef WIN32
+    LARGE_INTEGER freq;
+    QueryPerformanceFrequency(&freq);
+    return (int64)freq.QuadPart;
+#else
+    return (int64)1000000;
+#endif
+}
 }

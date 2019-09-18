@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfAttachInputToSocket : public GrfCommand {
-		private:
-			ExprScriptExpression* _pSocket;
+class GrfAttachInputToSocket : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pSocket;
 
-		public:
-			GrfAttachInputToSocket() : _pSocket(NULL) {}
-			virtual ~GrfAttachInputToSocket();
+public:
+    GrfAttachInputToSocket() : _pSocket(NULL) {}
+    virtual ~GrfAttachInputToSocket();
 
-			virtual const char* getFunctionName() const { return "attachInputToSocket"; }
+    virtual const char* getFunctionName() const
+    {
+        return "attachInputToSocket";
+    }
 
-			inline void setSocket(ExprScriptExpression* pSocket) { _pSocket = pSocket; }
+    inline void setSocket(ExprScriptExpression* pSocket)
+    {
+        _pSocket = pSocket;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

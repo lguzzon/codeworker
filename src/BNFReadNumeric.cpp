@@ -27,15 +27,26 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFReadNumeric.h"
 
-namespace CodeWorker {
-	BNFReadNumeric::BNFReadNumeric(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue, bool bNoCase) : BNFReadToken(pBNFScript, pParent, bContinue, bNoCase) {}
-	BNFReadNumeric::~BNFReadNumeric() {}
+namespace CodeWorker
+{
+BNFReadNumeric::BNFReadNumeric(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue, bool bNoCase) : BNFReadToken(pBNFScript, pParent, bContinue, bNoCase) {}
+BNFReadNumeric::~BNFReadNumeric() {}
 
-	void BNFReadNumeric::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFReadNumeric(*this, env);
-	}
+void BNFReadNumeric::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFReadNumeric(*this, env);
+}
 
-	const char* BNFReadNumeric::getFunctionName() const { return "#readNumeric"; }
-	std::string BNFReadNumeric::executeExtraction(DtaScriptVariable&) const { return CGRuntime::readNumeric(); }
-	std::string BNFReadNumeric::compileCppExtraction() const { return "CGRuntime::readNumeric()"; }
+const char* BNFReadNumeric::getFunctionName() const
+{
+    return "#readNumeric";
+}
+std::string BNFReadNumeric::executeExtraction(DtaScriptVariable&) const
+{
+    return CGRuntime::readNumeric();
+}
+std::string BNFReadNumeric::compileCppExtraction() const
+{
+    return "CGRuntime::readNumeric()";
+}
 }

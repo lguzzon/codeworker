@@ -29,21 +29,25 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptExpression.h"
 #include "GrfSetInputLocation.h"
 
-namespace CodeWorker {
-	GrfSetInputLocation::~GrfSetInputLocation() {
-		delete _pLocation;
-	}
+namespace CodeWorker
+{
+GrfSetInputLocation::~GrfSetInputLocation()
+{
+    delete _pLocation;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetInputLocation::executeInternal(DtaScriptVariable& visibility) {
-		std::string sLocation = _pLocation->getValue(visibility);
-		int iLocation = atoi(sLocation.c_str());
-		return CGRuntime::setInputLocation(iLocation);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSetInputLocation::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sLocation = _pLocation->getValue(visibility);
+    int iLocation = atoi(sLocation.c_str());
+    return CGRuntime::setInputLocation(iLocation);
+}
 
-	void GrfSetInputLocation::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setInputLocation(";
-		_pLocation->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSetInputLocation::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::setInputLocation(";
+    _pLocation->compileCppInt(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

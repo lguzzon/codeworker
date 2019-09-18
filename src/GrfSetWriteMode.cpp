@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfSetWriteMode.h"
 
-namespace CodeWorker {
-	GrfSetWriteMode::~GrfSetWriteMode() {
-		delete _pMode;
-	}
+namespace CodeWorker
+{
+GrfSetWriteMode::~GrfSetWriteMode()
+{
+    delete _pMode;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetWriteMode::executeInternal(DtaScriptVariable& visibility) {
-		std::string sMode = _pMode->getValue(visibility);
-		return CGRuntime::setWriteMode(sMode);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSetWriteMode::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sMode = _pMode->getValue(visibility);
+    return CGRuntime::setWriteMode(sMode);
+}
 
-	void GrfSetWriteMode::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setWriteMode(";
-		_pMode->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSetWriteMode::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::setWriteMode(";
+    _pMode->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

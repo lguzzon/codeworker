@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfSetInputLocation : public GrfCommand {
-		private:
-			ExprScriptExpression* _pLocation;
+class GrfSetInputLocation : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pLocation;
 
-		public:
-			GrfSetInputLocation() : _pLocation(NULL) {}
-			virtual ~GrfSetInputLocation();
+public:
+    GrfSetInputLocation() : _pLocation(NULL) {}
+    virtual ~GrfSetInputLocation();
 
-			virtual const char* getFunctionName() const { return "setInputLocation"; }
+    virtual const char* getFunctionName() const
+    {
+        return "setInputLocation";
+    }
 
-			inline void setLocation(ExprScriptExpression* pLocation) { _pLocation = pLocation; }
+    inline void setLocation(ExprScriptExpression* pLocation)
+    {
+        _pLocation = pLocation;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

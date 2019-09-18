@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfRandomSeed : public GrfCommand {
-		private:
-			ExprScriptExpression* _pSeed;
+class GrfRandomSeed : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pSeed;
 
-		public:
-			GrfRandomSeed() : _pSeed(NULL) {}
-			virtual ~GrfRandomSeed();
+public:
+    GrfRandomSeed() : _pSeed(NULL) {}
+    virtual ~GrfRandomSeed();
 
-			virtual const char* getFunctionName() const { return "randomSeed"; }
+    virtual const char* getFunctionName() const
+    {
+        return "randomSeed";
+    }
 
-			inline void setSeed(ExprScriptExpression* pSeed) { _pSeed = pSeed; }
+    inline void setSeed(ExprScriptExpression* pSeed)
+    {
+        _pSeed = pSeed;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

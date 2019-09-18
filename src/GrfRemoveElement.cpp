@@ -32,24 +32,28 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfRemoveElement.h"
 
-namespace CodeWorker {
-	GrfRemoveElement::~GrfRemoveElement() {
-		delete _pVariable;
-		delete _pKey;
-	}
+namespace CodeWorker
+{
+GrfRemoveElement::~GrfRemoveElement()
+{
+    delete _pVariable;
+    delete _pKey;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfRemoveElement::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pVariable = visibility.getExistingVariable(*_pVariable);
-		std::string sKey = _pKey->getValue(visibility);
-		return CGRuntime::removeElement(pVariable, sKey);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfRemoveElement::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pVariable = visibility.getExistingVariable(*_pVariable);
+    std::string sKey = _pKey->getValue(visibility);
+    return CGRuntime::removeElement(pVariable, sKey);
+}
 
-	void GrfRemoveElement::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::removeElement(";
-		_pVariable->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pKey->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfRemoveElement::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::removeElement(";
+    _pVariable->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pKey->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

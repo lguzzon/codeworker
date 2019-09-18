@@ -24,32 +24,43 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class ExprScriptExpression;
-	class DtaPatternScript;
+namespace CodeWorker
+{
+class ExprScriptExpression;
+class DtaPatternScript;
 
-	class GrfJointPoint : public GrfBlock {
-	private:
-		std::string _sName;
-		DtaPatternScript* _pPatternScript;
-		ExprScriptVariable* _pContext;
-		bool _bIterate;
+class GrfJointPoint : public GrfBlock
+{
+private:
+    std::string _sName;
+    DtaPatternScript* _pPatternScript;
+    ExprScriptVariable* _pContext;
+    bool _bIterate;
 
-	public:
-		inline GrfJointPoint(DtaPatternScript* pPatternScript, GrfBlock* pParent, const std::string& sName) : GrfBlock(pParent), _pPatternScript(pPatternScript), _sName(sName), _pContext(NULL), _bIterate(false) {}
-		virtual ~GrfJointPoint();
+public:
+    inline GrfJointPoint(DtaPatternScript* pPatternScript, GrfBlock* pParent, const std::string& sName) : GrfBlock(pParent), _pPatternScript(pPatternScript), _sName(sName), _pContext(NULL), _bIterate(false) {}
+    virtual ~GrfJointPoint();
 
-		inline void isIterate(bool bIterate) { _bIterate = bIterate; }
-		inline const std::string& getName() const { return _sName; }
-		inline void setContext(ExprScriptVariable* pContext) { _pContext = pContext; }
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    inline void isIterate(bool bIterate)
+    {
+        _bIterate = bIterate;
+    }
+    inline const std::string& getName() const
+    {
+        return _sName;
+    }
+    inline void setContext(ExprScriptVariable* pContext)
+    {
+        _pContext = pContext;
+    }
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		SEQUENCE_INTERRUPTION_LIST executeHeart(DtaScriptVariable& visibility);
-		SEQUENCE_INTERRUPTION_LIST executeHeartIteration(DtaScriptVariable& item);
+    SEQUENCE_INTERRUPTION_LIST executeHeart(DtaScriptVariable& visibility);
+    SEQUENCE_INTERRUPTION_LIST executeHeartIteration(DtaScriptVariable& item);
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

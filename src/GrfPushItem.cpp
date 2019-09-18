@@ -30,27 +30,45 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfPushItem.h"
 
-namespace CodeWorker {
-	GrfPushItem::~GrfPushItem() {
-		if (_pVariable != NULL) delete _pVariable;
-		if (_pValue != NULL) delete _pValue;
-	}
+namespace CodeWorker
+{
+GrfPushItem::~GrfPushItem()
+{
+    if (_pVariable != NULL) {
+        delete _pVariable;
+    }
 
-	SEQUENCE_INTERRUPTION_LIST GrfPushItem::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pVariable = visibility.getVariable(*_pVariable);
-		std::string sValue;
-		if (_pValue != NULL) sValue = _pValue->getValue(visibility);
-		pVariable->pushItem(sValue);
-		return NO_INTERRUPTION;
-	}
+    if (_pValue != NULL) {
+        delete _pValue;
+    }
+}
 
-	void GrfPushItem::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT;
-		_pVariable->compileCppForSet(theCompilerEnvironment);
-		CW_BODY_STREAM << ".pushItem(";
-		if (_pValue != NULL) _pValue->compileCpp(theCompilerEnvironment);
-		else CW_BODY_STREAM << "\"\"";
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfPushItem::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pVariable = visibility.getVariable(*_pVariable);
+    std::string sValue;
+
+    if (_pValue != NULL) {
+        sValue = _pValue->getValue(visibility);
+    }
+
+    pVariable->pushItem(sValue);
+    return NO_INTERRUPTION;
+}
+
+void GrfPushItem::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT;
+    _pVariable->compileCppForSet(theCompilerEnvironment);
+    CW_BODY_STREAM << ".pushItem(";
+
+    if (_pValue != NULL) {
+        _pValue->compileCpp(theCompilerEnvironment);
+    } else {
+        CW_BODY_STREAM << "\"\"";
+    }
+
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

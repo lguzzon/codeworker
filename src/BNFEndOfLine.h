@@ -24,20 +24,22 @@ To contact the author: codeworker@free.fr
 
 #include "BNFReadToken.h"
 
-namespace CodeWorker {
-	class BNFEndOfLine : public BNFReadToken {
-	public:
-		BNFEndOfLine(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
-		virtual ~BNFEndOfLine();
+namespace CodeWorker
+{
+class BNFEndOfLine : public BNFReadToken
+{
+public:
+    BNFEndOfLine(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
+    virtual ~BNFEndOfLine();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual const char* getFunctionName() const;
+    virtual const char* getFunctionName() const;
 
-	protected:
-		virtual std::string executeExtraction(DtaScriptVariable&) const;
-		virtual std::string compileCppExtraction() const;
-	};
+protected:
+    virtual std::string executeExtraction(DtaScriptVariable&) const;
+    virtual std::string compileCppExtraction() const;
+};
 }
 
 #endif

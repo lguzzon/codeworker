@@ -24,28 +24,39 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfAppendFile : public GrfCommand {
-		private:
-			ExprScriptExpression* _pFilename;
-			ExprScriptExpression* _pContent;
+class GrfAppendFile : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pFilename;
+    ExprScriptExpression* _pContent;
 
-		public:
-			GrfAppendFile() : _pFilename(NULL), _pContent(NULL) {}
-			virtual ~GrfAppendFile();
+public:
+    GrfAppendFile() : _pFilename(NULL), _pContent(NULL) {}
+    virtual ~GrfAppendFile();
 
-			virtual const char* getFunctionName() const { return "appendFile"; }
+    virtual const char* getFunctionName() const
+    {
+        return "appendFile";
+    }
 
-			inline void setFilename(ExprScriptExpression* pFilename) { _pFilename = pFilename; }
-			inline void setContent(ExprScriptExpression* pContent) { _pContent = pContent; }
+    inline void setFilename(ExprScriptExpression* pFilename)
+    {
+        _pFilename = pFilename;
+    }
+    inline void setContent(ExprScriptExpression* pContent)
+    {
+        _pContent = pContent;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

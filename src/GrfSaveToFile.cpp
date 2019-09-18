@@ -30,24 +30,28 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfSaveToFile.h"
 
-namespace CodeWorker {
-	GrfSaveToFile::~GrfSaveToFile() {
-		delete _pFilename;
-		delete _pContent;
-	}
+namespace CodeWorker
+{
+GrfSaveToFile::~GrfSaveToFile()
+{
+    delete _pFilename;
+    delete _pContent;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSaveToFile::executeInternal(DtaScriptVariable& visibility) {
-		std::string sFilename = _pFilename->getValue(visibility);
-		std::string sContent = _pContent->getValue(visibility);
-		return CGRuntime::saveToFile(sFilename, sContent);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSaveToFile::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sFilename = _pFilename->getValue(visibility);
+    std::string sContent = _pContent->getValue(visibility);
+    return CGRuntime::saveToFile(sFilename, sContent);
+}
 
-	void GrfSaveToFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::saveToFile(";
-		_pFilename->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pContent->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSaveToFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::saveToFile(";
+    _pFilename->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pContent->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

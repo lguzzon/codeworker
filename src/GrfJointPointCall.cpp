@@ -34,26 +34,34 @@ To contact the author: codeworker@free.fr
 #include "GrfJointPoint.h"
 #include "GrfJointPointCall.h"
 
-namespace CodeWorker {
-	GrfJointPointCall::~GrfJointPointCall() {
-		delete _pContext;
-	}
+namespace CodeWorker
+{
+GrfJointPointCall::~GrfJointPointCall()
+{
+    delete _pContext;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfJointPointCall::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
-		DtaScriptVariable* pContext = (_pContext == NULL) ? &visibility : visibility.getExistingVariable(*_pContext);
-		if (pContext != NULL) {
-			if (CGRuntime::getActiveJointPoint() == NULL) {
-				THROW_UTLEXCEPTION("cannot execute a '#jointcut' directive out of an advice");
-			}
-			std::string sLabel = "#jointpoint '" + CGRuntime::getActiveJointPoint()->getName() + "'";
-			UTLTRACE_STACK_FUNCTION(_sParsingFilePtr, sLabel.c_str(), _iFileLocation);
-			CGRuntime::getActiveJointPoint()->executeHeartIteration(*pContext);
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfJointPointCall::executeInternal(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
+    DtaScriptVariable* pContext = (_pContext == NULL) ? &visibility : visibility.getExistingVariable(*_pContext);
 
-	void GrfJointPointCall::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "<GrfJointPointCall not handled yet!>";CW_BODY_ENDL;
-	}
+    if (pContext != NULL) {
+        if (CGRuntime::getActiveJointPoint() == NULL) {
+            THROW_UTLEXCEPTION("cannot execute a '#jointcut' directive out of an advice");
+        }
+
+        std::string sLabel = "#jointpoint '" + CGRuntime::getActiveJointPoint()->getName() + "'";
+        UTLTRACE_STACK_FUNCTION(_sParsingFilePtr, sLabel.c_str(), _iFileLocation);
+        CGRuntime::getActiveJointPoint()->executeHeartIteration(*pContext);
+    }
+
+    return result;
+}
+
+void GrfJointPointCall::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "<GrfJointPointCall not handled yet!>";
+    CW_BODY_ENDL;
+}
 }

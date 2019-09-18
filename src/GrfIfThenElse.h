@@ -24,31 +24,42 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
-	class GrfBlock;
-	class ExprScriptExpression;
+namespace CodeWorker
+{
+class GrfBlock;
+class ExprScriptExpression;
 
-	class GrfIfThenElse : public GrfCommand {
-	private:
-		ExprScriptExpression* _pCondition;
-		GrfBlock* _pThenBlock;
-		GrfBlock* _pElseBlock;
+class GrfIfThenElse : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pCondition;
+    GrfBlock* _pThenBlock;
+    GrfBlock* _pElseBlock;
 
-	public:
-		GrfIfThenElse() : _pCondition(NULL), _pThenBlock(NULL), _pElseBlock(NULL) {}
-		virtual ~GrfIfThenElse();
+public:
+    GrfIfThenElse() : _pCondition(NULL), _pThenBlock(NULL), _pElseBlock(NULL) {}
+    virtual ~GrfIfThenElse();
 
-		inline void setCondition(ExprScriptExpression* pCondition) { _pCondition = pCondition; }
-		inline void setThenBlock(GrfBlock* pBlock) { _pThenBlock = pBlock; }
-		inline void setElseBlock(GrfBlock* pBlock) { _pElseBlock = pBlock; }
+    inline void setCondition(ExprScriptExpression* pCondition)
+    {
+        _pCondition = pCondition;
+    }
+    inline void setThenBlock(GrfBlock* pBlock)
+    {
+        _pThenBlock = pBlock;
+    }
+    inline void setElseBlock(GrfBlock* pBlock)
+    {
+        _pElseBlock = pBlock;
+    }
 
-		virtual void applyRecursively(APPLY_ON_COMMAND_FUNCTION apply);
+    virtual void applyRecursively(APPLY_ON_COMMAND_FUNCTION apply);
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfSetCommentBegin : public GrfCommand {
-		private:
-			ExprScriptExpression* _pCommentBegin;
+class GrfSetCommentBegin : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pCommentBegin;
 
-		public:
-			GrfSetCommentBegin() : _pCommentBegin(NULL) {}
-			virtual ~GrfSetCommentBegin();
+public:
+    GrfSetCommentBegin() : _pCommentBegin(NULL) {}
+    virtual ~GrfSetCommentBegin();
 
-			virtual const char* getFunctionName() const { return "setCommentBegin"; }
+    virtual const char* getFunctionName() const
+    {
+        return "setCommentBegin";
+    }
 
-			inline void setCommentBegin(ExprScriptExpression* pCommentBegin) { _pCommentBegin = pCommentBegin; }
+    inline void setCommentBegin(ExprScriptExpression* pCommentBegin)
+    {
+        _pCommentBegin = pCommentBegin;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

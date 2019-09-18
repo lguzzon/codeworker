@@ -28,16 +28,20 @@ To contact the author: codeworker@free.fr
 #include "CGRuntime.h"
 #include "GrfTraceStack.h"
 
-namespace CodeWorker {
-	GrfTraceStack::~GrfTraceStack() {
-	}
+namespace CodeWorker
+{
+GrfTraceStack::~GrfTraceStack()
+{
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfTraceStack::executeInternal(DtaScriptVariable& visibility) {
-		return CGRuntime::traceStack(visibility);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfTraceStack::executeInternal(DtaScriptVariable& visibility)
+{
+    return CGRuntime::traceStack(visibility);
+}
 
-	void GrfTraceStack::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "// procedure 'traceStack' cannot be translated to C++";
-		CW_BODY_ENDL;
+void GrfTraceStack::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "// procedure 'traceStack' cannot be translated to C++";
+    CW_BODY_ENDL;
 }
 }

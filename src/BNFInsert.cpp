@@ -33,77 +33,107 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFInsert.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 
-	BNFInsert::~BNFInsert() {
-	}
+BNFInsert::~BNFInsert()
+{
+}
 
-	void BNFInsert::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFInsert(*this, env);
-	}
+void BNFInsert::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFInsert(*this, env);
+}
 
-	bool BNFInsert::isABNFCommand() const { return true; }
+bool BNFInsert::isABNFCommand() const
+{
+    return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFInsert::execute(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		DtaScriptVariable* pVariable = visibility.getExistingVariable(*_pVariable);
-		bool bCreation = (pVariable == NULL);
-		if (bCreation) {
-			pVariable = visibility.getVariable(*_pVariable);
-			if (pVariable->isLocal()) CGRuntime::throwBNFExecutionError("declare the local variable '" + _pVariable->toString() + "' before calling '#insert'");
-		}
-		int iCursor = CGRuntime::getInputLocation();
-		int iImplicitCopyPosition = ((_pBNFScript->implicitCopy()) ? CGRuntime::getOutputLocation() : -1);
-		result = GrfBlock::executeInternal(visibility);
-		if (result != NO_INTERRUPTION) {
-			if (bCreation) CGRuntime::removeVariable(pVariable);
-			CGRuntime::setInputLocation(iCursor);
-			if (iImplicitCopyPosition >= 0) CGRuntime::resizeOutputStream(iImplicitCopyPosition);
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST BNFInsert::execute(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result;
+    DtaScriptVariable* pVariable = visibility.getExistingVariable(*_pVariable);
+    bool bCreation = (pVariable == NULL);
 
-	void BNFInsert::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		std::vector<GrfCommand*>::const_iterator i = getCommands().begin();
-		if (i != getCommands().end()) {
-			CW_BODY_INDENT << "// " << toString();
-			CW_BODY_ENDL;
-			int iCursor = theCompilerEnvironment.newCursor();
-			CW_BODY_INDENT << "int _compilerClauseCursor_" << iCursor << " = CGRuntime::getInputLocation();";
-			CW_BODY_ENDL;
-			CW_BODY_INDENT << "bool _compilerClauseCreation_" << iCursor << " = CGRuntime::existVariable(";
-			_pVariable->compileCpp(theCompilerEnvironment);
-			CW_BODY_STREAM << ");";
-			CW_BODY_ENDL;
-			CW_BODY_INDENT;
-			_pVariable->compileCppForSet(theCompilerEnvironment);
-			CW_BODY_STREAM << ";";CW_BODY_ENDL;
-			CW_BODY_INDENT << "if (_compilerClauseCreation_" << iCursor << " && ";
-			_pVariable->compileCpp(theCompilerEnvironment);
-			CW_BODY_STREAM << ".isLocal()) CGRuntime::throwBNFExecutionError(\"declare the local variable '" << _pVariable->toString() << "' before calling '#insert'\");";CW_BODY_ENDL;
-			GrfBlock::compileCppBNFSequence(theCompilerEnvironment);
-			CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";
-			CW_BODY_ENDL;
-			CW_BODY_INDENT << "\tif (_compilerClauseCreation_" << iCursor << ") CGRuntime::removeVariable(";
-			_pVariable->compileCppForSet(theCompilerEnvironment);
-			CW_BODY_STREAM << ");";
-			CW_BODY_ENDL;
-			CW_BODY_INDENT << "\tCGRuntime::setInputLocation(_compilerClauseCursor_" << iCursor << ");";
-			CW_BODY_ENDL;
-			CW_BODY_INDENT << "}";
-			CW_BODY_ENDL;
-		}
-	}
+    if (bCreation) {
+        pVariable = visibility.getVariable(*_pVariable);
 
-	std::string BNFInsert::toString() const {
-		std::string sText = "#insert(" + _pVariable->toString() + ")";
-		for (std::vector<GrfCommand*>::const_iterator i = getCommands().begin(); i != getCommands().end(); i++) {
-			if ((*i)->isABNFCommand()) {
-				if (i != getCommands().begin()) sText += " ";
-				sText += (*i)->toString();
-			}
-		}
-		return sText;
-	}
+        if (pVariable->isLocal()) {
+            CGRuntime::throwBNFExecutionError("declare the local variable '" + _pVariable->toString() + "' before calling '#insert'");
+        }
+    }
+
+    int iCursor = CGRuntime::getInputLocation();
+    int iImplicitCopyPosition = ((_pBNFScript->implicitCopy()) ? CGRuntime::getOutputLocation() : -1);
+    result = GrfBlock::executeInternal(visibility);
+
+    if (result != NO_INTERRUPTION) {
+        if (bCreation) {
+            CGRuntime::removeVariable(pVariable);
+        }
+
+        CGRuntime::setInputLocation(iCursor);
+
+        if (iImplicitCopyPosition >= 0) {
+            CGRuntime::resizeOutputStream(iImplicitCopyPosition);
+        }
+    }
+
+    return result;
+}
+
+void BNFInsert::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    std::vector<GrfCommand*>::const_iterator i = getCommands().begin();
+
+    if (i != getCommands().end()) {
+        CW_BODY_INDENT << "// " << toString();
+        CW_BODY_ENDL;
+        int iCursor = theCompilerEnvironment.newCursor();
+        CW_BODY_INDENT << "int _compilerClauseCursor_" << iCursor << " = CGRuntime::getInputLocation();";
+        CW_BODY_ENDL;
+        CW_BODY_INDENT << "bool _compilerClauseCreation_" << iCursor << " = CGRuntime::existVariable(";
+        _pVariable->compileCpp(theCompilerEnvironment);
+        CW_BODY_STREAM << ");";
+        CW_BODY_ENDL;
+        CW_BODY_INDENT;
+        _pVariable->compileCppForSet(theCompilerEnvironment);
+        CW_BODY_STREAM << ";";
+        CW_BODY_ENDL;
+        CW_BODY_INDENT << "if (_compilerClauseCreation_" << iCursor << " && ";
+        _pVariable->compileCpp(theCompilerEnvironment);
+        CW_BODY_STREAM << ".isLocal()) CGRuntime::throwBNFExecutionError(\"declare the local variable '" << _pVariable->toString() << "' before calling '#insert'\");";
+        CW_BODY_ENDL;
+        GrfBlock::compileCppBNFSequence(theCompilerEnvironment);
+        CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";
+        CW_BODY_ENDL;
+        CW_BODY_INDENT << "\tif (_compilerClauseCreation_" << iCursor << ") CGRuntime::removeVariable(";
+        _pVariable->compileCppForSet(theCompilerEnvironment);
+        CW_BODY_STREAM << ");";
+        CW_BODY_ENDL;
+        CW_BODY_INDENT << "\tCGRuntime::setInputLocation(_compilerClauseCursor_" << iCursor << ");";
+        CW_BODY_ENDL;
+        CW_BODY_INDENT << "}";
+        CW_BODY_ENDL;
+    }
+}
+
+std::string BNFInsert::toString() const
+{
+    std::string sText = "#insert(" + _pVariable->toString() + ")";
+
+    for (std::vector<GrfCommand*>::const_iterator i = getCommands().begin(); i != getCommands().end(); i++) {
+        if ((*i)->isABNFCommand()) {
+            if (i != getCommands().begin()) {
+                sText += " ";
+            }
+
+            sText += (*i)->toString();
+        }
+    }
+
+    return sText;
+}
 
 }

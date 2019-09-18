@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfResizeOutputStream : public GrfCommand {
-		private:
-			ExprScriptExpression* _pNewSize;
+class GrfResizeOutputStream : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pNewSize;
 
-		public:
-			GrfResizeOutputStream() : _pNewSize(NULL) {}
-			virtual ~GrfResizeOutputStream();
+public:
+    GrfResizeOutputStream() : _pNewSize(NULL) {}
+    virtual ~GrfResizeOutputStream();
 
-			virtual const char* getFunctionName() const { return "resizeOutputStream"; }
+    virtual const char* getFunctionName() const
+    {
+        return "resizeOutputStream";
+    }
 
-			inline void setNewSize(ExprScriptExpression* pNewSize) { _pNewSize = pNewSize; }
+    inline void setNewSize(ExprScriptExpression* pNewSize)
+    {
+        _pNewSize = pNewSize;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

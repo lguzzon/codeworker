@@ -28,46 +28,58 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfInsertText : public GrfCommand {
-		private:
-			ExprScriptExpression* _pLocation;
-			ExprScriptExpression* _pText;
+class GrfInsertText : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pLocation;
+    ExprScriptExpression* _pText;
 
-//##protect##"attributes"
-			DtaScriptVariable* const* _pOutputCoverage;
-//##protect##"attributes"
+    //##protect##"attributes"
+    DtaScriptVariable* const* _pOutputCoverage;
+    //##protect##"attributes"
 
-		public:
-			GrfInsertText() : _pLocation(NULL), _pText(NULL) {
-//##protect##"constructor"
-				_pOutputCoverage = NULL;
-//##protect##"constructor"
-			}
-			virtual ~GrfInsertText();
+public:
+    GrfInsertText() : _pLocation(NULL), _pText(NULL)
+    {
+        //##protect##"constructor"
+        _pOutputCoverage = NULL;
+        //##protect##"constructor"
+    }
+    virtual ~GrfInsertText();
 
-			virtual const char* getFunctionName() const { return "insertText"; }
+    virtual const char* getFunctionName() const
+    {
+        return "insertText";
+    }
 
-			inline void setLocation(ExprScriptExpression* pLocation) { _pLocation = pLocation; }
-			inline void setText(ExprScriptExpression* pText) { _pText = pText; }
+    inline void setLocation(ExprScriptExpression* pLocation)
+    {
+        _pLocation = pLocation;
+    }
+    inline void setText(ExprScriptExpression* pText)
+    {
+        _pText = pText;
+    }
 
 
-//##protect##"interface"
-			void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
-			static int shiftCoverageItem(DtaScriptVariable* pCoverage, int iLocation, int iLength);
-			static DtaScriptVariable* getCoverageItem(DtaScriptVariable* pCoverage, int iLocation, int iLength, const std::string& sType);
-//##protect##"interface"
+    //##protect##"interface"
+    void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
+    static int shiftCoverageItem(DtaScriptVariable* pCoverage, int iLocation, int iLength);
+    static DtaScriptVariable* getCoverageItem(DtaScriptVariable* pCoverage, int iLocation, int iLength, const std::string& sType);
+    //##protect##"interface"
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
 
-//##protect##"declarations"
-//##protect##"declarations"
-	};
+    //##protect##"declarations"
+    //##protect##"declarations"
+};
 }
 
 #endif

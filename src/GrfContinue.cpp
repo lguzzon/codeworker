@@ -27,16 +27,20 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfContinue.h"
 
-namespace CodeWorker {
-	GrfContinue::~GrfContinue() {
-	}
+namespace CodeWorker
+{
+GrfContinue::~GrfContinue()
+{
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfContinue::executeInternal(DtaScriptVariable&) {
-		return CONTINUE_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfContinue::executeInternal(DtaScriptVariable&)
+{
+    return CONTINUE_INTERRUPTION;
+}
 
-	void GrfContinue::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "continue;";
-		CW_BODY_ENDL;
-	}
+void GrfContinue::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "continue;";
+    CW_BODY_ENDL;
+}
 }

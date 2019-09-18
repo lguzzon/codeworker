@@ -28,25 +28,30 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
-	class ScpStream;
+namespace CodeWorker
+{
+class ScpStream;
 
-	class GrfText : public GrfCommand {
-	private:
-		DtaScriptVariable* const* _pOutputCoverage;
-		std::string _sText;
-		ScpStream** _pOutput;
+class GrfText : public GrfCommand
+{
+private:
+    DtaScriptVariable* const* _pOutputCoverage;
+    std::string _sText;
+    ScpStream** _pOutput;
 
-	public:
-		GrfText(DtaScriptVariable* const* pOutputCoverage, ScpStream*& pOutput, const char* sText) : _pOutputCoverage(pOutputCoverage), _pOutput(&pOutput), _sText(sText) {}
-		virtual ~GrfText();
+public:
+    GrfText(DtaScriptVariable* const* pOutputCoverage, ScpStream*& pOutput, const char* sText) : _pOutputCoverage(pOutputCoverage), _pOutput(&pOutput), _sText(sText) {}
+    virtual ~GrfText();
 
-		virtual const char* getFunctionName() const { return "__RAW_TEXT_TO_WRITE"; }
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual const char* getFunctionName() const
+    {
+        return "__RAW_TEXT_TO_WRITE";
+    }
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& /*visibility*/);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& /*visibility*/);
+};
 }
 
 #endif

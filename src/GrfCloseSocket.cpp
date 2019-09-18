@@ -29,21 +29,25 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptExpression.h"
 #include "GrfCloseSocket.h"
 
-namespace CodeWorker {
-	GrfCloseSocket::~GrfCloseSocket() {
-		delete _pSocket;
-	}
+namespace CodeWorker
+{
+GrfCloseSocket::~GrfCloseSocket()
+{
+    delete _pSocket;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfCloseSocket::executeInternal(DtaScriptVariable& visibility) {
-		std::string sSocket = _pSocket->getValue(visibility);
-		int iSocket = atoi(sSocket.c_str());
-		return CGRuntime::closeSocket(iSocket);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfCloseSocket::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sSocket = _pSocket->getValue(visibility);
+    int iSocket = atoi(sSocket.c_str());
+    return CGRuntime::closeSocket(iSocket);
+}
 
-	void GrfCloseSocket::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::closeSocket(";
-		_pSocket->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfCloseSocket::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::closeSocket(";
+    _pSocket->compileCppInt(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

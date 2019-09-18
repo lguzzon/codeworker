@@ -26,25 +26,30 @@ To contact the author: codeworker@free.fr
 
 #include "GrfForeach.h"
 
-namespace CodeWorker {
-	class ExprScriptMotif;
+namespace CodeWorker
+{
+class ExprScriptMotif;
 
-	class GrfSelect : public GrfForeach {
-	private:
-		ExprScriptMotif* _pMotifExpr;
+class GrfSelect : public GrfForeach
+{
+private:
+    ExprScriptMotif* _pMotifExpr;
 
-	public:
-		GrfSelect(GrfBlock* pBlock) : GrfForeach(pBlock), _pMotifExpr(NULL) {}
-		virtual ~GrfSelect();
+public:
+    GrfSelect(GrfBlock* pBlock) : GrfForeach(pBlock), _pMotifExpr(NULL) {}
+    virtual ~GrfSelect();
 
-		inline void setMotif(ExprScriptMotif* pMotif) { _pMotifExpr = pMotif; }
+    inline void setMotif(ExprScriptMotif* pMotif)
+    {
+        _pMotifExpr = pMotif;
+    }
 
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-		virtual SEQUENCE_INTERRUPTION_LIST executeSelect(const std::list<DtaScriptVariable*>& listOfNodes, DtaScriptVariable& stackSelect);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+    virtual SEQUENCE_INTERRUPTION_LIST executeSelect(const std::list<DtaScriptVariable*>& listOfNodes, DtaScriptVariable& stackSelect);
+};
 }
 
 #endif

@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfSetIncludePath.h"
 
-namespace CodeWorker {
-	GrfSetIncludePath::~GrfSetIncludePath() {
-		delete _pPath;
-	}
+namespace CodeWorker
+{
+GrfSetIncludePath::~GrfSetIncludePath()
+{
+    delete _pPath;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetIncludePath::executeInternal(DtaScriptVariable& visibility) {
-		std::string sPath = _pPath->getValue(visibility);
-		return CGRuntime::setIncludePath(sPath);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSetIncludePath::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sPath = _pPath->getValue(visibility);
+    return CGRuntime::setIncludePath(sPath);
+}
 
-	void GrfSetIncludePath::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setIncludePath(";
-		_pPath->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSetIncludePath::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::setIncludePath(";
+    _pPath->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

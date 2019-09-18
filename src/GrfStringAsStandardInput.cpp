@@ -31,32 +31,36 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfStringAsStandardInput.h"
 
-namespace CodeWorker {
-	GrfStringAsStandardInput::~GrfStringAsStandardInput() {
-		delete _pText;
-	}
+namespace CodeWorker
+{
+GrfStringAsStandardInput::~GrfStringAsStandardInput()
+{
+    delete _pText;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfStringAsStandardInput::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		std::string sInput = _pText->getValue(visibility);
-		CGStandardInputOutput theInput(sInput);
-		result = GrfBlock::executeInternal(visibility);
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfStringAsStandardInput::executeInternal(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result;
+    std::string sInput = _pText->getValue(visibility);
+    CGStandardInputOutput theInput(sInput);
+    result = GrfBlock::executeInternal(visibility);
+    return result;
+}
 
-	void GrfStringAsStandardInput::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "{";
-		CW_BODY_ENDL;
-		theCompilerEnvironment.incrementIndentation();
-		CW_BODY_INDENT << "CGStandardInputOutput theInput(";
-		_pText->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT;
-		theCompilerEnvironment.bracketsToNextBlock(true);
-		GrfBlock::compileCpp(theCompilerEnvironment);
-		theCompilerEnvironment.decrementIndentation();
-		CW_BODY_INDENT << "}";
-		CW_BODY_ENDL;
-	}
+void GrfStringAsStandardInput::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "{";
+    CW_BODY_ENDL;
+    theCompilerEnvironment.incrementIndentation();
+    CW_BODY_INDENT << "CGStandardInputOutput theInput(";
+    _pText->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT;
+    theCompilerEnvironment.bracketsToNextBlock(true);
+    GrfBlock::compileCpp(theCompilerEnvironment);
+    theCompilerEnvironment.decrementIndentation();
+    CW_BODY_INDENT << "}";
+    CW_BODY_ENDL;
+}
 }

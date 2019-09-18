@@ -22,62 +22,69 @@ To contact the author: codeworker@free.fr
 #ifndef _ASTCommand_h_
 #define _ASTCommand_h_
 
-namespace CodeWorker {
-	class ScpStream;
+namespace CodeWorker
+{
+class ScpStream;
 
-	class ASTCommandEnvironment {
-	};
+class ASTCommandEnvironment
+{
+};
 
 
-	class ASTCommand {
-		public:
-			virtual ~ASTCommand();
-			virtual void execute(ASTCommandEnvironment& env) = 0;
-		protected:
-			ExprScriptExpression* parseExpression(ScpStream& script);
-			ExprScriptVariable* parseVariableExpression(ScpStream& script);
-	};
+class ASTCommand
+{
+public:
+    virtual ~ASTCommand();
+    virtual void execute(ASTCommandEnvironment& env) = 0;
+protected:
+    ExprScriptExpression* parseExpression(ScpStream& script);
+    ExprScriptVariable* parseVariableExpression(ScpStream& script);
+};
 
-	class ASTThisCommand : public ASTCommand {
-		private:
-			ExprScriptVariable* _pVariable;
+class ASTThisCommand : public ASTCommand
+{
+private:
+    ExprScriptVariable* _pVariable;
 
-		public:
-			ASTThisCommand(ScpStream& script);
-			virtual ~ASTThisCommand();
-			virtual void execute(ASTCommandEnvironment& env);
-	};
+public:
+    ASTThisCommand(ScpStream& script);
+    virtual ~ASTThisCommand();
+    virtual void execute(ASTCommandEnvironment& env);
+};
 
-	class ASTValueCommand : public ASTCommand {
-		private:
-			ExprScriptVariable* _pVariable;
+class ASTValueCommand : public ASTCommand
+{
+private:
+    ExprScriptVariable* _pVariable;
 
-		public:
-			ASTValueCommand(ScpStream& script);
-			virtual ~ASTValueCommand();
-			virtual void execute(ASTCommandEnvironment& env);
-	};
+public:
+    ASTValueCommand(ScpStream& script);
+    virtual ~ASTValueCommand();
+    virtual void execute(ASTCommandEnvironment& env);
+};
 
-	class ASTRefCommand : public ASTCommand {
-		private:
-			ExprScriptVariable* _pVariable;
+class ASTRefCommand : public ASTCommand
+{
+private:
+    ExprScriptVariable* _pVariable;
 
-		public:
-			ASTRefCommand(ScpStream& script);
-			virtual ~ASTRefCommand();
-			virtual void execute(ASTCommandEnvironment& env);
-	};
+public:
+    ASTRefCommand(ScpStream& script);
+    virtual ~ASTRefCommand();
+    virtual void execute(ASTCommandEnvironment& env);
+};
 
-	class ASTSlideCommand : public ASTCommand {
-		private:
-			ExprScriptVariable* _pVariable;
-			std::string _sAttribute;
+class ASTSlideCommand : public ASTCommand
+{
+private:
+    ExprScriptVariable* _pVariable;
+    std::string _sAttribute;
 
-		public:
-			ASTSlideCommand(ScpStream& script);
-			virtual ~ASTSlideCommand();
-			virtual void execute(ASTCommandEnvironment& env);
-	};
+public:
+    ASTSlideCommand(ScpStream& script);
+    virtual ~ASTSlideCommand();
+    virtual void execute(ASTCommandEnvironment& env);
+};
 }
 
 #endif

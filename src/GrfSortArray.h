@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptVariable;
 
-	class GrfSortArray : public GrfCommand {
-		private:
-			ExprScriptVariable* _pArray;
+class GrfSortArray : public GrfCommand
+{
+private:
+    ExprScriptVariable* _pArray;
 
-		public:
-			GrfSortArray() : _pArray(NULL) {}
-			virtual ~GrfSortArray();
+public:
+    GrfSortArray() : _pArray(NULL) {}
+    virtual ~GrfSortArray();
 
-			virtual const char* getFunctionName() const { return "sortArray"; }
+    virtual const char* getFunctionName() const
+    {
+        return "sortArray";
+    }
 
-			inline void setArray(ExprScriptVariable* pArray) { _pArray = pArray; }
+    inline void setArray(ExprScriptVariable* pArray)
+    {
+        _pArray = pArray;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

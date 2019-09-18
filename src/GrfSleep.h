@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfSleep : public GrfCommand {
-		private:
-			ExprScriptExpression* _pMillis;
+class GrfSleep : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pMillis;
 
-		public:
-			GrfSleep() : _pMillis(NULL) {}
-			virtual ~GrfSleep();
+public:
+    GrfSleep() : _pMillis(NULL) {}
+    virtual ~GrfSleep();
 
-			virtual const char* getFunctionName() const { return "sleep"; }
+    virtual const char* getFunctionName() const
+    {
+        return "sleep";
+    }
 
-			inline void setMillis(ExprScriptExpression* pMillis) { _pMillis = pMillis; }
+    inline void setMillis(ExprScriptExpression* pMillis)
+    {
+        _pMillis = pMillis;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

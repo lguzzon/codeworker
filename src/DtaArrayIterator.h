@@ -26,69 +26,82 @@ To contact the author: codeworker@free.fr
 
 #include <list>
 
-namespace CodeWorker {
-	class DtaScriptVariable;
-	
-	class DtaArrayIterator {
-	protected:
-		int _iCurrentPosition;
-		mutable DtaScriptVariable* _pItemNoRef;
+namespace CodeWorker
+{
+class DtaScriptVariable;
 
-	public:
-		inline DtaArrayIterator(const DtaArrayIterator& copy) : _iCurrentPosition(copy._iCurrentPosition), _pItemNoRef(NULL) {}
-		inline DtaArrayIterator() : _iCurrentPosition(0), _pItemNoRef(NULL) {}
-		virtual ~DtaArrayIterator();
+class DtaArrayIterator
+{
+protected:
+    int _iCurrentPosition;
+    mutable DtaScriptVariable* _pItemNoRef;
 
-		virtual DtaArrayIterator* clone() const = 0;
-		inline int index() const { return _iCurrentPosition; }
-		inline bool first() const { return (_iCurrentPosition == 0); }
-		inline bool last() const { return _iCurrentPosition + 1 == size(); }
-		DtaScriptVariable* itemNoRef() const;
-		virtual int size() const = 0;
-		virtual bool end() const = 0;
-		virtual DtaScriptVariable* item() const = 0;
-		virtual const char* key() const = 0;
-		virtual bool prec() = 0;
-		virtual bool next() = 0;
-	};
+public:
+    inline DtaArrayIterator(const DtaArrayIterator& copy) : _iCurrentPosition(copy._iCurrentPosition), _pItemNoRef(NULL) {}
+    inline DtaArrayIterator() : _iCurrentPosition(0), _pItemNoRef(NULL) {}
+    virtual ~DtaArrayIterator();
 
-	class DtaListIterator : public DtaArrayIterator {
-	private:
-		const std::list<DtaScriptVariable*>& _list;
-		std::list<DtaScriptVariable*>::const_iterator i;
+    virtual DtaArrayIterator* clone() const = 0;
+    inline int index() const
+    {
+        return _iCurrentPosition;
+    }
+    inline bool first() const
+    {
+        return (_iCurrentPosition == 0);
+    }
+    inline bool last() const
+    {
+        return _iCurrentPosition + 1 == size();
+    }
+    DtaScriptVariable* itemNoRef() const;
+    virtual int size() const = 0;
+    virtual bool end() const = 0;
+    virtual DtaScriptVariable* item() const = 0;
+    virtual const char* key() const = 0;
+    virtual bool prec() = 0;
+    virtual bool next() = 0;
+};
 
-	public:
-		inline DtaListIterator(const DtaListIterator& copy) : DtaArrayIterator(copy), _list(copy._list), i(copy.i) {}
-		inline DtaListIterator(const std::list<DtaScriptVariable*>& listOfNodes) : _list(listOfNodes), i(listOfNodes.begin()) {}
-		virtual ~DtaListIterator();
+class DtaListIterator : public DtaArrayIterator
+{
+private:
+    const std::list<DtaScriptVariable*>& _list;
+    std::list<DtaScriptVariable*>::const_iterator i;
 
-		virtual DtaArrayIterator* clone() const;
-		virtual int size() const;
-		virtual bool end() const;
-		virtual DtaScriptVariable* item() const;
-		virtual const char* key() const;
-		virtual bool prec();
-		virtual bool next();
-	};
+public:
+    inline DtaListIterator(const DtaListIterator& copy) : DtaArrayIterator(copy), _list(copy._list), i(copy.i) {}
+    inline DtaListIterator(const std::list<DtaScriptVariable*>& listOfNodes) : _list(listOfNodes), i(listOfNodes.begin()) {}
+    virtual ~DtaListIterator();
 
-	class DtaReverseListIterator : public DtaArrayIterator {
-	private:
-		const std::list<DtaScriptVariable*>& _list;
-		std::list<DtaScriptVariable*>::const_reverse_iterator i;
+    virtual DtaArrayIterator* clone() const;
+    virtual int size() const;
+    virtual bool end() const;
+    virtual DtaScriptVariable* item() const;
+    virtual const char* key() const;
+    virtual bool prec();
+    virtual bool next();
+};
 
-	public:
-		inline DtaReverseListIterator(const DtaReverseListIterator& copy) : DtaArrayIterator(copy), _list(copy._list), i(copy.i) {}
-		inline DtaReverseListIterator(const std::list<DtaScriptVariable*>& listOfNodes) : _list(listOfNodes), i(listOfNodes.rbegin()) {}
-		virtual ~DtaReverseListIterator();
+class DtaReverseListIterator : public DtaArrayIterator
+{
+private:
+    const std::list<DtaScriptVariable*>& _list;
+    std::list<DtaScriptVariable*>::const_reverse_iterator i;
 
-		virtual DtaArrayIterator* clone() const;
-		virtual int size() const;
-		virtual bool end() const;
-		virtual const char* key() const;
-		virtual DtaScriptVariable* item() const;
-		virtual bool prec();
-		virtual bool next();
-	};
+public:
+    inline DtaReverseListIterator(const DtaReverseListIterator& copy) : DtaArrayIterator(copy), _list(copy._list), i(copy.i) {}
+    inline DtaReverseListIterator(const std::list<DtaScriptVariable*>& listOfNodes) : _list(listOfNodes), i(listOfNodes.rbegin()) {}
+    virtual ~DtaReverseListIterator();
+
+    virtual DtaArrayIterator* clone() const;
+    virtual int size() const;
+    virtual bool end() const;
+    virtual const char* key() const;
+    virtual DtaScriptVariable* item() const;
+    virtual bool prec();
+    virtual bool next();
+};
 }
 
 #endif

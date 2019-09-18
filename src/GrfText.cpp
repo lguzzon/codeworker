@@ -29,38 +29,43 @@ To contact the author: codeworker@free.fr
 #include "GrfText.h"
 
 
-namespace CodeWorker {
-	GrfText::~GrfText() {}
+namespace CodeWorker
+{
+GrfText::~GrfText() {}
 
-	SEQUENCE_INTERRUPTION_LIST GrfText::executeInternal(DtaScriptVariable&) {
-		if (*_pOutputCoverage != NULL) {
-			DtaScriptVariable* pCoverage = (*_pOutputCoverage)->pushItem("R");
-			pCoverage->insertNode("script")->setValue(_iFileLocation);
-			pCoverage->insertNode("output")->setValue((*_pOutput)->getOutputLocation() + (*_pOutputCoverage)->getIntValue());
-		}
-		(*_pOutput)->writeBinaryData(_sText.c_str(), _sText.size());
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfText::executeInternal(DtaScriptVariable&)
+{
+    if (*_pOutputCoverage != NULL) {
+        DtaScriptVariable* pCoverage = (*_pOutputCoverage)->pushItem("R");
+        pCoverage->insertNode("script")->setValue(_iFileLocation);
+        pCoverage->insertNode("output")->setValue((*_pOutput)->getOutputLocation() + (*_pOutputCoverage)->getIntValue());
+    }
 
-	void GrfText::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		std::string::size_type iStart = 0;
-		char tcLine[513];
-		for(;;) {
-			if (iStart + 512 < _sText.size()) {
-				tcLine[512] = '\0';
-				memcpy(tcLine, _sText.c_str() + iStart, 512);
-				CW_BODY_INDENT << "CGRuntime::writeText(";
-				CW_BODY_STREAM.writeString(tcLine);
-				CW_BODY_STREAM << ");";
-				CW_BODY_ENDL;
-				iStart += 512;
-			} else {
-				CW_BODY_INDENT << "CGRuntime::writeText(";
-				CW_BODY_STREAM.writeString(_sText.c_str() + iStart);
-				CW_BODY_STREAM << ");";
-				CW_BODY_ENDL;
-				break;
-			}
-		}
-	}
+    (*_pOutput)->writeBinaryData(_sText.c_str(), _sText.size());
+    return NO_INTERRUPTION;
+}
+
+void GrfText::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    std::string::size_type iStart = 0;
+    char tcLine[513];
+
+    for (;;) {
+        if (iStart + 512 < _sText.size()) {
+            tcLine[512] = '\0';
+            memcpy(tcLine, _sText.c_str() + iStart, 512);
+            CW_BODY_INDENT << "CGRuntime::writeText(";
+            CW_BODY_STREAM.writeString(tcLine);
+            CW_BODY_STREAM << ");";
+            CW_BODY_ENDL;
+            iStart += 512;
+        } else {
+            CW_BODY_INDENT << "CGRuntime::writeText(";
+            CW_BODY_STREAM.writeString(_sText.c_str() + iStart);
+            CW_BODY_STREAM << ");";
+            CW_BODY_ENDL;
+            break;
+        }
+    }
+}
 }

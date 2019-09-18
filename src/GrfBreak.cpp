@@ -27,16 +27,20 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfBreak.h"
 
-namespace CodeWorker {
-	GrfBreak::~GrfBreak() {
-	}
+namespace CodeWorker
+{
+GrfBreak::~GrfBreak()
+{
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfBreak::executeInternal(DtaScriptVariable&) {
-		return BREAK_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfBreak::executeInternal(DtaScriptVariable&)
+{
+    return BREAK_INTERRUPTION;
+}
 
-	void GrfBreak::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "break;";
-		CW_BODY_ENDL;
-	}
+void GrfBreak::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "break;";
+    CW_BODY_ENDL;
+}
 }

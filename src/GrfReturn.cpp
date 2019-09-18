@@ -30,31 +30,38 @@ To contact the author: codeworker@free.fr
 #include "GrfFunction.h"
 #include "GrfReturn.h"
 
-namespace CodeWorker {
-	GrfReturn::~GrfReturn() {
-		delete _pExpression;
-	}
+namespace CodeWorker
+{
+GrfReturn::~GrfReturn()
+{
+    delete _pExpression;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfReturn::executeInternal(DtaScriptVariable& visibility) {
-		if (_pExpression != NULL) {
-			std::string sValue = _pExpression->getValue(visibility);
-			visibility.setValueAtVariable(_sFunctionName.c_str(), sValue.c_str(), true, true);
-		}
-		return RETURN_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfReturn::executeInternal(DtaScriptVariable& visibility)
+{
+    if (_pExpression != NULL) {
+        std::string sValue = _pExpression->getValue(visibility);
+        visibility.setValueAtVariable(_sFunctionName.c_str(), sValue.c_str(), true, true);
+    }
 
-	void GrfReturn::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		if (_pExpression != NULL) {
-			CW_BODY_INDENT << _sFunctionName << ".setValue(";
-			_pExpression->compileCpp(theCompilerEnvironment);
-			CW_BODY_STREAM << ");";
-			CW_BODY_ENDL;
-		}
-		if (theCompilerEnvironment.getCurrentFunction()->getFinally() != NULL) {
-			theCompilerEnvironment.bracketsToNextBlock(false);
-			theCompilerEnvironment.getCurrentFunction()->getFinally()->compileCpp(theCompilerEnvironment);
-		}
-		CW_BODY_INDENT << "return " << _sFunctionName << ".getStringValue();";
-		CW_BODY_ENDL;
-	}
+    return RETURN_INTERRUPTION;
+}
+
+void GrfReturn::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    if (_pExpression != NULL) {
+        CW_BODY_INDENT << _sFunctionName << ".setValue(";
+        _pExpression->compileCpp(theCompilerEnvironment);
+        CW_BODY_STREAM << ");";
+        CW_BODY_ENDL;
+    }
+
+    if (theCompilerEnvironment.getCurrentFunction()->getFinally() != NULL) {
+        theCompilerEnvironment.bracketsToNextBlock(false);
+        theCompilerEnvironment.getCurrentFunction()->getFinally()->compileCpp(theCompilerEnvironment);
+    }
+
+    CW_BODY_INDENT << "return " << _sFunctionName << ".getStringValue();";
+    CW_BODY_ENDL;
+}
 }

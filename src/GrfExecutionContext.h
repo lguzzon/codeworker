@@ -24,52 +24,75 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class UtlException;
-	class BNFClauseCall;
+namespace CodeWorker
+{
+class UtlException;
+class BNFClauseCall;
 
-	class GrfExecutionContext : public GrfBlock {
-	private:
-		GrfCommand* _pLastCommand;
-		GrfExecutionContext* _pLastExecutionContext;
+class GrfExecutionContext : public GrfBlock
+{
+private:
+    GrfCommand* _pLastCommand;
+    GrfExecutionContext* _pLastExecutionContext;
 
-	protected:
-		std::list<GrfCommand*> _stack;
+protected:
+    std::list<GrfCommand*> _stack;
 
-	protected:
-		GrfExecutionContext(GrfBlock* pParent = NULL);
+protected:
+    GrfExecutionContext(GrfBlock* pParent = NULL);
 
-		inline GrfCommand* getLastCommand() const { return _pLastCommand; }
-		inline unsigned int getCounter(GrfCommand* pCommand) const { return pCommand->_iCounter; }
-		inline long getTimeInMillis(GrfCommand* pCommand) const { return pCommand->getTimeInMillis(); }
-		inline void incrementCounter(GrfCommand* pCommand) { pCommand->_iCounter++; }
-		inline const char* getParsingFilePtr(GrfCommand* pCommand) const { return pCommand->_sParsingFilePtr; }
-		inline int getFileLocation(GrfCommand* pCommand) const { return pCommand->_iFileLocation; }
+    inline GrfCommand* getLastCommand() const
+    {
+        return _pLastCommand;
+    }
+    inline unsigned int getCounter(GrfCommand* pCommand) const
+    {
+        return pCommand->_iCounter;
+    }
+    inline long getTimeInMillis(GrfCommand* pCommand) const
+    {
+        return pCommand->getTimeInMillis();
+    }
+    inline void incrementCounter(GrfCommand* pCommand)
+    {
+        pCommand->_iCounter++;
+    }
+    inline const char* getParsingFilePtr(GrfCommand* pCommand) const
+    {
+        return pCommand->_sParsingFilePtr;
+    }
+    inline int getFileLocation(GrfCommand* pCommand) const
+    {
+        return pCommand->_iFileLocation;
+    }
 
-		virtual SEQUENCE_INTERRUPTION_LIST openSession(DtaScriptVariable& visibility) = 0;
+    virtual SEQUENCE_INTERRUPTION_LIST openSession(DtaScriptVariable& visibility) = 0;
 
-		// must be 'final'!
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+    // must be 'final'!
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
 
-	public:
-		virtual ~GrfExecutionContext();
+public:
+    virtual ~GrfExecutionContext();
 
-		inline GrfExecutionContext* getLastExecutionContext() { return _pLastExecutionContext; }
+    inline GrfExecutionContext* getLastExecutionContext()
+    {
+        return _pLastExecutionContext;
+    }
 
-		// to call into redefined methods if symbols information
-		virtual void handleBeforeExecutionCBK(GrfCommand* pCommand, DtaScriptVariable& /*visibility*/);
-		virtual void handleAfterExecutionCBK(GrfCommand* pCommand, DtaScriptVariable& /*visibility*/) = 0;
-		virtual void handleAfterExceptionCBK(GrfCommand* pCommand, DtaScriptVariable& visibility, UtlException& exception) = 0;
-		virtual void handleStartingFunction(GrfFunction* pFunction);
-		virtual void handleEndingFunction(GrfFunction* pFunction);
-		virtual void handleStartingBNFClause(BNFClauseCall* pClauseCall);
-		virtual void handleEndingBNFClause(BNFClauseCall* pClauseCall);
-		virtual void handleBeforeScriptExecutionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/);
-		virtual void handleAfterScriptExecutionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/);
+    // to call into redefined methods if symbols information
+    virtual void handleBeforeExecutionCBK(GrfCommand* pCommand, DtaScriptVariable& /*visibility*/);
+    virtual void handleAfterExecutionCBK(GrfCommand* pCommand, DtaScriptVariable& /*visibility*/) = 0;
+    virtual void handleAfterExceptionCBK(GrfCommand* pCommand, DtaScriptVariable& visibility, UtlException& exception) = 0;
+    virtual void handleStartingFunction(GrfFunction* pFunction);
+    virtual void handleEndingFunction(GrfFunction* pFunction);
+    virtual void handleStartingBNFClause(BNFClauseCall* pClauseCall);
+    virtual void handleEndingBNFClause(BNFClauseCall* pClauseCall);
+    virtual void handleBeforeScriptExecutionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/);
+    virtual void handleAfterScriptExecutionCBK(GrfCommand* /*pCommand*/, DtaScriptVariable& /*visibility*/);
 
-	private:
-		static void clearRecursively(GrfCommand* pCommand);
-	};
+private:
+    static void clearRecursively(GrfCommand* pCommand);
+};
 }
 
 #endif

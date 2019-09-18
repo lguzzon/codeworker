@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptVariable;
 
-	class GrfClearVariable : public GrfCommand {
-		private:
-			ExprScriptVariable* _pNode;
+class GrfClearVariable : public GrfCommand
+{
+private:
+    ExprScriptVariable* _pNode;
 
-		public:
-			GrfClearVariable() : _pNode(NULL) {}
-			virtual ~GrfClearVariable();
+public:
+    GrfClearVariable() : _pNode(NULL) {}
+    virtual ~GrfClearVariable();
 
-			virtual const char* getFunctionName() const { return "clearVariable"; }
+    virtual const char* getFunctionName() const
+    {
+        return "clearVariable";
+    }
 
-			inline void setNode(ExprScriptVariable* pNode) { _pNode = pNode; }
+    inline void setNode(ExprScriptVariable* pNode)
+    {
+        _pNode = pNode;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

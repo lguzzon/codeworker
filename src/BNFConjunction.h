@@ -24,26 +24,28 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
+namespace CodeWorker
+{
+class DtaBNFScript;
 
-	class BNFConjunction : public GrfBlock {
-	private:
-		DtaBNFScript* _pBNFScript;
+class BNFConjunction : public GrfBlock
+{
+private:
+    DtaBNFScript* _pBNFScript;
 
-	public:
-		BNFConjunction(DtaBNFScript* pBNFScript, GrfBlock* pParent);
-		virtual ~BNFConjunction();
+public:
+    BNFConjunction(DtaBNFScript* pBNFScript, GrfBlock* pParent);
+    virtual ~BNFConjunction();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-		virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-		virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& visibility);
+    virtual SEQUENCE_INTERRUPTION_LIST execute(DtaScriptVariable& visibility);
 
-		virtual std::string toString() const;
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
-	};
+    virtual std::string toString() const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+};
 }
 
 #endif

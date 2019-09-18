@@ -28,17 +28,21 @@ To contact the author: codeworker@free.fr
 #include "CGRuntime.h"
 #include "GrfTraceEngine.h"
 
-namespace CodeWorker {
-	GrfTraceEngine::~GrfTraceEngine() {
-	}
+namespace CodeWorker
+{
+GrfTraceEngine::~GrfTraceEngine()
+{
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfTraceEngine::executeInternal(DtaScriptVariable& visibility) {
-		return CGRuntime::traceEngine();
-	}
+SEQUENCE_INTERRUPTION_LIST GrfTraceEngine::executeInternal(DtaScriptVariable& visibility)
+{
+    return CGRuntime::traceEngine();
+}
 
-	void GrfTraceEngine::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::traceEngine(";
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfTraceEngine::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::traceEngine(";
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

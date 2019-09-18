@@ -24,22 +24,27 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class ExprScriptExpression;
+namespace CodeWorker
+{
+class ExprScriptExpression;
 
-	class GrfFileAsStandardInput : public GrfBlock {
-	private:
-		ExprScriptExpression* _pFilename;
-	public:
-		GrfFileAsStandardInput(GrfBlock* pParent) : GrfBlock(pParent), _pFilename(NULL) {}
-		virtual ~GrfFileAsStandardInput();
+class GrfFileAsStandardInput : public GrfBlock
+{
+private:
+    ExprScriptExpression* _pFilename;
+public:
+    GrfFileAsStandardInput(GrfBlock* pParent) : GrfBlock(pParent), _pFilename(NULL) {}
+    virtual ~GrfFileAsStandardInput();
 
-		inline void setFilename(ExprScriptExpression* pFilename) { _pFilename = pFilename; }
-		virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    inline void setFilename(ExprScriptExpression* pFilename)
+    {
+        _pFilename = pFilename;
+    }
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-	protected:
-		virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

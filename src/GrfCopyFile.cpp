@@ -30,24 +30,28 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfCopyFile.h"
 
-namespace CodeWorker {
-	GrfCopyFile::~GrfCopyFile() {
-		delete _pSourceFileName;
-		delete _pDestinationFileName;
-	}
+namespace CodeWorker
+{
+GrfCopyFile::~GrfCopyFile()
+{
+    delete _pSourceFileName;
+    delete _pDestinationFileName;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfCopyFile::executeInternal(DtaScriptVariable& visibility) {
-		std::string sSourceFileName = _pSourceFileName->getValue(visibility);
-		std::string sDestinationFileName = _pDestinationFileName->getValue(visibility);
-		return CGRuntime::copyFile(sSourceFileName, sDestinationFileName);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfCopyFile::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sSourceFileName = _pSourceFileName->getValue(visibility);
+    std::string sDestinationFileName = _pDestinationFileName->getValue(visibility);
+    return CGRuntime::copyFile(sSourceFileName, sDestinationFileName);
+}
 
-	void GrfCopyFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::copyFile(";
-		_pSourceFileName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pDestinationFileName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfCopyFile::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::copyFile(";
+    _pSourceFileName->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pDestinationFileName->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

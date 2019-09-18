@@ -29,25 +29,32 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptExpression.h"
 #include "GrfIncrementIndentLevel.h"
 
-namespace CodeWorker {
-	GrfIncrementIndentLevel::~GrfIncrementIndentLevel() {
-		delete _pLevel;
-	}
+namespace CodeWorker
+{
+GrfIncrementIndentLevel::~GrfIncrementIndentLevel()
+{
+    delete _pLevel;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfIncrementIndentLevel::executeInternal(DtaScriptVariable& visibility) {
-		std::string sLevel = _pLevel->getValue(visibility);
-		int iLevel = atoi(sLevel.c_str());
-		return CGRuntime::incrementIndentLevel(iLevel);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfIncrementIndentLevel::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sLevel = _pLevel->getValue(visibility);
+    int iLevel = atoi(sLevel.c_str());
+    return CGRuntime::incrementIndentLevel(iLevel);
+}
 
-	void GrfIncrementIndentLevel::populateDefaultParameters() {
-		if (_pLevel == NULL) _pLevel = new ExprScriptConstant(1);
-	}
+void GrfIncrementIndentLevel::populateDefaultParameters()
+{
+    if (_pLevel == NULL) {
+        _pLevel = new ExprScriptConstant(1);
+    }
+}
 
-	void GrfIncrementIndentLevel::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::incrementIndentLevel(";
-		_pLevel->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfIncrementIndentLevel::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::incrementIndentLevel(";
+    _pLevel->compileCppInt(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

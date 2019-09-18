@@ -36,37 +36,48 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFNextStep.h"
 
-namespace CodeWorker {
-	BNFNextStep::BNFNextStep(DtaBNFScript* pBNFScript, GrfBlock* pParent, BNFStepper* pStepperRE) : _pBNFScript(pBNFScript), GrfCommand(pParent), _pStepper(pStepperRE) {}
+namespace CodeWorker
+{
+BNFNextStep::BNFNextStep(DtaBNFScript* pBNFScript, GrfBlock* pParent, BNFStepper* pStepperRE) : _pBNFScript(pBNFScript), GrfCommand(pParent), _pStepper(pStepperRE) {}
 
-	BNFNextStep::~BNFNextStep() {
-	}
+BNFNextStep::~BNFNextStep()
+{
+}
 
-	void BNFNextStep::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFNextStep(*this, env);
-	}
+void BNFNextStep::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFNextStep(*this, env);
+}
 
-	bool BNFNextStep::isABNFCommand() const { return true; }
+bool BNFNextStep::isABNFCommand() const
+{
+    return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFNextStep::executeInternal(DtaScriptVariable& visibility) {
-		_pBNFScript->skipEmptyChars(visibility);
-		int iStepLocation = CGRuntime::getInputLocation();
-		if (iStepLocation > _pStepper->getStepLocation()) {
-			_pStepper->setStepLocation(iStepLocation);
-		}
-		return NO_INTERRUPTION;
-	}
+SEQUENCE_INTERRUPTION_LIST BNFNextStep::executeInternal(DtaScriptVariable& visibility)
+{
+    _pBNFScript->skipEmptyChars(visibility);
+    int iStepLocation = CGRuntime::getInputLocation();
 
-	void BNFNextStep::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "// " << toString();
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "theEnvironment.skipEmptyChars();";
-		CW_BODY_ENDL;
-		CW_BODY_INDENT << "_compilerClauseNextLocation_" << theCompilerEnvironment.getBNFStepperCursor() << " = CGRuntime::getInputLocation();";
-		CW_BODY_ENDL;
-	}
+    if (iStepLocation > _pStepper->getStepLocation()) {
+        _pStepper->setStepLocation(iStepLocation);
+    }
 
-	std::string BNFNextStep::toString() const {
-		return "#nextStep";
-	}
+    return NO_INTERRUPTION;
+}
+
+void BNFNextStep::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "// " << toString();
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "theEnvironment.skipEmptyChars();";
+    CW_BODY_ENDL;
+    CW_BODY_INDENT << "_compilerClauseNextLocation_" << theCompilerEnvironment.getBNFStepperCursor() << " = CGRuntime::getInputLocation();";
+    CW_BODY_ENDL;
+}
+
+std::string BNFNextStep::toString() const
+{
+    return "#nextStep";
+}
 }

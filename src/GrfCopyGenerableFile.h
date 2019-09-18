@@ -24,28 +24,39 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfCopyGenerableFile : public GrfCommand {
-		private:
-			ExprScriptExpression* _pSourceFileName;
-			ExprScriptExpression* _pDestinationFileName;
+class GrfCopyGenerableFile : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pSourceFileName;
+    ExprScriptExpression* _pDestinationFileName;
 
-		public:
-			GrfCopyGenerableFile() : _pSourceFileName(NULL), _pDestinationFileName(NULL) {}
-			virtual ~GrfCopyGenerableFile();
+public:
+    GrfCopyGenerableFile() : _pSourceFileName(NULL), _pDestinationFileName(NULL) {}
+    virtual ~GrfCopyGenerableFile();
 
-			virtual const char* getFunctionName() const { return "copyGenerableFile"; }
+    virtual const char* getFunctionName() const
+    {
+        return "copyGenerableFile";
+    }
 
-			inline void setSourceFileName(ExprScriptExpression* pSourceFileName) { _pSourceFileName = pSourceFileName; }
-			inline void setDestinationFileName(ExprScriptExpression* pDestinationFileName) { _pDestinationFileName = pDestinationFileName; }
+    inline void setSourceFileName(ExprScriptExpression* pSourceFileName)
+    {
+        _pSourceFileName = pSourceFileName;
+    }
+    inline void setDestinationFileName(ExprScriptExpression* pDestinationFileName)
+    {
+        _pDestinationFileName = pDestinationFileName;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

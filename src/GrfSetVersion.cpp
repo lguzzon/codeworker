@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfSetVersion.h"
 
-namespace CodeWorker {
-	GrfSetVersion::~GrfSetVersion() {
-		delete _pVersion;
-	}
+namespace CodeWorker
+{
+GrfSetVersion::~GrfSetVersion()
+{
+    delete _pVersion;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetVersion::executeInternal(DtaScriptVariable& visibility) {
-		std::string sVersion = _pVersion->getValue(visibility);
-		return CGRuntime::setVersion(sVersion);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSetVersion::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sVersion = _pVersion->getValue(visibility);
+    return CGRuntime::setVersion(sVersion);
+}
 
-	void GrfSetVersion::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setVersion(";
-		_pVersion->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSetVersion::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::setVersion(";
+    _pVersion->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

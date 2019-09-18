@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfSetWriteMode : public GrfCommand {
-		private:
-			ExprScriptExpression* _pMode;
+class GrfSetWriteMode : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pMode;
 
-		public:
-			GrfSetWriteMode() : _pMode(NULL) {}
-			virtual ~GrfSetWriteMode();
+public:
+    GrfSetWriteMode() : _pMode(NULL) {}
+    virtual ~GrfSetWriteMode();
 
-			virtual const char* getFunctionName() const { return "setWriteMode"; }
+    virtual const char* getFunctionName() const
+    {
+        return "setWriteMode";
+    }
 
-			inline void setMode(ExprScriptExpression* pMode) { _pMode = pMode; }
+    inline void setMode(ExprScriptExpression* pMode)
+    {
+        _pMode = pMode;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

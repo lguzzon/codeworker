@@ -28,30 +28,48 @@ To contact the author: codeworker@free.fr
 
 #include "ExternalValueNode.h"
 
-namespace CodeWorker {
-	ExternalValueNode::~ExternalValueNode() {
-	}
+namespace CodeWorker
+{
+ExternalValueNode::~ExternalValueNode()
+{
+}
 
-	size_t ExternalValueNode::getValueLength() const {
-		const char* tcValue = getValue();
-		if (tcValue == NULL) return 0;
-		return strlen(tcValue);
-	}
+size_t ExternalValueNode::getValueLength() const
+{
+    const char* tcValue = getValue();
 
-	double ExternalValueNode::getDoubleValue() const {
-		const char* tcValue = getValue();
-		if (tcValue == NULL) return 0.0;
-		return atof(tcValue);
-	}
+    if (tcValue == NULL) {
+        return 0;
+    }
 
-	bool ExternalValueNode::getBooleanValue() const {
-		const char* tcValue = getValue();
-		return ((tcValue != NULL) && (*tcValue != '\0'));
-	}
+    return strlen(tcValue);
+}
 
-	int ExternalValueNode::getIntValue() const {
-		const char* tcValue = getValue();
-		if (tcValue == NULL) return 0;
-		return atoi(tcValue);
-	}
+double ExternalValueNode::getDoubleValue() const
+{
+    const char* tcValue = getValue();
+
+    if (tcValue == NULL) {
+        return 0.0;
+    }
+
+    return atof(tcValue);
+}
+
+bool ExternalValueNode::getBooleanValue() const
+{
+    const char* tcValue = getValue();
+    return ((tcValue != NULL) && (*tcValue != '\0'));
+}
+
+int ExternalValueNode::getIntValue() const
+{
+    const char* tcValue = getValue();
+
+    if (tcValue == NULL) {
+        return 0;
+    }
+
+    return atoi(tcValue);
+}
 }

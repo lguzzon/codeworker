@@ -27,17 +27,21 @@ To contact the author: codeworker@free.fr
 #include "CGRuntime.h"
 #include "DtaCommandScript.h"
 
-namespace CodeWorker {
-	DtaCommandScript::~DtaCommandScript() {
-	}
+namespace CodeWorker
+{
+DtaCommandScript::~DtaCommandScript()
+{
+}
 
-	void DtaCommandScript::traceEngine() const {
-		CGRuntime::traceLine("Command script:");
-		traceInternalEngine();
-	}
+void DtaCommandScript::traceEngine() const
+{
+    CGRuntime::traceLine("Command script:");
+    traceInternalEngine();
+}
 
-	SEQUENCE_INTERRUPTION_LIST DtaCommandScript::execute(DtaScriptVariable& thisContext) {
-		DtaProject::getInstance().prepareExecution();
-		return DtaScript::execute(thisContext);
-	}
+SEQUENCE_INTERRUPTION_LIST DtaCommandScript::execute(DtaScriptVariable& thisContext)
+{
+    DtaProject::getInstance().prepareExecution();
+    return DtaScript::execute(thisContext);
+}
 }

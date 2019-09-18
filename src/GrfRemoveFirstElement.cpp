@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptVariable.h"
 #include "GrfRemoveFirstElement.h"
 
-namespace CodeWorker {
-	GrfRemoveFirstElement::~GrfRemoveFirstElement() {
-		delete _pList;
-	}
+namespace CodeWorker
+{
+GrfRemoveFirstElement::~GrfRemoveFirstElement()
+{
+    delete _pList;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfRemoveFirstElement::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pList = visibility.getExistingVariable(*_pList);
-		return CGRuntime::removeFirstElement(pList);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfRemoveFirstElement::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pList = visibility.getExistingVariable(*_pList);
+    return CGRuntime::removeFirstElement(pList);
+}
 
-	void GrfRemoveFirstElement::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::removeFirstElement(";
-		_pList->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfRemoveFirstElement::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::removeFirstElement(";
+    _pList->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

@@ -24,30 +24,41 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptVariable;
 class ExprScriptExpression;
 
-	class GrfTraceObject : public GrfCommand {
-		private:
-			ExprScriptVariable* _pObject;
-			ExprScriptExpression* _pDepth;
+class GrfTraceObject : public GrfCommand
+{
+private:
+    ExprScriptVariable* _pObject;
+    ExprScriptExpression* _pDepth;
 
-		public:
-			GrfTraceObject() : _pObject(NULL), _pDepth(NULL) {}
-			virtual ~GrfTraceObject();
+public:
+    GrfTraceObject() : _pObject(NULL), _pDepth(NULL) {}
+    virtual ~GrfTraceObject();
 
-			virtual const char* getFunctionName() const { return "traceObject"; }
+    virtual const char* getFunctionName() const
+    {
+        return "traceObject";
+    }
 
-			inline void setObject(ExprScriptVariable* pObject) { _pObject = pObject; }
-			inline void setDepth(ExprScriptExpression* pDepth) { _pDepth = pDepth; }
+    inline void setObject(ExprScriptVariable* pObject)
+    {
+        _pObject = pObject;
+    }
+    inline void setDepth(ExprScriptExpression* pDepth)
+    {
+        _pDepth = pDepth;
+    }
 
-			void populateDefaultParameters();
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    void populateDefaultParameters();
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

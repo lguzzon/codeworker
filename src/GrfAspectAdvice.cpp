@@ -34,25 +34,31 @@ To contact the author: codeworker@free.fr
 #include "GrfJointPoint.h"
 #include "GrfAspectAdvice.h"
 
-namespace CodeWorker {
-	GrfAspectAdvice::~GrfAspectAdvice() {
-		delete _pPointcut;
-	}
+namespace CodeWorker
+{
+GrfAspectAdvice::~GrfAspectAdvice()
+{
+    delete _pPointcut;
+}
 
-	bool GrfAspectAdvice::matchPointcut(GrfJointPoint& jointPoint, DtaScriptVariable& context) const {
-		DtaScriptVariable scope(NULL, _sMatchingName);
-		scope.insertNode("jointpoint")->setValue(jointPoint.getName().c_str());
-		scope.insertNode("context")->setValue(&context);
-		std::string sResult = _pPointcut->getValue(scope);
-		return !sResult.empty();
-	}
+bool GrfAspectAdvice::matchPointcut(GrfJointPoint& jointPoint, DtaScriptVariable& context) const
+{
+    DtaScriptVariable scope(NULL, _sMatchingName);
+    scope.insertNode("jointpoint")->setValue(jointPoint.getName().c_str());
+    scope.insertNode("context")->setValue(&context);
+    std::string sResult = _pPointcut->getValue(scope);
+    return !sResult.empty();
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfAspectAdvice::executeInternal(DtaScriptVariable& visibility) {
-		CGThisModifier modifyThis(&visibility);
-		return GrfBlock::executeInternal(visibility);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfAspectAdvice::executeInternal(DtaScriptVariable& visibility)
+{
+    CGThisModifier modifyThis(&visibility);
+    return GrfBlock::executeInternal(visibility);
+}
 
-	void GrfAspectAdvice::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "<GrfAspectAdvice not handled yet!>";CW_BODY_ENDL;
-	}
+void GrfAspectAdvice::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "<GrfAspectAdvice not handled yet!>";
+    CW_BODY_ENDL;
+}
 }

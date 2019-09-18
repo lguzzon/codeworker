@@ -28,17 +28,21 @@ To contact the author: codeworker@free.fr
 #include "CGRuntime.h"
 #include "GrfGoBack.h"
 
-namespace CodeWorker {
-	GrfGoBack::~GrfGoBack() {
-	}
+namespace CodeWorker
+{
+GrfGoBack::~GrfGoBack()
+{
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfGoBack::executeInternal(DtaScriptVariable& visibility) {
-		return CGRuntime::goBack();
-	}
+SEQUENCE_INTERRUPTION_LIST GrfGoBack::executeInternal(DtaScriptVariable& visibility)
+{
+    return CGRuntime::goBack();
+}
 
-	void GrfGoBack::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::goBack(";
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfGoBack::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::goBack(";
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

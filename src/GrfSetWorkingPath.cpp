@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfSetWorkingPath.h"
 
-namespace CodeWorker {
-	GrfSetWorkingPath::~GrfSetWorkingPath() {
-		delete _pPath;
-	}
+namespace CodeWorker
+{
+GrfSetWorkingPath::~GrfSetWorkingPath()
+{
+    delete _pPath;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetWorkingPath::executeInternal(DtaScriptVariable& visibility) {
-		std::string sPath = _pPath->getValue(visibility);
-		return CGRuntime::setWorkingPath(sPath);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSetWorkingPath::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sPath = _pPath->getValue(visibility);
+    return CGRuntime::setWorkingPath(sPath);
+}
 
-	void GrfSetWorkingPath::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setWorkingPath(";
-		_pPath->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSetWorkingPath::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::setWorkingPath(";
+    _pPath->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

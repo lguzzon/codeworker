@@ -28,46 +28,61 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfOverwritePortion : public GrfCommand {
-		private:
-			ExprScriptExpression* _pLocation;
-			ExprScriptExpression* _pText;
-			ExprScriptExpression* _pSize;
+class GrfOverwritePortion : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pLocation;
+    ExprScriptExpression* _pText;
+    ExprScriptExpression* _pSize;
 
-//##protect##"attributes"
-			DtaScriptVariable* const* _pOutputCoverage;
-//##protect##"attributes"
+    //##protect##"attributes"
+    DtaScriptVariable* const* _pOutputCoverage;
+    //##protect##"attributes"
 
-		public:
-			GrfOverwritePortion() : _pLocation(NULL), _pText(NULL), _pSize(NULL) {
-//##protect##"constructor"
-				_pOutputCoverage = NULL;
-//##protect##"constructor"
-			}
-			virtual ~GrfOverwritePortion();
+public:
+    GrfOverwritePortion() : _pLocation(NULL), _pText(NULL), _pSize(NULL)
+    {
+        //##protect##"constructor"
+        _pOutputCoverage = NULL;
+        //##protect##"constructor"
+    }
+    virtual ~GrfOverwritePortion();
 
-			virtual const char* getFunctionName() const { return "overwritePortion"; }
+    virtual const char* getFunctionName() const
+    {
+        return "overwritePortion";
+    }
 
-			inline void setLocation(ExprScriptExpression* pLocation) { _pLocation = pLocation; }
-			inline void setText(ExprScriptExpression* pText) { _pText = pText; }
-			inline void setSize(ExprScriptExpression* pSize) { _pSize = pSize; }
+    inline void setLocation(ExprScriptExpression* pLocation)
+    {
+        _pLocation = pLocation;
+    }
+    inline void setText(ExprScriptExpression* pText)
+    {
+        _pText = pText;
+    }
+    inline void setSize(ExprScriptExpression* pSize)
+    {
+        _pSize = pSize;
+    }
 
 
-//##protect##"interface"
-			void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
-//##protect##"interface"
+    //##protect##"interface"
+    void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
+    //##protect##"interface"
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
 
-//##protect##"declarations"
-//##protect##"declarations"
-	};
+    //##protect##"declarations"
+    //##protect##"declarations"
+};
 }
 
 #endif

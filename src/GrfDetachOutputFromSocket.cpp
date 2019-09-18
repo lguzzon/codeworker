@@ -29,21 +29,25 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptExpression.h"
 #include "GrfDetachOutputFromSocket.h"
 
-namespace CodeWorker {
-	GrfDetachOutputFromSocket::~GrfDetachOutputFromSocket() {
-		delete _pSocket;
-	}
+namespace CodeWorker
+{
+GrfDetachOutputFromSocket::~GrfDetachOutputFromSocket()
+{
+    delete _pSocket;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfDetachOutputFromSocket::executeInternal(DtaScriptVariable& visibility) {
-		std::string sSocket = _pSocket->getValue(visibility);
-		int iSocket = atoi(sSocket.c_str());
-		return CGRuntime::detachOutputFromSocket(iSocket);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfDetachOutputFromSocket::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sSocket = _pSocket->getValue(visibility);
+    int iSocket = atoi(sSocket.c_str());
+    return CGRuntime::detachOutputFromSocket(iSocket);
+}
 
-	void GrfDetachOutputFromSocket::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::detachOutputFromSocket(";
-		_pSocket->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfDetachOutputFromSocket::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::detachOutputFromSocket(";
+    _pSocket->compileCppInt(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

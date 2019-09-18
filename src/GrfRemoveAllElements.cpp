@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptVariable.h"
 #include "GrfRemoveAllElements.h"
 
-namespace CodeWorker {
-	GrfRemoveAllElements::~GrfRemoveAllElements() {
-		delete _pVariable;
-	}
+namespace CodeWorker
+{
+GrfRemoveAllElements::~GrfRemoveAllElements()
+{
+    delete _pVariable;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfRemoveAllElements::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pVariable = visibility.getExistingVariable(*_pVariable);
-		return CGRuntime::removeAllElements(pVariable);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfRemoveAllElements::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pVariable = visibility.getExistingVariable(*_pVariable);
+    return CGRuntime::removeAllElements(pVariable);
+}
 
-	void GrfRemoveAllElements::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::removeAllElements(";
-		_pVariable->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfRemoveAllElements::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::removeAllElements(";
+    _pVariable->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

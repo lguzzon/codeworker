@@ -39,24 +39,25 @@ To contact the author: codeworker@free.fr
 #include <string>
 
 #ifndef WIN32
-	int strnicmp(const char* tc1, const char* tc2, size_t iLength);
-	int stricmp(const char* tc1, const char* tc2);
+int strnicmp(const char* tc1, const char* tc2, size_t iLength);
+int stricmp(const char* tc1, const char* tc2);
 #endif
 
-namespace CodeWorker {
-	int stricmp(const std::string& s1, const std::string& s2);
-	int strnicmp(const std::string& tc1, const std::string& tc2, size_t iLength);
-	std::string toUppercase(const char* sText);
-	std::string toLowercase(const char* sText);
+namespace CodeWorker
+{
+int stricmp(const std::string& s1, const std::string& s2);
+int strnicmp(const std::string& tc1, const std::string& tc2, size_t iLength);
+std::string toUppercase(const char* sText);
+std::string toLowercase(const char* sText);
 
-	bool trimLeft(std::string& sText);
-	bool trimRight(std::string& sText);
-	bool trim(std::string& sText);
-	bool splitString(const std::string& sCompletString, char iChar, std::string& sBegin, std::string& sEnd) ;
+bool trimLeft(std::string& sText);
+bool trimRight(std::string& sText);
+bool trim(std::string& sText);
+bool splitString(const std::string& sCompletString, char iChar, std::string& sBegin, std::string& sEnd) ;
 
-	std::string toString(int iNumber);
-	std::string toString(unsigned int iNumber);
-	std::string toString(double dNumber);
+std::string toString(int iNumber);
+std::string toString(unsigned int iNumber);
+std::string toString(double dNumber);
 }
 
 #endif

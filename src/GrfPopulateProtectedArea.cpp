@@ -35,37 +35,44 @@ To contact the author: codeworker@free.fr
 
 #include "GrfPopulateProtectedArea.h"
 
-namespace CodeWorker {
-	GrfPopulateProtectedArea::~GrfPopulateProtectedArea() {
-		delete _pProtectedAreaName;
-		delete _pContent;
-	}
+namespace CodeWorker
+{
+GrfPopulateProtectedArea::~GrfPopulateProtectedArea()
+{
+    delete _pProtectedAreaName;
+    delete _pContent;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfPopulateProtectedArea::executeInternal(DtaScriptVariable& visibility) {
-		std::string sProtectedAreaName = _pProtectedAreaName->getValue(visibility);
-		std::string sContent = _pContent->getValue(visibility);
-//##protect##"execute"
-		if (*_pOutputCoverage != NULL) {
-			DtaScriptVariable* pCoverage = (*_pOutputCoverage)->pushItem("P");
-			pCoverage->insertNode("script")->setValue(_iFileLocation);
-			pCoverage->insertNode("output")->setValue(CGRuntime::getOutputLocation() + (*_pOutputCoverage)->getIntValue());
-		}
-//##protect##"execute"
-		return CGRuntime::populateProtectedArea(sProtectedAreaName, sContent);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfPopulateProtectedArea::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sProtectedAreaName = _pProtectedAreaName->getValue(visibility);
+    std::string sContent = _pContent->getValue(visibility);
+
+    //##protect##"execute"
+    if (*_pOutputCoverage != NULL) {
+        DtaScriptVariable* pCoverage = (*_pOutputCoverage)->pushItem("P");
+        pCoverage->insertNode("script")->setValue(_iFileLocation);
+        pCoverage->insertNode("output")->setValue(CGRuntime::getOutputLocation() + (*_pOutputCoverage)->getIntValue());
+    }
+
+    //##protect##"execute"
+    return CGRuntime::populateProtectedArea(sProtectedAreaName, sContent);
+}
 
 //##protect##"implementation"
-	void GrfPopulateProtectedArea::prepareCoverage(DtaScriptVariable* const* pOutputCoverage) {
-		_pOutputCoverage = pOutputCoverage;
-	}
+void GrfPopulateProtectedArea::prepareCoverage(DtaScriptVariable* const* pOutputCoverage)
+{
+    _pOutputCoverage = pOutputCoverage;
+}
 //##protect##"implementation"
 
-	void GrfPopulateProtectedArea::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::populateProtectedArea(";
-		_pProtectedAreaName->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pContent->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfPopulateProtectedArea::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::populateProtectedArea(";
+    _pProtectedAreaName->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pContent->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

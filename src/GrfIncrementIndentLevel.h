@@ -24,27 +24,35 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfIncrementIndentLevel : public GrfCommand {
-		private:
-			ExprScriptExpression* _pLevel;
+class GrfIncrementIndentLevel : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pLevel;
 
-		public:
-			GrfIncrementIndentLevel() : _pLevel(NULL) {}
-			virtual ~GrfIncrementIndentLevel();
+public:
+    GrfIncrementIndentLevel() : _pLevel(NULL) {}
+    virtual ~GrfIncrementIndentLevel();
 
-			virtual const char* getFunctionName() const { return "incrementIndentLevel"; }
+    virtual const char* getFunctionName() const
+    {
+        return "incrementIndentLevel";
+    }
 
-			inline void setLevel(ExprScriptExpression* pLevel) { _pLevel = pLevel; }
+    inline void setLevel(ExprScriptExpression* pLevel)
+    {
+        _pLevel = pLevel;
+    }
 
-			void populateDefaultParameters();
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    void populateDefaultParameters();
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

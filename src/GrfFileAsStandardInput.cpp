@@ -31,30 +31,34 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfFileAsStandardInput.h"
 
-namespace CodeWorker {
-	GrfFileAsStandardInput::~GrfFileAsStandardInput() {
-		delete _pFilename;
-	}
+namespace CodeWorker
+{
+GrfFileAsStandardInput::~GrfFileAsStandardInput()
+{
+    delete _pFilename;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfFileAsStandardInput::executeInternal(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result;
-		std::string sFilename = _pFilename->getValue(visibility);
-		CGFileStandardInputOutput theInput(sFilename, "");
-		result = GrfBlock::executeInternal(visibility);
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfFileAsStandardInput::executeInternal(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result;
+    std::string sFilename = _pFilename->getValue(visibility);
+    CGFileStandardInputOutput theInput(sFilename, "");
+    result = GrfBlock::executeInternal(visibility);
+    return result;
+}
 
-	void GrfFileAsStandardInput::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "{";
-		CW_BODY_ENDL;
-		theCompilerEnvironment.incrementIndentation();
-		CW_BODY_INDENT << "CGFileStandardInputOutput theInput(";
-		_pFilename->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", \"\");";
-		CW_BODY_ENDL;
-		GrfBlock::compileCpp(theCompilerEnvironment);
-		theCompilerEnvironment.decrementIndentation();
-		CW_BODY_INDENT << "}";
-		CW_BODY_ENDL;
-	}
+void GrfFileAsStandardInput::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "{";
+    CW_BODY_ENDL;
+    theCompilerEnvironment.incrementIndentation();
+    CW_BODY_INDENT << "CGFileStandardInputOutput theInput(";
+    _pFilename->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ", \"\");";
+    CW_BODY_ENDL;
+    GrfBlock::compileCpp(theCompilerEnvironment);
+    theCompilerEnvironment.decrementIndentation();
+    CW_BODY_INDENT << "}";
+    CW_BODY_ENDL;
+}
 }

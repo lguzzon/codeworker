@@ -30,24 +30,28 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfCopySmartDirectory.h"
 
-namespace CodeWorker {
-	GrfCopySmartDirectory::~GrfCopySmartDirectory() {
-		delete _pSourceDirectory;
-		delete _pDestinationPath;
-	}
+namespace CodeWorker
+{
+GrfCopySmartDirectory::~GrfCopySmartDirectory()
+{
+    delete _pSourceDirectory;
+    delete _pDestinationPath;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfCopySmartDirectory::executeInternal(DtaScriptVariable& visibility) {
-		std::string sSourceDirectory = _pSourceDirectory->getValue(visibility);
-		std::string sDestinationPath = _pDestinationPath->getValue(visibility);
-		return CGRuntime::copySmartDirectory(sSourceDirectory, sDestinationPath);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfCopySmartDirectory::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sSourceDirectory = _pSourceDirectory->getValue(visibility);
+    std::string sDestinationPath = _pDestinationPath->getValue(visibility);
+    return CGRuntime::copySmartDirectory(sSourceDirectory, sDestinationPath);
+}
 
-	void GrfCopySmartDirectory::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::copySmartDirectory(";
-		_pSourceDirectory->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pDestinationPath->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfCopySmartDirectory::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::copySmartDirectory(";
+    _pSourceDirectory->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pDestinationPath->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

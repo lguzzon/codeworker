@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include <string>
 #include "GrfSetCommentEnd.h"
 
-namespace CodeWorker {
-	GrfSetCommentEnd::~GrfSetCommentEnd() {
-		delete _pCommentEnd;
-	}
+namespace CodeWorker
+{
+GrfSetCommentEnd::~GrfSetCommentEnd()
+{
+    delete _pCommentEnd;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSetCommentEnd::executeInternal(DtaScriptVariable& visibility) {
-		std::string sCommentEnd = _pCommentEnd->getValue(visibility);
-		return CGRuntime::setCommentEnd(sCommentEnd);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSetCommentEnd::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sCommentEnd = _pCommentEnd->getValue(visibility);
+    return CGRuntime::setCommentEnd(sCommentEnd);
+}
 
-	void GrfSetCommentEnd::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::setCommentEnd(";
-		_pCommentEnd->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSetCommentEnd::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::setCommentEnd(";
+    _pCommentEnd->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

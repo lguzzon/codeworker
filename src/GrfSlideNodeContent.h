@@ -24,28 +24,39 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptVariable;
 
-	class GrfSlideNodeContent : public GrfCommand {
-		private:
-			ExprScriptVariable* _pOrgNode;
-			ExprScriptVariable* _pDestNode;
+class GrfSlideNodeContent : public GrfCommand
+{
+private:
+    ExprScriptVariable* _pOrgNode;
+    ExprScriptVariable* _pDestNode;
 
-		public:
-			GrfSlideNodeContent() : _pOrgNode(NULL), _pDestNode(NULL) {}
-			virtual ~GrfSlideNodeContent();
+public:
+    GrfSlideNodeContent() : _pOrgNode(NULL), _pDestNode(NULL) {}
+    virtual ~GrfSlideNodeContent();
 
-			virtual const char* getFunctionName() const { return "slideNodeContent"; }
+    virtual const char* getFunctionName() const
+    {
+        return "slideNodeContent";
+    }
 
-			inline void setOrgNode(ExprScriptVariable* pOrgNode) { _pOrgNode = pOrgNode; }
-			inline void setDestNode(ExprScriptVariable* pDestNode) { _pDestNode = pDestNode; }
+    inline void setOrgNode(ExprScriptVariable* pOrgNode)
+    {
+        _pOrgNode = pOrgNode;
+    }
+    inline void setDestNode(ExprScriptVariable* pDestNode)
+    {
+        _pDestNode = pDestNode;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

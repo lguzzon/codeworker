@@ -31,29 +31,36 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptExpression.h"
 #include "GrfTraceObject.h"
 
-namespace CodeWorker {
-	GrfTraceObject::~GrfTraceObject() {
-		delete _pObject;
-		delete _pDepth;
-	}
+namespace CodeWorker
+{
+GrfTraceObject::~GrfTraceObject()
+{
+    delete _pObject;
+    delete _pDepth;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfTraceObject::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pObject = visibility.getVariable(*_pObject);
-		std::string sDepth = _pDepth->getValue(visibility);
-		int iDepth = atoi(sDepth.c_str());
-		return CGRuntime::traceObject(pObject, iDepth);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfTraceObject::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pObject = visibility.getVariable(*_pObject);
+    std::string sDepth = _pDepth->getValue(visibility);
+    int iDepth = atoi(sDepth.c_str());
+    return CGRuntime::traceObject(pObject, iDepth);
+}
 
-	void GrfTraceObject::populateDefaultParameters() {
-		if (_pDepth == NULL) _pDepth = new ExprScriptConstant(0);
-	}
+void GrfTraceObject::populateDefaultParameters()
+{
+    if (_pDepth == NULL) {
+        _pDepth = new ExprScriptConstant(0);
+    }
+}
 
-	void GrfTraceObject::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::traceObject(";
-		_pObject->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pDepth->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfTraceObject::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::traceObject(";
+    _pObject->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pDepth->compileCppInt(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

@@ -30,30 +30,44 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfReference.h"
 
-namespace CodeWorker {
-	GrfReference::~GrfReference() {
-		if (_pVariable != NULL) delete _pVariable;
-		if (_pReference != NULL) delete _pReference;
-	}
+namespace CodeWorker
+{
+GrfReference::~GrfReference()
+{
+    if (_pVariable != NULL) {
+        delete _pVariable;
+    }
 
-	SEQUENCE_INTERRUPTION_LIST GrfReference::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pVariable = visibility.getVariableForReferenceAssignment(*_pVariable);
-		DtaScriptVariable* pReference = visibility.getExistingVariable(*_pReference);
-		if (pReference == NULL) {
-			std::string sCompleteName = pVariable->getCompleteName();
-			std::string sExpression = _pReference->toString();
-			throw UtlException("runtime error: can't refer to a variable that doesn't exist, see 'ref " + sCompleteName + " = " + sExpression + ";'");
-		}
-		if (pVariable != pReference) pVariable->setValue(pReference);
-		return NO_INTERRUPTION;
-	}
+    if (_pReference != NULL) {
+        delete _pReference;
+    }
+}
 
-	void GrfReference::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT;
-		_pVariable->compileCppForSet(theCompilerEnvironment);
-		CW_BODY_STREAM << ".setReference(";
-		_pReference->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfReference::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pVariable = visibility.getVariableForReferenceAssignment(*_pVariable);
+    DtaScriptVariable* pReference = visibility.getExistingVariable(*_pReference);
+
+    if (pReference == NULL) {
+        std::string sCompleteName = pVariable->getCompleteName();
+        std::string sExpression = _pReference->toString();
+        throw UtlException("runtime error: can't refer to a variable that doesn't exist, see 'ref " + sCompleteName + " = " + sExpression + ";'");
+    }
+
+    if (pVariable != pReference) {
+        pVariable->setValue(pReference);
+    }
+
+    return NO_INTERRUPTION;
+}
+
+void GrfReference::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT;
+    _pVariable->compileCppForSet(theCompilerEnvironment);
+    CW_BODY_STREAM << ".setReference(";
+    _pReference->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

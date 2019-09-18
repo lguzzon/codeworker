@@ -30,20 +30,24 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptVariable.h"
 #include "GrfInvertArray.h"
 
-namespace CodeWorker {
-	GrfInvertArray::~GrfInvertArray() {
-		delete _pArray;
-	}
+namespace CodeWorker
+{
+GrfInvertArray::~GrfInvertArray()
+{
+    delete _pArray;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfInvertArray::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pArray = visibility.getExistingVariable(*_pArray);
-		return CGRuntime::invertArray(pArray);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfInvertArray::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pArray = visibility.getExistingVariable(*_pArray);
+    return CGRuntime::invertArray(pArray);
+}
 
-	void GrfInvertArray::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::invertArray(";
-		_pArray->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfInvertArray::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::invertArray(";
+    _pArray->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

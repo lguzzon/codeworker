@@ -238,129 +238,144 @@ than only in the scripting language of CodeWorker.
 #include <map>
 #include <memory>
 
-namespace CodeWorker {
-	class DtaScriptVariable;
-	class ExprScriptExpression;
-	class ExprScriptVariable;
-	class CGRuntime;
-	class ExternalValueNode;
+namespace CodeWorker
+{
+class DtaScriptVariable;
+class ExprScriptExpression;
+class ExprScriptVariable;
+class CGRuntime;
+class ExternalValueNode;
 
 
-	class CppParsingTree_expr {
-		protected:
-			ExprScriptExpression* _pExpression;
+class CppParsingTree_expr
+{
+protected:
+    ExprScriptExpression* _pExpression;
 
-		public:
-			inline CppParsingTree_expr() : _pExpression(NULL) {}
-			CppParsingTree_expr(const std::string& sExpression);
-			~CppParsingTree_expr();
+public:
+    inline CppParsingTree_expr() : _pExpression(NULL) {}
+    CppParsingTree_expr(const std::string& sExpression);
+    ~CppParsingTree_expr();
 
-			inline ExprScriptExpression& getExpression() const { return *_pExpression; }
-	};
+    inline ExprScriptExpression& getExpression() const
+    {
+        return *_pExpression;
+    }
+};
 
-	class CppParsingTree_varexpr : public CppParsingTree_expr {
-		public:
-			CppParsingTree_varexpr(const std::string& sVariableExpression);
+class CppParsingTree_varexpr : public CppParsingTree_expr
+{
+public:
+    CppParsingTree_varexpr(const std::string& sVariableExpression);
 
-			ExprScriptVariable& getVariableExpression() const;
-	};
+    ExprScriptVariable& getVariableExpression() const;
+};
 
 
-	class CppParsingTree_var {
-		protected:
-			DtaScriptVariable* _pInternalNode;
-			friend class CGRuntime;
-			friend class CGCompiledCommonScript;
-			friend class CGCompiledTemplateScript;
-			friend class CGCompiledBNFScript;
-			friend class CGCompiledTranslationScript;
+class CppParsingTree_var
+{
+protected:
+    DtaScriptVariable* _pInternalNode;
+    friend class CGRuntime;
+    friend class CGCompiledCommonScript;
+    friend class CGCompiledTemplateScript;
+    friend class CGCompiledBNFScript;
+    friend class CGCompiledTranslationScript;
 
-			CppParsingTree_var();
+    CppParsingTree_var();
 
-		public:
-			CppParsingTree_var(const CppParsingTree_var& tree);
-			CppParsingTree_var(DtaScriptVariable* pVariable);
-			CppParsingTree_var(DtaScriptVariable& variable);
+public:
+    CppParsingTree_var(const CppParsingTree_var& tree);
+    CppParsingTree_var(DtaScriptVariable* pVariable);
+    CppParsingTree_var(DtaScriptVariable& variable);
 
-			// avoid this accessor, please!
-			inline DtaScriptVariable* getInternalNode() const { return _pInternalNode; }
+    // avoid this accessor, please!
+    inline DtaScriptVariable* getInternalNode() const
+    {
+        return _pInternalNode;
+    }
 
-			ExternalValueNode* getExternalValueNode() const;
-			inline bool isNull() const { return (_pInternalNode == NULL); }
-			bool isLocal() const;
-			const char* getName() const;
-			const char* getValue() const;
-			size_t getValueLength() const;
-			bool getBooleanValue() const;
-			int getIntValue() const;
-			double getDoubleValue() const;
-			std::string getStringValue() const;
-			DtaScriptVariable* getReference() const;
+    ExternalValueNode* getExternalValueNode() const;
+    inline bool isNull() const
+    {
+        return (_pInternalNode == NULL);
+    }
+    bool isLocal() const;
+    const char* getName() const;
+    const char* getValue() const;
+    size_t getValueLength() const;
+    bool getBooleanValue() const;
+    int getIntValue() const;
+    double getDoubleValue() const;
+    std::string getStringValue() const;
+    DtaScriptVariable* getReference() const;
 
-			void clearValue() const;
+    void clearValue() const;
 
-			void setValue(const char* tcValue) const;
-			void setValue(const std::string& sValue) const;
-			void setValue(bool bValue) const;
-			void setValue(double dValue) const;
-			void setValue(int iValue) const;
-			void setValue(const CppParsingTree_var& pValue) const;
-			void setValue(ExternalValueNode* pExternal) const;
-			void setValue(const std::list<std::string>& listOfValues) const;
-			void concatenateValue(const std::string& sValue) const;
-			void concatenateValue(const CppParsingTree_var& pValue) const;
-			void setReference(const CppParsingTree_var& reference) const;
-			void setAll(const CppParsingTree_var& tree) const;
-			void merge(const CppParsingTree_var& tree) const;
-			CppParsingTree_var pushItem() const;
-			void pushItem(const std::string& sValue) const;
-			void pushItem(const CppParsingTree_var& theValue) const;
-			void addElements(const CppParsingTree_var& theValue) const;
-			const std::list<DtaScriptVariable*>* getArray() const;
-			const std::map<std::string, DtaScriptVariable*>* getSortedArray() const;
-			std::auto_ptr<std::vector<DtaScriptVariable*> > getSortedNoCaseArray() const;
-			std::auto_ptr<std::vector<DtaScriptVariable*> > getSortedArrayOnValue() const;
-			std::auto_ptr<std::vector<DtaScriptVariable*> > getSortedNoCaseArrayOnValue() const;
+    void setValue(const char* tcValue) const;
+    void setValue(const std::string& sValue) const;
+    void setValue(bool bValue) const;
+    void setValue(double dValue) const;
+    void setValue(int iValue) const;
+    void setValue(const CppParsingTree_var& pValue) const;
+    void setValue(ExternalValueNode* pExternal) const;
+    void setValue(const std::list<std::string>& listOfValues) const;
+    void concatenateValue(const std::string& sValue) const;
+    void concatenateValue(const CppParsingTree_var& pValue) const;
+    void setReference(const CppParsingTree_var& reference) const;
+    void setAll(const CppParsingTree_var& tree) const;
+    void merge(const CppParsingTree_var& tree) const;
+    CppParsingTree_var pushItem() const;
+    void pushItem(const std::string& sValue) const;
+    void pushItem(const CppParsingTree_var& theValue) const;
+    void addElements(const CppParsingTree_var& theValue) const;
+    const std::list<DtaScriptVariable*>* getArray() const;
+    const std::map<std::string, DtaScriptVariable*>* getSortedArray() const;
+    std::auto_ptr<std::vector<DtaScriptVariable*> > getSortedNoCaseArray() const;
+    std::auto_ptr<std::vector<DtaScriptVariable*> > getSortedArrayOnValue() const;
+    std::auto_ptr<std::vector<DtaScriptVariable*> > getSortedNoCaseArrayOnValue() const;
 
-			std::list<std::string> getAttributeNames() const;
+    std::list<std::string> getAttributeNames() const;
 
-			void clearNode() const;
+    void clearNode() const;
 
-			CppParsingTree_var getNode(const std::string& sBranch) const;
-			CppParsingTree_var getEvaluatedNode(const std::string& sDynamicVariable) const;
-			CppParsingTree_var getOrCreateLocalEvaluatedNode(const std::string& sDynamicVariable) const;
-			CppParsingTree_var getParentNode() const;
-			CppParsingTree_var getRootNode() const;
-			CppParsingTree_var getArrayNodeFromKey(const std::string& sKey) const;
-			CppParsingTree_var getArrayNodeFromPosition(int iPosition) const;
-			CppParsingTree_var getFirstArrayNode() const;
-			CppParsingTree_var getLastArrayNode() const;
+    CppParsingTree_var getNode(const std::string& sBranch) const;
+    CppParsingTree_var getEvaluatedNode(const std::string& sDynamicVariable) const;
+    CppParsingTree_var getOrCreateLocalEvaluatedNode(const std::string& sDynamicVariable) const;
+    CppParsingTree_var getParentNode() const;
+    CppParsingTree_var getRootNode() const;
+    CppParsingTree_var getArrayNodeFromKey(const std::string& sKey) const;
+    CppParsingTree_var getArrayNodeFromPosition(int iPosition) const;
+    CppParsingTree_var getFirstArrayNode() const;
+    CppParsingTree_var getLastArrayNode() const;
 
-			CppParsingTree_var insertNode(const std::string& sBranch) const;
-			CppParsingTree_var insertEvaluatedNode(const std::string& sDynamicVariable) const;
-			CppParsingTree_var insertClassicalEvaluatedNode(const std::string& sDynamicVariable) const;
-			CppParsingTree_var insertArrayNodeFromKey(const std::string& sKey) const;
-			CppParsingTree_var insertArrayNodeFromKey(int iKey) const;
-			CppParsingTree_var insertArrayNodeFromKey(const CppParsingTree_var& pKey) const;
-	};
+    CppParsingTree_var insertNode(const std::string& sBranch) const;
+    CppParsingTree_var insertEvaluatedNode(const std::string& sDynamicVariable) const;
+    CppParsingTree_var insertClassicalEvaluatedNode(const std::string& sDynamicVariable) const;
+    CppParsingTree_var insertArrayNodeFromKey(const std::string& sKey) const;
+    CppParsingTree_var insertArrayNodeFromKey(int iKey) const;
+    CppParsingTree_var insertArrayNodeFromKey(const CppParsingTree_var& pKey) const;
+};
 
-	class CppParsingTree_value : public CppParsingTree_var {
-		public:
-			CppParsingTree_value();
-			CppParsingTree_value(bool bValue);
-			CppParsingTree_value(int iValue);
-			CppParsingTree_value(double dValue);
-			CppParsingTree_value(const char* tcValue);
-			CppParsingTree_value(const std::string& sValue);
-			CppParsingTree_value(const CppParsingTree_var& tree);
-			CppParsingTree_value(const CppParsingTree_value& tree);
-			~CppParsingTree_value();
-	};
+class CppParsingTree_value : public CppParsingTree_var
+{
+public:
+    CppParsingTree_value();
+    CppParsingTree_value(bool bValue);
+    CppParsingTree_value(int iValue);
+    CppParsingTree_value(double dValue);
+    CppParsingTree_value(const char* tcValue);
+    CppParsingTree_value(const std::string& sValue);
+    CppParsingTree_value(const CppParsingTree_var& tree);
+    CppParsingTree_value(const CppParsingTree_value& tree);
+    ~CppParsingTree_value();
+};
 
-	class CppParsingTree_global : public CppParsingTree_var {
-		public:
-			void initialize(const std::string& sName);
-	};
+class CppParsingTree_global : public CppParsingTree_var
+{
+public:
+    void initialize(const std::string& sName);
+};
 }
 
 #endif

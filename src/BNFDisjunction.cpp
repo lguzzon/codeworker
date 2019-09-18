@@ -33,77 +33,119 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFDisjunction.h"
 
-namespace CodeWorker {
-	BNFDisjunction::BNFDisjunction(DtaBNFScript* pBNFScript, GrfBlock* pParent) : _pBNFScript(pBNFScript), GrfBlock(pParent) {}
+namespace CodeWorker
+{
+BNFDisjunction::BNFDisjunction(DtaBNFScript* pBNFScript, GrfBlock* pParent) : _pBNFScript(pBNFScript), GrfBlock(pParent) {}
 
-	BNFDisjunction::~BNFDisjunction() {
-	}
+BNFDisjunction::~BNFDisjunction()
+{
+}
 
-	void BNFDisjunction::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFDisjunction(*this, env);
-	}
+void BNFDisjunction::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFDisjunction(*this, env);
+}
 
-	bool BNFDisjunction::isABNFCommand() const { return true; }
+bool BNFDisjunction::isABNFCommand() const
+{
+    return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFDisjunction::execute(DtaScriptVariable& visibility) {
-		SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
-		int iLocation = CGRuntime::getInputLocation();
-		if (hasLocalVariables()) {
-			DtaScriptVariable localVariables(&visibility, "##stack## block");
-			for (int i = 0; i < getNbCommands(); i++) {
-				result = GrfBlock::executeInto(localVariables, i, i);
-				if (result != BREAK_INTERRUPTION) break;
-				if (_pBNFScript->getRatchetPosition() > iLocation) {
-					CGRuntime::throwBNFExecutionError(toString(), "#ratchet position reached");
-				}
-				CGRuntime::setInputLocation(iLocation);
-			}
-		} else {
-			for (int i = 0; i < getNbCommands(); i++) {
-				result = GrfBlock::executeInto(visibility, i, i);
-				if (result != BREAK_INTERRUPTION) break;
-				if (_pBNFScript->getRatchetPosition() > iLocation) {
-					CGRuntime::throwBNFExecutionError(toString(), "#ratchet position reached");
-				}
-				CGRuntime::setInputLocation(iLocation);
-			}
-		}
-		return result;
-	}
+SEQUENCE_INTERRUPTION_LIST BNFDisjunction::execute(DtaScriptVariable& visibility)
+{
+    SEQUENCE_INTERRUPTION_LIST result = NO_INTERRUPTION;
+    int iLocation = CGRuntime::getInputLocation();
 
-	void BNFDisjunction::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		std::vector<GrfCommand*>::const_iterator i = getCommands().begin();
-		if (i != getCommands().end()) {
-			CW_BODY_INDENT << "// " << toString();CW_BODY_ENDL;
-			CW_BODY_INDENT << "{";CW_BODY_ENDL;
-			theCompilerEnvironment.incrementIndentation();
-			for (;;) {
-				(*i)->compileCpp(theCompilerEnvironment);
-				i++;
-				if (i == getCommands().end()) break;
-				CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";CW_BODY_ENDL;
-				theCompilerEnvironment.incrementIndentation();
-				CW_BODY_INDENT << "_compilerClauseSuccess = true;";CW_BODY_ENDL;
-			}
-			int j = getNbCommands() - 1;
-			while (j > 0) {
-				theCompilerEnvironment.decrementIndentation();
-				CW_BODY_INDENT << "}";CW_BODY_ENDL;
-				j--;
-			}
-			theCompilerEnvironment.decrementIndentation();
-			CW_BODY_INDENT << "}";CW_BODY_ENDL;
-		}
-	}
+    if (hasLocalVariables()) {
+        DtaScriptVariable localVariables(&visibility, "##stack## block");
 
-	std::string BNFDisjunction::toString() const {
-		std::string sText;
-		for (std::vector<GrfCommand*>::const_iterator i = getCommands().begin(); i != getCommands().end(); i++) {
-			if ((*i)->isABNFCommand()) {
-				if (i != getCommands().begin()) sText += " | ";
-				sText += (*i)->toString();
-			}
-		}
-		return sText;
-	}
+        for (int i = 0; i < getNbCommands(); i++) {
+            result = GrfBlock::executeInto(localVariables, i, i);
+
+            if (result != BREAK_INTERRUPTION) {
+                break;
+            }
+
+            if (_pBNFScript->getRatchetPosition() > iLocation) {
+                CGRuntime::throwBNFExecutionError(toString(), "#ratchet position reached");
+            }
+
+            CGRuntime::setInputLocation(iLocation);
+        }
+    } else {
+        for (int i = 0; i < getNbCommands(); i++) {
+            result = GrfBlock::executeInto(visibility, i, i);
+
+            if (result != BREAK_INTERRUPTION) {
+                break;
+            }
+
+            if (_pBNFScript->getRatchetPosition() > iLocation) {
+                CGRuntime::throwBNFExecutionError(toString(), "#ratchet position reached");
+            }
+
+            CGRuntime::setInputLocation(iLocation);
+        }
+    }
+
+    return result;
+}
+
+void BNFDisjunction::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    std::vector<GrfCommand*>::const_iterator i = getCommands().begin();
+
+    if (i != getCommands().end()) {
+        CW_BODY_INDENT << "// " << toString();
+        CW_BODY_ENDL;
+        CW_BODY_INDENT << "{";
+        CW_BODY_ENDL;
+        theCompilerEnvironment.incrementIndentation();
+
+        for (;;) {
+            (*i)->compileCpp(theCompilerEnvironment);
+            i++;
+
+            if (i == getCommands().end()) {
+                break;
+            }
+
+            CW_BODY_INDENT << "if (!_compilerClauseSuccess) {";
+            CW_BODY_ENDL;
+            theCompilerEnvironment.incrementIndentation();
+            CW_BODY_INDENT << "_compilerClauseSuccess = true;";
+            CW_BODY_ENDL;
+        }
+
+        int j = getNbCommands() - 1;
+
+        while (j > 0) {
+            theCompilerEnvironment.decrementIndentation();
+            CW_BODY_INDENT << "}";
+            CW_BODY_ENDL;
+            j--;
+        }
+
+        theCompilerEnvironment.decrementIndentation();
+        CW_BODY_INDENT << "}";
+        CW_BODY_ENDL;
+    }
+}
+
+std::string BNFDisjunction::toString() const
+{
+    std::string sText;
+
+    for (std::vector<GrfCommand*>::const_iterator i = getCommands().begin(); i != getCommands().end(); i++) {
+        if ((*i)->isABNFCommand()) {
+            if (i != getCommands().begin()) {
+                sText += " | ";
+            }
+
+            sText += (*i)->toString();
+        }
+    }
+
+    return sText;
+}
 }

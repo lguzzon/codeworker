@@ -30,19 +30,24 @@ To contact the author: codeworker@free.fr
 #include "ScpStream.h"
 #include "CppCompilerEnvironment.h"
 
-namespace CodeWorker {
-	GrfExit::~GrfExit() {
-		delete _pCodeExpression;
-	}
+namespace CodeWorker
+{
+GrfExit::~GrfExit()
+{
+    delete _pCodeExpression;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfExit::executeInternal(DtaScriptVariable& visibility) {
-		int iValue = _pCodeExpression->getIntValue(visibility);
-		throw UtlExitException(iValue);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfExit::executeInternal(DtaScriptVariable& visibility)
+{
+    int iValue = _pCodeExpression->getIntValue(visibility);
+    throw UtlExitException(iValue);
+}
 
-	void GrfExit::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "throw UtlExitException(";
-		_pCodeExpression->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";CW_BODY_ENDL;
-	}
+void GrfExit::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "throw UtlExitException(";
+    _pCodeExpression->compileCppInt(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

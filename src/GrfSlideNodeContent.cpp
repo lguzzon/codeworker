@@ -30,24 +30,28 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptVariable.h"
 #include "GrfSlideNodeContent.h"
 
-namespace CodeWorker {
-	GrfSlideNodeContent::~GrfSlideNodeContent() {
-		delete _pOrgNode;
-		delete _pDestNode;
-	}
+namespace CodeWorker
+{
+GrfSlideNodeContent::~GrfSlideNodeContent()
+{
+    delete _pOrgNode;
+    delete _pDestNode;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSlideNodeContent::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pOrgNode = visibility.getExistingVariable(*_pOrgNode);
-		ExprScriptVariable& xDestNode = *_pDestNode;
-		return CGRuntime::slideNodeContent(pOrgNode, xDestNode);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSlideNodeContent::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pOrgNode = visibility.getExistingVariable(*_pOrgNode);
+    ExprScriptVariable& xDestNode = *_pDestNode;
+    return CGRuntime::slideNodeContent(pOrgNode, xDestNode);
+}
 
-	void GrfSlideNodeContent::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::slideNodeContent(";
-		_pOrgNode->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pDestNode->compileCppExpr(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSlideNodeContent::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::slideNodeContent(";
+    _pOrgNode->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pDestNode->compileCppExpr(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

@@ -30,29 +30,40 @@ To contact the author: codeworker@free.fr
 #include "CppCompilerEnvironment.h"
 #include "GrfMerge.h"
 
-namespace CodeWorker {
-	GrfMerge::~GrfMerge() {
-		if (_pVariable != NULL) delete _pVariable;
-		if (_pSource != NULL) delete _pSource;
-	}
+namespace CodeWorker
+{
+GrfMerge::~GrfMerge()
+{
+    if (_pVariable != NULL) {
+        delete _pVariable;
+    }
 
-	SEQUENCE_INTERRUPTION_LIST GrfMerge::executeInternal(DtaScriptVariable& visibility) {
-		DtaScriptVariable* pVariable = visibility.getVariable(*_pVariable);
-		DtaScriptVariable* pSource = visibility.getExistingVariable(*_pSource);
-		if (pSource == NULL) {
-			std::string sVariableName = pVariable->getCompleteName();
-			throw UtlException("runtime error: variable '" + _pSource->toString() + "' doesn't exist while merging all of it ('merge' command) to variable '" + sVariableName + "'");
-		}
-		pVariable->copyAll(*pSource, true);
-		return NO_INTERRUPTION;
-	}
+    if (_pSource != NULL) {
+        delete _pSource;
+    }
+}
 
-	void GrfMerge::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT;
-		_pVariable->compileCppForSet(theCompilerEnvironment);
-		CW_BODY_STREAM << ".merge(";
-		_pSource->compileCpp(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+SEQUENCE_INTERRUPTION_LIST GrfMerge::executeInternal(DtaScriptVariable& visibility)
+{
+    DtaScriptVariable* pVariable = visibility.getVariable(*_pVariable);
+    DtaScriptVariable* pSource = visibility.getExistingVariable(*_pSource);
+
+    if (pSource == NULL) {
+        std::string sVariableName = pVariable->getCompleteName();
+        throw UtlException("runtime error: variable '" + _pSource->toString() + "' doesn't exist while merging all of it ('merge' command) to variable '" + sVariableName + "'");
+    }
+
+    pVariable->copyAll(*pSource, true);
+    return NO_INTERRUPTION;
+}
+
+void GrfMerge::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT;
+    _pVariable->compileCppForSet(theCompilerEnvironment);
+    CW_BODY_STREAM << ".merge(";
+    _pSource->compileCpp(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

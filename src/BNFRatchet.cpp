@@ -31,28 +31,36 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFRatchet.h"
 
-namespace CodeWorker {
-	BNFRatchet::BNFRatchet(DtaBNFScript* pBNFScript, GrfBlock* pParent) : _pBNFScript(pBNFScript), GrfBlock(pParent) {}
+namespace CodeWorker
+{
+BNFRatchet::BNFRatchet(DtaBNFScript* pBNFScript, GrfBlock* pParent) : _pBNFScript(pBNFScript), GrfBlock(pParent) {}
 
-	BNFRatchet::~BNFRatchet() {}
+BNFRatchet::~BNFRatchet() {}
 
-	void BNFRatchet::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFRatchet(*this, env);
-	}
+void BNFRatchet::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFRatchet(*this, env);
+}
 
-	bool BNFRatchet::isABNFCommand() const { return true; }
+bool BNFRatchet::isABNFCommand() const
+{
+    return true;
+}
 
-	SEQUENCE_INTERRUPTION_LIST BNFRatchet::executeInternal(DtaScriptVariable& visibility) {
-		_pBNFScript->setRatchetPosition(CGRuntime::getInputLocation());
-		return GrfBlock::executeInternal(visibility);
-	}
+SEQUENCE_INTERRUPTION_LIST BNFRatchet::executeInternal(DtaScriptVariable& visibility)
+{
+    _pBNFScript->setRatchetPosition(CGRuntime::getInputLocation());
+    return GrfBlock::executeInternal(visibility);
+}
 
-	std::string BNFRatchet::toString() const {
-		return "#ratchet";
-	}
+std::string BNFRatchet::toString() const
+{
+    return "#ratchet";
+}
 
-	void BNFRatchet::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "<#ratchet not implemented yet>// " << toString();
-		CW_BODY_ENDL;
-	}
+void BNFRatchet::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "<#ratchet not implemented yet>// " << toString();
+    CW_BODY_ENDL;
+}
 }

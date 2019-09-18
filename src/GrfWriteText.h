@@ -28,42 +28,51 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfWriteText : public GrfCommand {
-		private:
-			ExprScriptExpression* _pText;
+class GrfWriteText : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pText;
 
-//##protect##"attributes"
-			DtaScriptVariable* const* _pOutputCoverage;
-//##protect##"attributes"
+    //##protect##"attributes"
+    DtaScriptVariable* const* _pOutputCoverage;
+    //##protect##"attributes"
 
-		public:
-			GrfWriteText() : _pText(NULL) {
-//##protect##"constructor"
-				_pOutputCoverage = NULL;
-//##protect##"constructor"
-			}
-			virtual ~GrfWriteText();
+public:
+    GrfWriteText() : _pText(NULL)
+    {
+        //##protect##"constructor"
+        _pOutputCoverage = NULL;
+        //##protect##"constructor"
+    }
+    virtual ~GrfWriteText();
 
-			virtual const char* getFunctionName() const { return "writeText"; }
+    virtual const char* getFunctionName() const
+    {
+        return "writeText";
+    }
 
-			inline void setText(ExprScriptExpression* pText) { _pText = pText; }
+    inline void setText(ExprScriptExpression* pText)
+    {
+        _pText = pText;
+    }
 
 
-//##protect##"interface"
-			void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
-//##protect##"interface"
+    //##protect##"interface"
+    void prepareCoverage(DtaScriptVariable* const* pOutputCoverage);
+    //##protect##"interface"
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
 
-//##protect##"declarations"
-//##protect##"declarations"
-	};
+    //##protect##"declarations"
+    //##protect##"declarations"
+};
 }
 
 #endif

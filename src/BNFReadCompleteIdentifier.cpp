@@ -27,15 +27,26 @@ To contact the author: codeworker@free.fr
 #include "DtaVisitor.h"
 #include "BNFReadCompleteIdentifier.h"
 
-namespace CodeWorker {
-	BNFReadCompleteIdentifier::BNFReadCompleteIdentifier(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue, bool bNoCase) : BNFReadToken(pBNFScript, pParent, bContinue, bNoCase) {}
-	BNFReadCompleteIdentifier::~BNFReadCompleteIdentifier() {}
+namespace CodeWorker
+{
+BNFReadCompleteIdentifier::BNFReadCompleteIdentifier(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue, bool bNoCase) : BNFReadToken(pBNFScript, pParent, bContinue, bNoCase) {}
+BNFReadCompleteIdentifier::~BNFReadCompleteIdentifier() {}
 
-	void BNFReadCompleteIdentifier::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env) {
-		visitor.visitBNFReadCompleteIdentifier(*this, env);
-	}
+void BNFReadCompleteIdentifier::accept(DtaVisitor& visitor, DtaVisitorEnvironment& env)
+{
+    visitor.visitBNFReadCompleteIdentifier(*this, env);
+}
 
-	const char* BNFReadCompleteIdentifier::getFunctionName() const { return "#readCompleteIdentifier"; }
-	std::string BNFReadCompleteIdentifier::executeExtraction(DtaScriptVariable&) const { return CGRuntime::readCompleteIdentifier(); }
-	std::string BNFReadCompleteIdentifier::compileCppExtraction() const { return "CGRuntime::readCompleteIdentifier()"; }
+const char* BNFReadCompleteIdentifier::getFunctionName() const
+{
+    return "#readCompleteIdentifier";
+}
+std::string BNFReadCompleteIdentifier::executeExtraction(DtaScriptVariable&) const
+{
+    return CGRuntime::readCompleteIdentifier();
+}
+std::string BNFReadCompleteIdentifier::compileCppExtraction() const
+{
+    return "CGRuntime::readCompleteIdentifier()";
+}
 }

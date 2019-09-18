@@ -27,70 +27,83 @@ To contact the author: codeworker@free.fr
 #include "UtlTrace.h"
 #include "UtlException.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 
-	UtlException::UtlException(const UtlException& exception) {
-		_sMessage = exception._sMessage;
-		_sTraceStack = exception._sTraceStack;
-		_bFinalMessage = exception._bFinalMessage;
-	}
+UtlException::UtlException(const UtlException& exception)
+{
+    _sMessage = exception._sMessage;
+    _sTraceStack = exception._sTraceStack;
+    _bFinalMessage = exception._bFinalMessage;
+}
 
-	UtlException::UtlException(std::istream& stream, const std::string& sMessage) : _bFinalMessage(false){
-		char sText[10000];
-		sprintf(sText, "line %d, %s", CodeWorker::getLineCount(stream), sMessage.c_str());
-		_sMessage = sText;
-		_sTraceStack = UtlTrace::getTraceStack();
-	}
+UtlException::UtlException(std::istream& stream, const std::string& sMessage) : _bFinalMessage(false)
+{
+    char sText[10000];
+    sprintf(sText, "line %d, %s", CodeWorker::getLineCount(stream), sMessage.c_str());
+    _sMessage = sText;
+    _sTraceStack = UtlTrace::getTraceStack();
+}
 
-	UtlException::UtlException(std::istream& stream, const char* sMessage) : _bFinalMessage(false) {
-		char sText[10000];
-		sprintf(sText, "line %d, %s", CodeWorker::getLineCount(stream), sMessage);
-		_sMessage = sText;
-		_sTraceStack = UtlTrace::getTraceStack();
-	}
+UtlException::UtlException(std::istream& stream, const char* sMessage) : _bFinalMessage(false)
+{
+    char sText[10000];
+    sprintf(sText, "line %d, %s", CodeWorker::getLineCount(stream), sMessage);
+    _sMessage = sText;
+    _sTraceStack = UtlTrace::getTraceStack();
+}
 
-	UtlException::UtlException(std::istream& stream, const std::string& sTraceStack, const std::string& sMessage) : _sTraceStack(sTraceStack), _bFinalMessage(false) {
-		char sText[10000];
-		sprintf(sText, "line %d, %s", CodeWorker::getLineCount(stream), sMessage.c_str());
-		_sMessage = sText;
-	}
+UtlException::UtlException(std::istream& stream, const std::string& sTraceStack, const std::string& sMessage) : _sTraceStack(sTraceStack), _bFinalMessage(false)
+{
+    char sText[10000];
+    sprintf(sText, "line %d, %s", CodeWorker::getLineCount(stream), sMessage.c_str());
+    _sMessage = sText;
+}
 
-	UtlException::UtlException(const ScpStream& stream, const std::string& sMessage) : _bFinalMessage(false) {
-		char sText[10000];
-		sprintf(sText, "line %d, %s", stream.getLineCount(), sMessage.c_str());
-		_sMessage = sText;
-		_sTraceStack = UtlTrace::getTraceStack();
-	}
+UtlException::UtlException(const ScpStream& stream, const std::string& sMessage) : _bFinalMessage(false)
+{
+    char sText[10000];
+    sprintf(sText, "line %d, %s", stream.getLineCount(), sMessage.c_str());
+    _sMessage = sText;
+    _sTraceStack = UtlTrace::getTraceStack();
+}
 
-	UtlException::UtlException(const ScpStream& stream, const char* sMessage) : _bFinalMessage(false) {
-		char sText[10000];
-		sprintf(sText, "line %d, %s", stream.getLineCount(), sMessage);
-		_sMessage = sText;
-		_sTraceStack = UtlTrace::getTraceStack();
-	}
+UtlException::UtlException(const ScpStream& stream, const char* sMessage) : _bFinalMessage(false)
+{
+    char sText[10000];
+    sprintf(sText, "line %d, %s", stream.getLineCount(), sMessage);
+    _sMessage = sText;
+    _sTraceStack = UtlTrace::getTraceStack();
+}
 
-	UtlException::UtlException(const ScpStream& stream, const std::string& sTraceStack, const std::string& sMessage) : _sTraceStack(sTraceStack), _bFinalMessage(false) {
-		char sText[10000];
-		sprintf(sText, "line %d, %s", stream.getLineCount(), sMessage.c_str());
-		_sMessage = sText;
-	}
+UtlException::UtlException(const ScpStream& stream, const std::string& sTraceStack, const std::string& sMessage) : _sTraceStack(sTraceStack), _bFinalMessage(false)
+{
+    char sText[10000];
+    sprintf(sText, "line %d, %s", stream.getLineCount(), sMessage.c_str());
+    _sMessage = sText;
+}
 
-	UtlException::UtlException(const std::string& sMessage) : _sMessage(sMessage), _bFinalMessage(false) {
-		_sTraceStack = UtlTrace::getTraceStack();
-	}
+UtlException::UtlException(const std::string& sMessage) : _sMessage(sMessage), _bFinalMessage(false)
+{
+    _sTraceStack = UtlTrace::getTraceStack();
+}
 
-	UtlException::UtlException(const char* sMessage) : _sMessage(sMessage), _bFinalMessage(false) {
-		_sTraceStack = UtlTrace::getTraceStack();
-	}
+UtlException::UtlException(const char* sMessage) : _sMessage(sMessage), _bFinalMessage(false)
+{
+    _sTraceStack = UtlTrace::getTraceStack();
+}
 
-	UtlException::UtlException(const std::string& sTraceStack, const std::string& sMessage, bool bFinalMessage) : _sTraceStack(sTraceStack), _sMessage(sMessage), _bFinalMessage(bFinalMessage) {
-	}
+UtlException::UtlException(const std::string& sTraceStack, const std::string& sMessage, bool bFinalMessage) : _sTraceStack(sTraceStack), _sMessage(sMessage), _bFinalMessage(bFinalMessage)
+{
+}
 
-	UtlException::~UtlException() throw() {
-	}
+UtlException::~UtlException() throw()
+{
+}
 
-	const char* UtlException::what() const throw() {
-		return _sMessage.c_str();
-	}
+const char* UtlException::what() const throw()
+{
+    return _sMessage.c_str();
+}
 
 }

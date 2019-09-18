@@ -24,47 +24,50 @@ To contact the author: codeworker@free.fr
 
 #include "GrfTryCatch.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
+namespace CodeWorker
+{
+class DtaBNFScript;
 
-	class BNFTryCatch : public GrfTryCatch {
-		public:
-			BNFTryCatch(DtaBNFScript* pBNFScript);
-			BNFTryCatch(DtaBNFScript* pBNFScript, GrfBlock* pParent);
-			virtual ~BNFTryCatch();
+class BNFTryCatch : public GrfTryCatch
+{
+public:
+    BNFTryCatch(DtaBNFScript* pBNFScript);
+    BNFTryCatch(DtaBNFScript* pBNFScript, GrfBlock* pParent);
+    virtual ~BNFTryCatch();
 
-			virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-			virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-			virtual std::string toString() const;
+    virtual std::string toString() const;
 
-		protected:
-			DtaBNFScript* _pBNFScript;
+protected:
+    DtaBNFScript* _pBNFScript;
 
-			SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-			virtual SEQUENCE_INTERRUPTION_LIST executeCatchStatement(DtaScriptVariable& visibility, int iLocation, int iImplicitCopyPosition, const std::string& sCatchedMessage, const std::string& sCatchedStack = "");
-			virtual SEQUENCE_INTERRUPTION_LIST executeCatchStatement(DtaScriptVariable& visibility, int iLocation, int iImplicitCopyPosition, UtlException& exception);
-	};
+    SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+    virtual SEQUENCE_INTERRUPTION_LIST executeCatchStatement(DtaScriptVariable& visibility, int iLocation, int iImplicitCopyPosition, const std::string& sCatchedMessage, const std::string& sCatchedStack = "");
+    virtual SEQUENCE_INTERRUPTION_LIST executeCatchStatement(DtaScriptVariable& visibility, int iLocation, int iImplicitCopyPosition, UtlException& exception);
+};
 
 
-	class ExprScriptExpression;
+class ExprScriptExpression;
 
-	class BNFContinue : public BNFTryCatch {
-		private:
-			ExprScriptExpression* _pErrorMessage;
-		public:
-			BNFContinue(DtaBNFScript* pBNFScript, GrfBlock* pParent, ExprScriptVariable* pVariable, ExprScriptExpression* pMessage);
-			virtual ~BNFContinue();
+class BNFContinue : public BNFTryCatch
+{
+private:
+    ExprScriptExpression* _pErrorMessage;
+public:
+    BNFContinue(DtaBNFScript* pBNFScript, GrfBlock* pParent, ExprScriptVariable* pVariable, ExprScriptExpression* pMessage);
+    virtual ~BNFContinue();
 
-			virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-			virtual std::string toString() const;
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeCatchStatement(DtaScriptVariable& visibility, int iLocation, int iImplicitCopyPosition, UtlException& exception);
-	};
+    virtual std::string toString() const;
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeCatchStatement(DtaScriptVariable& visibility, int iLocation, int iImplicitCopyPosition, UtlException& exception);
+};
 }
 
 #endif

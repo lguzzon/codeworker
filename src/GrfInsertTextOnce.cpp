@@ -36,40 +36,47 @@ To contact the author: codeworker@free.fr
 
 #include "GrfInsertTextOnce.h"
 
-namespace CodeWorker {
-	GrfInsertTextOnce::~GrfInsertTextOnce() {
-		delete _pLocation;
-		delete _pText;
-	}
+namespace CodeWorker
+{
+GrfInsertTextOnce::~GrfInsertTextOnce()
+{
+    delete _pLocation;
+    delete _pText;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfInsertTextOnce::executeInternal(DtaScriptVariable& visibility) {
-		std::string sLocation = _pLocation->getValue(visibility);
-		int iLocation = atoi(sLocation.c_str());
-		std::string sText = _pText->getValue(visibility);
-//##protect##"execute"
-		if ((*_pOutputCoverage != NULL) && CGRuntime::getOutputStream()->insertTextOnce(sText, iLocation)) {
-			int iCoverageLocation = iLocation + (*_pOutputCoverage)->getIntValue();
-			DtaScriptVariable* pCoverage = GrfInsertText::getCoverageItem(*_pOutputCoverage, sText.size(), iCoverageLocation, "I");
-			pCoverage->insertNode("script")->setValue(_iFileLocation);
-			pCoverage->insertNode("output")->setValue(iCoverageLocation);
-			return NO_INTERRUPTION;
-		}
-//##protect##"execute"
-		return CGRuntime::insertTextOnce(iLocation, sText);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfInsertTextOnce::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sLocation = _pLocation->getValue(visibility);
+    int iLocation = atoi(sLocation.c_str());
+    std::string sText = _pText->getValue(visibility);
+
+    //##protect##"execute"
+    if ((*_pOutputCoverage != NULL) && CGRuntime::getOutputStream()->insertTextOnce(sText, iLocation)) {
+        int iCoverageLocation = iLocation + (*_pOutputCoverage)->getIntValue();
+        DtaScriptVariable* pCoverage = GrfInsertText::getCoverageItem(*_pOutputCoverage, sText.size(), iCoverageLocation, "I");
+        pCoverage->insertNode("script")->setValue(_iFileLocation);
+        pCoverage->insertNode("output")->setValue(iCoverageLocation);
+        return NO_INTERRUPTION;
+    }
+
+    //##protect##"execute"
+    return CGRuntime::insertTextOnce(iLocation, sText);
+}
 
 //##protect##"implementation"
-	void GrfInsertTextOnce::prepareCoverage(DtaScriptVariable* const* pOutputCoverage) {
-		_pOutputCoverage = pOutputCoverage;
-	}
+void GrfInsertTextOnce::prepareCoverage(DtaScriptVariable* const* pOutputCoverage)
+{
+    _pOutputCoverage = pOutputCoverage;
+}
 //##protect##"implementation"
 
-	void GrfInsertTextOnce::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::insertTextOnce(";
-		_pLocation->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ", ";
-		_pText->compileCppString(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfInsertTextOnce::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::insertTextOnce(";
+    _pLocation->compileCppInt(theCompilerEnvironment);
+    CW_BODY_STREAM << ", ";
+    _pText->compileCppString(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

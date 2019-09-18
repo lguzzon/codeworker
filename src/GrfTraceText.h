@@ -24,26 +24,34 @@ To contact the author: codeworker@free.fr
 
 #include "GrfCommand.h"
 
-namespace CodeWorker {
+namespace CodeWorker
+{
 class ExprScriptExpression;
 
-	class GrfTraceText : public GrfCommand {
-		private:
-			ExprScriptExpression* _pText;
+class GrfTraceText : public GrfCommand
+{
+private:
+    ExprScriptExpression* _pText;
 
-		public:
-			GrfTraceText() : _pText(NULL) {}
-			virtual ~GrfTraceText();
+public:
+    GrfTraceText() : _pText(NULL) {}
+    virtual ~GrfTraceText();
 
-			virtual const char* getFunctionName() const { return "traceText"; }
+    virtual const char* getFunctionName() const
+    {
+        return "traceText";
+    }
 
-			inline void setText(ExprScriptExpression* pText) { _pText = pText; }
+    inline void setText(ExprScriptExpression* pText)
+    {
+        _pText = pText;
+    }
 
-			virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
+    virtual void compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const;
 
-		protected:
-			virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
-	};
+protected:
+    virtual SEQUENCE_INTERRUPTION_LIST executeInternal(DtaScriptVariable& visibility);
+};
 }
 
 #endif

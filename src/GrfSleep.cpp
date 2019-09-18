@@ -29,21 +29,25 @@ To contact the author: codeworker@free.fr
 #include "ExprScriptExpression.h"
 #include "GrfSleep.h"
 
-namespace CodeWorker {
-	GrfSleep::~GrfSleep() {
-		delete _pMillis;
-	}
+namespace CodeWorker
+{
+GrfSleep::~GrfSleep()
+{
+    delete _pMillis;
+}
 
-	SEQUENCE_INTERRUPTION_LIST GrfSleep::executeInternal(DtaScriptVariable& visibility) {
-		std::string sMillis = _pMillis->getValue(visibility);
-		int iMillis = atoi(sMillis.c_str());
-		return CGRuntime::sleep(iMillis);
-	}
+SEQUENCE_INTERRUPTION_LIST GrfSleep::executeInternal(DtaScriptVariable& visibility)
+{
+    std::string sMillis = _pMillis->getValue(visibility);
+    int iMillis = atoi(sMillis.c_str());
+    return CGRuntime::sleep(iMillis);
+}
 
-	void GrfSleep::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const {
-		CW_BODY_INDENT << "CGRuntime::sleep(";
-		_pMillis->compileCppInt(theCompilerEnvironment);
-		CW_BODY_STREAM << ");";
-		CW_BODY_ENDL;
-	}
+void GrfSleep::compileCpp(CppCompilerEnvironment& theCompilerEnvironment) const
+{
+    CW_BODY_INDENT << "CGRuntime::sleep(";
+    _pMillis->compileCppInt(theCompilerEnvironment);
+    CW_BODY_STREAM << ");";
+    CW_BODY_ENDL;
+}
 }

@@ -24,35 +24,46 @@ To contact the author: codeworker@free.fr
 
 #include "GrfBlock.h"
 
-namespace CodeWorker {
-	class DtaBNFScript;
-	class BNFClause;
-	class ExprScriptVariable;
+namespace CodeWorker
+{
+class DtaBNFScript;
+class BNFClause;
+class ExprScriptVariable;
 
-	class BNFStepper : public GrfBlock {
-		protected:
-			DtaBNFScript* _pBNFScript;
-			ExprScriptVariable* _pVariableToAssign;
-			bool _bConcatVariable;
-			std::vector<std::string> _listOfConstants;
-			int _iClauseReturnType;
-			bool _bContinue;
-			int _iStepLocation;
+class BNFStepper : public GrfBlock
+{
+protected:
+    DtaBNFScript* _pBNFScript;
+    ExprScriptVariable* _pVariableToAssign;
+    bool _bConcatVariable;
+    std::vector<std::string> _listOfConstants;
+    int _iClauseReturnType;
+    bool _bContinue;
+    int _iStepLocation;
 
-		public:
-			BNFStepper(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
-			virtual ~BNFStepper();
+public:
+    BNFStepper(DtaBNFScript* pBNFScript, GrfBlock* pParent, bool bContinue);
+    virtual ~BNFStepper();
 
-		virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
+    virtual void accept(DtaVisitor& visitor, DtaVisitorEnvironment& env);
 
-			virtual bool isABNFCommand() const;
+    virtual bool isABNFCommand() const;
 
-			void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
-			inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants) { _listOfConstants = listOfConstants; }
+    void setVariableToAssign(ExprScriptVariable* pVariableToAssign, bool bConcat, BNFClause& theClause);
+    inline void setConstantsToMatch(const std::vector<std::string>& listOfConstants)
+    {
+        _listOfConstants = listOfConstants;
+    }
 
-			inline int getStepLocation() const { return _iStepLocation; }
-			inline void setStepLocation(int iLocation) { _iStepLocation = iLocation; }
-	};
+    inline int getStepLocation() const
+    {
+        return _iStepLocation;
+    }
+    inline void setStepLocation(int iLocation)
+    {
+        _iStepLocation = iLocation;
+    }
+};
 }
 
 #endif
